@@ -1,0 +1,22 @@
+<resources>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="cyan">#FF009999</color>
+    <color name="darkCyan">#FF006363</color>
+
+    <color name="green">#FF9FEE00</color>
+    <color name="darkGreen">#FF679B00</color>
+
+    <color name="red">#FFFF0000</color>
+    <color name="darkRed">#FFA60000</color>
+
+    <color name="blue">#FF0A64A4</color>
+    <color name="darkBlue">#FF03406A</color>
+
+    <color name="orange">#FFC579</color>
+    <color name="darkOrange">#FF9D23</color>
+
+</resources>

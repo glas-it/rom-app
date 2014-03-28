@@ -1,15 +1,14 @@
-package ar.com.glasit.rom;
+package ar.com.glasit.rom.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import ar.com.glasit.rom.R;
 
-public class MyActivity extends Activity {
-    /**
-     * Called when the activity is first created.
-     */
+public class MainActivity extends Activity {
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
     }
 }
