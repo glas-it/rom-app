@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ROM</string>
+    <string name="userName">Usuario</string>
+    <string name="userPass">Contraseña</string>
+    <string name="userPassWord">Contraseña</string>
+    <string name="attempLoginButton">Iniciar sesión</string>
+    <string name="errorMail">Nombre de usuario inválido</string>
+    <string name="errorTooShortPass">La contraseña es corta</string>
+    <string name="errorInvalidadPass">Contraseña incorrecta</string>
+    <string name="errorFieldIncomplete">Este campo es requerido</string>
+     <string name="loginProcess">Iniciando sesión ..</string>
+    
 </resources>
