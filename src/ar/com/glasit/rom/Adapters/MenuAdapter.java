@@ -1,6 +1,7 @@
 package ar.com.glasit.rom.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,8 @@ public class MenuAdapter extends BaseAdapter {
         }
 
         TextView desciption = (TextView) rowView.findViewById(android.R.id.text1);
+        desciption.setTextColor(Color.BLACK);
+
         desciption.setText(menu.getItemInPage(position).toString());
         return rowView;
     }

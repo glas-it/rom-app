@@ -18,6 +18,12 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="Theme.Sherlock.Light.DarkActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:textAppearanceSmall">@android:style/TextAppearance.Small.Inverse</item>
+        <item name="android:textAppearanceMedium">@android:style/TextAppearance.Medium.Inverse</item>
+        <item name="android:textAppearanceLarge">@android:style/TextAppearance.Large.Inverse</item>
+        <item name="android:textAppearanceSmallInverse">@android:style/TextAppearance.Small</item>
+        <item name="android:textAppearanceMediumInverse">@android:style/TextAppearance.Medium</item>
+        <item name="android:textAppearanceLargeInverse">@android:style/TextAppearance.Large</item>
     </style>
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">

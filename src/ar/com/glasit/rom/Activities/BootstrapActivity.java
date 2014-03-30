@@ -49,18 +49,6 @@ public class BootstrapActivity extends StackFragmentActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        SherlockFragment fragment = (SherlockFragment) getLastFragment();
-        if (fragment != null) {
-            switch (item.getItemId()) {
-                default:
-                    break;
-            }
-        }
-        return true;
-    }
-
-    @Override
     public void onBackPressed() {
         if  (!disableBack) {
             SherlockFragment fragment = (SherlockFragment) getLastFragment();
@@ -90,89 +78,7 @@ public class BootstrapActivity extends StackFragmentActivity {
 /*        startActivity(new Intent(this, MainActivity.class));
         finish();*/
         try {
-            String stringJson = "[\n" +
-                    "    {\n" +
-                    "        \"class\": \"rom.Rubro\",\n" +
-                    "        \"id\": 1,\n" +
-                    "        \"descripcion\": \"Entradas\",\n" +
-                    "        \"subrubros\": [\n" +
-                    "            {\n" +
-                    "                \"class\": \"rom.Subrubro\",\n" +
-                    "                \"id\": 2,\n" +
-                    "                \"descripcion\": \"Frias\",\n" +
-                    "                \"items\": [\n" +
-                    "                    {\n" +
-                    "                        \"class\": \"rom.Item\",\n" +
-                    "                        \"id\": 1,\n" +
-                    "                        \"title\": \"Ensalada Caesar\",\n" +
-                    "                        \"descripcion\": \"Ensalada de pollo, lechuga y salsa caesar\"\n" +
-                    "                    },\n" +
-                    "                    {\n" +
-                    "                        \"class\": \"rom.Item\",\n" +
-                    "                        \"id\": 2,\n" +
-                    "                        \"title\": \"Ensalada de mariscos\",\n" +
-                    "                        \"descripcion\": \"Ensalada de langostinos y camarones\"\n" +
-                    "                    }\n" +
-                    "                ]\n" +
-                    "            },\n" +
-                    "            {\n" +
-                    "                \"class\": \"rom.Subrubro\",\n" +
-                    "                \"id\": 3,\n" +
-                    "                \"descripcion\": \"Calientes\",\n" +
-                    "                \"items\": [\n" +
-                    "                    {\n" +
-                    "                        \"class\": \"rom.Item\",\n" +
-                    "                        \"id\": 1,\n" +
-                    "                        \"title\": \"Empanadas\",\n" +
-                    "                        \"descripcion\": \"Empanadas de carne fritas\"\n" +
-                    "                    }\n" +
-                    "                ]\n" +
-                    "            }\n" +
-                    "        ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "        \"class\": \"rom.Rubro\",\n" +
-                    "        \"id\": 2,\n" +
-                    "        \"descripcion\": \"Postre\",\n" +
-                    "        \"subrubros\": [\n" +
-                    "            {\n" +
-                    "                \"class\": \"rom.Subrubro\",\n" +
-                    "                \"id\": 4,\n" +
-                    "                \"descripcion\": \"Tortas\",\n" +
-                    "                \"items\": [\n" +
-                    "                    {\n" +
-                    "                        \"class\": \"rom.Item\",\n" +
-                    "                        \"id\": 1,\n" +
-                    "                        \"title\": \"Selva negra\",\n" +
-                    "                        \"descripcion\": \"Porcion de selva negra\"\n" +
-                    "                    },\n" +
-                    "                    {\n" +
-                    "                        \"class\": \"rom.Item\",\n" +
-                    "                        \"id\": 2,\n" +
-                    "                        \"title\": \"Torta de Ricota\",\n" +
-                    "                        \"descripcion\": \"Porcion de torta de ricota\"\n" +
-                    "                    }\n" +
-                    "                ]\n" +
-                    "            },\n" +
-                    "            {\n" +
-                    "                \"class\": \"rom.Subrubro\",\n" +
-                    "                \"id\": 5,\n" +
-                    "                \"descripcion\": \"Tartas\",\n" +
-                    "                \"items\": [\n" +
-                    "                    {\n" +
-                    "                        \"class\": \"rom.Item\",\n" +
-                    "                        \"id\": 1,\n" +
-                    "                        \"title\": \"Lemon Pie\",\n" +
-                    "                        \"descripcion\": \"Porcion de lemon pie\"\n" +
-                    "                    }\n" +
-                    "                ]\n" +
-                    "            }\n" +
-                    "        ]\n" +
-                    "    }\n" +
-                    "]\n";
-            JSONArray jsonArray = new JSONArray(stringJson);
-            ar.com.glasit.rom.Model.Menu menu = new ar.com.glasit.rom.Model.Menu(jsonArray);
-            pushFragment(new MenuFragment(menu));
+            pushFragment(new MenuFragment());
         } catch (Exception e) {
         }
     }

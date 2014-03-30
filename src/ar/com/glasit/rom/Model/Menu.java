@@ -8,17 +8,37 @@ import java.util.Vector;
 
 public class Menu {
 
+    private static Menu instance = null;
+
     List<Item> items;
     Item currentPage;
+    private List<OnSelectItemListener> onSelectItemListeners;
 
-    public Menu(JSONArray jsonMenu) {
+    public static Menu getInstance() {
+        if (Menu.instance == null) {
+            Menu.instance = new Menu();
+        }
+        return Menu.instance;
+    }
+
+    private Menu(){
+        this(null);
+    }
+
+    private Menu(JSONArray jsonMenu) {
         this.items = new Vector<Item>();
+        this.onSelectItemListeners = new Vector<OnSelectItemListener>();
+        this.update(jsonMenu);
+    }
+
+    public void update(JSONArray jsonMenu) {
+        items.clear();
+        currentPage = null;
         try {
             for (int i = 0; i < jsonMenu.length(); i++) {
                 items.add(Item.fromJson(jsonMenu.getJSONObject(i)));
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
         }
     }
 
@@ -26,6 +46,10 @@ public class Menu {
         Item item = getItemInPage(position);
         if (item.hasChildren()) {
             currentPage = item;
+        } else {
+            for (OnSelectItemListener onSelectItemListener : onSelectItemListeners) {
+                onSelectItemListener.selectItem(item);
+            }
         }
     }
 
@@ -50,5 +74,17 @@ public class Menu {
             }
         }
         return item;
+    }
+
+    public boolean isEmpty() {
+        return this.items.isEmpty();
+    }
+
+    public void addOnSelectItemListener(OnSelectItemListener onSelectItemListener) {
+        this.onSelectItemListeners.add(onSelectItemListener);
+    }
+
+    public void removeOnSelectItemListener(OnSelectItemListener onSelectItemListener){
+        this.onSelectItemListeners.remove(onSelectItemListener);
     }
 }

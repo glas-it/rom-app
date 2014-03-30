@@ -9,6 +9,7 @@
     <string name="errorTooShortPass">La contraseña es corta</string>
     <string name="errorInvalidadPass">Contraseña incorrecta</string>
     <string name="errorFieldIncomplete">Este campo es requerido</string>
-     <string name="loginProcess">Iniciando sesión ..</string>
-    
+    <string name="loginProcess">Iniciando sesión ..</string>
+    <string name="backend_url">http://192.168.1.104/</string>
+    <string name="refresh">Refrescar</string>
 </resources>

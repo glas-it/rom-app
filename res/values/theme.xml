@@ -4,7 +4,6 @@
     <style name="Theme.Styled"
            parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
-        <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
     </style>
     <style name="Widget.Styled.ActionBar"
            parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
@@ -13,11 +12,11 @@
     </style>
     <style name="TextAppearance.Styled.Medium"
            parent="android:TextAppearance.Medium">
-        <item name="android:textColor">@color/darkGreen</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
     <style name="TextAppearance.Styled.Large"
            parent="android:TextAppearance.Large">
-        <item name="android:textColor">@color/darkGreen</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
 </resources>
