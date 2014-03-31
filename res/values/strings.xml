@@ -9,6 +9,8 @@
     <string name="errorTooShortPass">La contraseña es corta</string>
     <string name="errorInvalidadPass">Contraseña incorrecta</string>
     <string name="errorFieldIncomplete">Este campo es requerido</string>
-     <string name="loginProcess">Iniciando sesión ..</string>
+    <string name="loginProcess">Iniciando sesión ..</string>
+    <string name="closeSession">Cerar sesión</string>
+    <string name="errorDialog">Aceptar</string>
     
 </resources>

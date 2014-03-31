@@ -2,14 +2,16 @@ package ar.com.glasit.rom.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import ar.com.glasit.rom.Fragments.MenuFragment;
 import ar.com.glasit.rom.Fragments.SplashFragment;
 import ar.com.glasit.rom.Helpers.ContextHelper;
+import ar.com.glasit.rom.Model.SessionManager;
 import ar.com.glasit.rom.R;
+
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,9 +39,11 @@ public class BootstrapActivity extends StackFragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        if (menuResId != 0){
-            getSupportMenuInflater().inflate(menuResId, menu);
-        }
+        
+        getSupportMenuInflater().inflate(R.menu.bootstrap,menu);
+//        if (menuResId != 0){
+//            getSupportMenuInflater().inflate(menuResId, menu);
+//        }
         return  true;
     }
 
@@ -53,6 +57,9 @@ public class BootstrapActivity extends StackFragmentActivity {
         SherlockFragment fragment = (SherlockFragment) getLastFragment();
         if (fragment != null) {
             switch (item.getItemId()) {
+    		case R.id.close_Session:
+    			onCloseSessionButtonTapped();
+    	    	return true;
                 default:
                     break;
             }
@@ -60,6 +67,13 @@ public class BootstrapActivity extends StackFragmentActivity {
         return true;
     }
 
+    private void onCloseSessionButtonTapped() {
+    	SessionManager.getInstance().closeSession();
+     	Intent intent = new Intent(this, StartSessionActivity.class);
+     	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);	
+	}
+    
     @Override
     public void onBackPressed() {
         if  (!disableBack) {
