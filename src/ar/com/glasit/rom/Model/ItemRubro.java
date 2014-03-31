@@ -10,11 +10,11 @@ import java.util.Vector;
 
 public class ItemRubro extends Item{
 
-    private List<Item> items;
+    private List<IItem> items;
 
     public ItemRubro(JSONObject json) throws JSONException {
         super(json);
-        this.items = new Vector<Item>();
+        this.items = new Vector<IItem>();
         String keyItems = null;
         if (json.has(WellKnownKeys.SUBRUBROS)) {
             JSONArray jsonArray = json.getJSONArray(WellKnownKeys.SUBRUBROS);
@@ -31,7 +31,12 @@ public class ItemRubro extends Item{
     }
 
     @Override
-    public int getItemsCount() {
+    public List<IItem> getChildren() {
+        return items;
+    }
+
+    @Override
+    public int getChildrenCount() {
         return items.size();
     }
 
@@ -41,7 +46,7 @@ public class ItemRubro extends Item{
     }
 
     @Override
-    public Item getItem(int pos) {
+    public IItem getItem(int pos) {
         return !items.isEmpty() ? items.get(pos) : null;
     }
 

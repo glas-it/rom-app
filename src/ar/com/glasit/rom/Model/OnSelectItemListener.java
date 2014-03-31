@@ -5,5 +5,5 @@ package ar.com.glasit.rom.Model;
  */
 public interface OnSelectItemListener {
 
-    public void selectItem(Item item);
+    public void selectItem(IItem item);
 }

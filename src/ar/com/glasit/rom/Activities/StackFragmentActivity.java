@@ -2,6 +2,7 @@ package ar.com.glasit.rom.Activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import ar.com.glasit.rom.R;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -70,5 +71,13 @@ public class StackFragmentActivity extends SherlockFragmentActivity{
 
     protected Fragment getLastFragment(){
         return !this.mFragmentStack.isEmpty() ? this.mFragmentStack.lastElement() : null;
+    }
+
+    protected void popAll() {
+        FragmentManager fm = getSupportFragmentManager();
+        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+            this.mFragmentStack.pop();
+        }
     }
 }

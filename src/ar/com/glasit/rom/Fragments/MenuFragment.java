@@ -1,65 +1,73 @@
 package ar.com.glasit.rom.Fragments;
 
+import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
-import ar.com.glasit.rom.Adapters.MenuAdapter;
+import android.widget.Toast;
+import ar.com.glasit.rom.Adapters.ItemAdapter;
+import ar.com.glasit.rom.Helpers.BackendHelper;
+import ar.com.glasit.rom.Model.IItem;
 import ar.com.glasit.rom.Model.Menu;
+import ar.com.glasit.rom.Model.OnSelectItemListener;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.SearchView;
 import com.devspark.progressfragment.SherlockProgressListFragment;
 
-public class MenuFragment extends SherlockProgressListFragment{
+import java.util.List;
+import java.util.Vector;
+
+public class MenuFragment extends ItemFragment{
 
     private ListView items;
 
     private Menu menu;
-    private MenuAdapter menuAdapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    public MenuFragment() {
-        this.menu = Menu.getInstance();
-        menuAdapter = new MenuAdapter(this.menu);
+    public void onResume() {
+        super.onResume();
+        populateList();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Show indeterminate progress
         setListShown(false);
+    }
+
+    public MenuFragment() {
+        this(new Vector<OnSelectItemListener>());
+    }
+
+    public MenuFragment(OnSelectItemListener onSelectItemListener) {
+        super(Menu.getInstance(), onSelectItemListener);
+        this.menu = Menu.getInstance();
+    }
+
+    public MenuFragment(List<OnSelectItemListener> onSelectItemListeners) {
+        super(Menu.getInstance(), onSelectItemListeners);
+        this.menu = Menu.getInstance();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getListView().setBackgroundColor(Color.TRANSPARENT);
-        getListView().setCacheColorHint(Color.TRANSPARENT);
-        if (menu.isEmpty()) {
+        if (!menu.hasChildren()) {
             obtainData();
-        } else {
-
         }
     }
 
-    public void onBackPressed() {
-        menu.goBack();
-        menuAdapter.notifyDataSetInvalidated();
-    }
-
     @Override
-    public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, MenuInflater inflater) {
+    protected void inflateMenu(com.actionbarsherlock.view.Menu menu, MenuInflater inflater){
         inflater.inflate(R.menu.refresh, menu);
     }
 
@@ -69,40 +77,43 @@ public class MenuFragment extends SherlockProgressListFragment{
             case R.id.menu_refresh:
                 obtainData();
                 return true;
+            case R.id.menu_set_url:
+                AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                final EditText input = new EditText(getSherlockActivity());
+                input.setText(BackendHelper.getBackendUrl());
+                alert.setView(input);
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        BackendHelper.setBackendUrl(input.getText().toString());
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+                alert.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-
     private void obtainData(){
         setListShown(false);
-        RestService.callGetService(serviceListener, getString(R.string.backend_url), WellKnownMethods.GetMenu, null);
-    }
-
-    private void updateData(){
-        setListAdapter(menuAdapter);
-        items = getListView();
-        items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                menu.select(position);
-                menuAdapter.notifyDataSetInvalidated();
-            }
-        });
-        setListShown(true);
+        RestService.callGetService(serviceListener, BackendHelper.getBackendUrl(), WellKnownMethods.GetMenu, null);
     }
 
     ServiceListener serviceListener = new ServiceListener() {
         @Override
         public void onServiceCompleted(IServiceRequest request, ServiceResponse obj) {
             menu.update(obj.getJsonArray());
-            updateData();
+            populateList();
         }
 
         @Override
         public void onError(String error) {
-            setListShown(false);
+            Toast.makeText(getSherlockActivity(), getSherlockActivity().getText(R.string.connectivity_error), Toast.LENGTH_SHORT).show();
+            setListShown(true);
         }
     };
 }

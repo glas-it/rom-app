@@ -4,25 +4,27 @@ import ar.com.glasit.rom.Service.WellKnownKeys;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class Item {
+import java.util.List;
+
+public abstract class Item implements IItem {
 
     protected Long id;
     protected String description;
-    protected Item parent;
+    protected IItem parent;
 
     public Item(JSONObject jsonItem) throws JSONException {
         this.id = jsonItem.getLong(WellKnownKeys.ID);
         this.description = jsonItem.getString(WellKnownKeys.DESCRIPTION);
     }
 
-    public static Item fromJson(JSONObject json, Item parent) {
-        Item item = fromJson(json);
+    public static IItem fromJson(JSONObject json, Item parent) {
+        IItem item = fromJson(json);
         if (item != null) {
             item.setParent(parent);
         }
         return item;
     }
-    public static Item fromJson(JSONObject json) {
+    public static IItem fromJson(JSONObject json) {
         Item item = null;
         try {
             String itemType = json.getString(WellKnownKeys.CLASS);
@@ -42,21 +44,35 @@ public abstract class Item {
         return id;
     }
 
-    public abstract int getItemsCount();
+    @Override
+    public abstract List<IItem> getChildren();
 
+    @Override
+    public abstract int getChildrenCount();
+
+    @Override
     public abstract boolean hasChildren();
-    public abstract Item getItem(int pos);
 
-    public Item getParent() {
+    @Override
+    public abstract IItem getItem(int pos);
+
+    @Override
+    public IItem getParent() {
         return parent;
     }
 
-    public void setParent(Item parent) {
+    @Override
+    public void setParent(IItem parent) {
         this.parent = parent;
     }
 
     @Override
     public String toString() {
+        return description;
+    }
+
+    @Override
+    public String getDescription() {
         return description;
     }
 }

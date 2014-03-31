@@ -12,4 +12,12 @@
     <string name="loginProcess">Iniciando sesión ..</string>
     <string name="backend_url">http://192.168.1.104/</string>
     <string name="refresh">Refrescar</string>
+    <string name="menu">Carta</string>
+    <string name="search">Buscar</string>
+    <string name="notes">Notas:</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="settings">Preferencias</string>
+    <string name="empty">No hay resultados</string>
+    <string name="connectivity_error">Hubo un problema con la conexión a internet. Revise si esta conectado e intente más tarde.</string>
 </resources>

@@ -1,18 +1,17 @@
 package ar.com.glasit.rom.Model;
 
+import ar.com.glasit.rom.Helpers.ContextHelper;
+import ar.com.glasit.rom.R;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.List;
 import java.util.Vector;
 
-public class Menu {
+public class Menu implements IItem{
 
     private static Menu instance = null;
 
-    List<Item> items;
-    Item currentPage;
-    private List<OnSelectItemListener> onSelectItemListeners;
+    List<IItem> items;
 
     public static Menu getInstance() {
         if (Menu.instance == null) {
@@ -26,14 +25,12 @@ public class Menu {
     }
 
     private Menu(JSONArray jsonMenu) {
-        this.items = new Vector<Item>();
-        this.onSelectItemListeners = new Vector<OnSelectItemListener>();
+        this.items = new Vector<IItem>();
         this.update(jsonMenu);
     }
 
     public void update(JSONArray jsonMenu) {
         items.clear();
-        currentPage = null;
         try {
             for (int i = 0; i < jsonMenu.length(); i++) {
                 items.add(Item.fromJson(jsonMenu.getJSONObject(i)));
@@ -42,49 +39,47 @@ public class Menu {
         }
     }
 
-    public void select(int position){
-        Item item = getItemInPage(position);
-        if (item.hasChildren()) {
-            currentPage = item;
-        } else {
-            for (OnSelectItemListener onSelectItemListener : onSelectItemListeners) {
-                onSelectItemListener.selectItem(item);
-            }
-        }
+     public IItem getItem(int position) {
+        return items.get(position);
     }
 
-    public void goBack() {
-        if (currentPage != null) {
-            Item item = currentPage.getParent();
-            currentPage = item;
-        }
+    @Override
+    public Long getId() {
+        return 0L;
     }
 
-    public int getCountInPage() {
-        return (currentPage != null) ? currentPage.getItemsCount() : items.size();
+    @Override
+    public List<IItem> getChildren() {
+        return items;
     }
 
-    public Item getItemInPage(int position) {
-        Item item = null;
-        if (currentPage == null) {
-            item = items.get(position);
-        } else {
-            if (currentPage.hasChildren()) {
-                item = currentPage.getItem(position);
-            }
-        }
-        return item;
+    @Override
+    public int getChildrenCount() {
+        return items.size();
     }
 
-    public boolean isEmpty() {
-        return this.items.isEmpty();
+    @Override
+    public boolean hasChildren() {
+        return !items.isEmpty() ;
     }
 
-    public void addOnSelectItemListener(OnSelectItemListener onSelectItemListener) {
-        this.onSelectItemListeners.add(onSelectItemListener);
+    @Override
+    public IItem getParent() {
+        return null;
     }
 
-    public void removeOnSelectItemListener(OnSelectItemListener onSelectItemListener){
-        this.onSelectItemListeners.remove(onSelectItemListener);
+    @Override
+    public void setParent(IItem item) {
+        throw new IllegalArgumentException();
+    }
+
+    @Override
+    public String getDescription() {
+        return toString();
+    }
+
+    @Override
+    public String toString() {
+        return ContextHelper.getContextInstance().getText(R.string.menu).toString();
     }
 }

@@ -5,6 +5,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class ItemProducto extends Item{
 
     private String title;
@@ -15,7 +17,12 @@ public class ItemProducto extends Item{
     }
 
     @Override
-    public int getItemsCount() {
+    public List<IItem> getChildren() {
+        return null;
+    }
+
+    @Override
+    public int getChildrenCount() {
         return 0;
     }
 
@@ -28,4 +35,10 @@ public class ItemProducto extends Item{
     public Item getItem(int pos) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
+
 }
