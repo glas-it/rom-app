@@ -20,4 +20,6 @@
     <string name="settings">Preferencias</string>
     <string name="empty">No hay resultados</string>
     <string name="connectivity_error">Hubo un problema con la conexión a internet. Revise si esta conectado e intente más tarde.</string>
+    <string name="closeSession">Cerar sesión</string>
+    <string name="errorDialog">Aceptar</string>
 </resources>

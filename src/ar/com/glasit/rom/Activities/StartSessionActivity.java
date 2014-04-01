@@ -2,8 +2,10 @@ package ar.com.glasit.rom.Activities;
 
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 import ar.com.glasit.rom.R;
+import ar.com.glasit.rom.Dialogs.ErrorDialogFragment;
+import ar.com.glasit.rom.Dialogs.ErrorDialogFragment.IErrorListener;
+import ar.com.glasit.rom.Model.SessionManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -11,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,10 +21,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class StartSessionActivity extends SherlockFragmentActivity {
+public class StartSessionActivity extends SherlockFragmentActivity 
+							implements IErrorListener{
 	
 	
 	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+
+	private static final String errorInvalidCredentials = "Usuario y/o contraseña incorrecta";
+
+	private static final String errorLoginFailed = "Login error";
 
 	// User y password para el login.
 	private String userName;
@@ -39,11 +45,11 @@ public class StartSessionActivity extends SherlockFragmentActivity {
 
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
+	
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start_session);
-
+				
 		userName = getIntent().getStringExtra(EXTRA_EMAIL);
 		mUserView = (EditText) findViewById(R.id.userLogin);
 		mUserView.setText(userName);
@@ -75,9 +81,14 @@ public class StartSessionActivity extends SherlockFragmentActivity {
 					}
 				});
 		
+		SessionManager.initialize(getPreferences(0));
+		SessionManager.getInstance().retrieveUser();
 		
-		//TODO: si ya esta logeado saltar directo de actividad
-
+		//valido si ya esta logeado 
+		if(SessionManager.getInstance().isSessionOn())	{
+	    	Intent intent = new Intent(this, BootstrapActivity.class);
+	    	startActivity(intent);
+		}
 
 	}
 
@@ -109,7 +120,7 @@ public class StartSessionActivity extends SherlockFragmentActivity {
 			cancel = true;
 			attemptingLogin=false;
 		}
-		else if (userPass.length() < 6)
+		else if (userPass.length() < 4)
 		{
 			mPasswordView.setError(getString(R.string.errorTooShortPass));
 			focusView = mPasswordView;
@@ -117,27 +128,25 @@ public class StartSessionActivity extends SherlockFragmentActivity {
 			attemptingLogin=false;
 		}
 
-		if (TextUtils.isEmpty(userName))
-		{
+		if (TextUtils.isEmpty(userName))	{
 			mUserView.setError(getString(R.string.errorFieldIncomplete));
 			focusView = mUserView;
 			cancel = true;
 			attemptingLogin=false;
 		}
+		
 
-		if (cancel)
-		{
+		if (cancel)	{
 			focusView.requestFocus();
 		}
 		
 		//logear
-		else
-		{
+		else	{
 			mLoginStatusMessageView.setText(R.string.loginProcess);
 			showProgress(true);
-	
-			//TODO: login services
 			
+			
+			//TODO: login services
 			Intent intent = new Intent(this, BootstrapActivity.class);
 			startActivity(intent);
 
@@ -192,4 +201,22 @@ public class StartSessionActivity extends SherlockFragmentActivity {
 	}
 
 
+	public void loginFailed() {
+		showProgress(false);
+		attemptingLogin = false;
+
+		ErrorDialogFragment dialog = new ErrorDialogFragment();
+    	dialog.show(getSupportFragmentManager(), "Error");
+	}
+
+	@Override
+	public String getErrorMessage() {
+		return errorInvalidCredentials;
+	}
+
+	@Override
+	public String getErrorTitle() {
+		return errorLoginFailed;
+	}
+	
 }

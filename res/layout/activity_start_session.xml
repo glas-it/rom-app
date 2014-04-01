@@ -6,16 +6,17 @@
     <ScrollView
         android:id="@+id/loginScroll"
         android:layout_width="match_parent"
-        android:layout_height="504dp"
+        android:layout_height="match_parent"
         android:layout_weight="0.23"
-        android:background="@color/orange"
+        android:background="@drawable/food"
         android:scrollbars="none" >
 
         <LinearLayout
             style="@color/black_overlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="50dp">
 
             <EditText
                 android:id="@+id/userLogin"
@@ -24,7 +25,7 @@
                 android:ems="10"
                 android:hint="@string/userName"
                 android:inputType="textPersonName"
-                android:paddingTop="20dp" >
+                android:singleLine="true">
 
                 <requestFocus />
             </EditText>
@@ -36,7 +37,7 @@
                 android:ems="10"
                 android:hint="@string/userPass"
                 android:inputType="textPassword"
-                android:paddingTop="20dp" />
+                android:singleLine="true"/>
 
             <Button
                 android:id="@+id/loginButton"
@@ -58,7 +59,7 @@
         android:layout_gravity="center"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <ProgressBar
             android:id="@+id/loginProgressBar"

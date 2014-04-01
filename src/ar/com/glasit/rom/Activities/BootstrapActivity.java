@@ -3,22 +3,14 @@ package ar.com.glasit.rom.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-import ar.com.glasit.rom.Fragments.ItemFragment;
 import ar.com.glasit.rom.Fragments.MenuFragment;
-import ar.com.glasit.rom.Fragments.SplashFragment;
 import ar.com.glasit.rom.Helpers.ContextHelper;
-import ar.com.glasit.rom.Model.IItem;
-import ar.com.glasit.rom.Model.OnSelectItemListener;
 import ar.com.glasit.rom.R;
-import com.actionbarsherlock.app.SherlockActivity;
+import ar.com.glasit.rom.Model.SessionManager;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.Vector;
 
 public class BootstrapActivity extends SherlockFragmentActivity{
 
@@ -38,6 +30,13 @@ public class BootstrapActivity extends SherlockFragmentActivity{
         }
     }
 
+    private void onCloseSessionButtonTapped() {
+    	SessionManager.getInstance().closeSession();
+     	Intent intent = new Intent(this, StartSessionActivity.class);
+     	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);	
+	}
+    
     private boolean isFirstTime(){
         return false;
     }
