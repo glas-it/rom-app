@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Vector;
 
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 
@@ -117,6 +118,14 @@ public class RestService extends AsyncTask<Void, Void, ServiceResponse> {
         serviceThread.addListener(serviceListener);
 		serviceThread.execute();
 	}
+
+    public static void callGetService(ServiceListener serviceListener, String method, List<NameValuePair> parameters) {
+        callGetService(serviceListener, BackendHelper.getBackendUrl(), method, parameters);
+    }
+
+    public static void callPostService(ServiceListener serviceListener, String method, List<NameValuePair> parameters) {
+        callPostService(serviceListener, BackendHelper.getBackendUrl(), method, parameters);
+    }
 
     public static void callGetService(ServiceListener serviceListener, String url, String method, List<NameValuePair> parameters) {
         IServiceRequest serviceRequest = new ServiceGetRequest(url);

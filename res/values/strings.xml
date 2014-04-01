@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ROM</string>
-    <string name="userName">Usuario</string>
+    <string name="userName">Usuario/PIN</string>
     <string name="userPass">Contraseña</string>
     <string name="userPassWord">Contraseña</string>
     <string name="attempLoginButton">Iniciar sesión</string>
     <string name="errorMail">Nombre de usuario inválido</string>
     <string name="errorTooShortPass">La contraseña es corta</string>
     <string name="errorInvalidadPass">Contraseña incorrecta</string>
-    <string name="errorFieldIncomplete">Este campo es requerido</string>
+    <string name="errorFieldIncomplete">Por favor completa con tu usuario/PIN</string>
     <string name="loginProcess">Iniciando sesión ..</string>
     <string name="backend_url">http://192.168.1.104/</string>
     <string name="refresh">Refrescar</string>
@@ -19,7 +19,7 @@
     <string name="ok">OK</string>
     <string name="settings">Preferencias</string>
     <string name="empty">No hay resultados</string>
-    <string name="connectivity_error">Hubo un problema con la conexión a internet. Revise si esta conectado e intente más tarde.</string>
-    <string name="closeSession">Cerar sesión</string>
+    <string name="connectivity_error">El servidor no responde, por favor revise si esta conectado y/o intente más tarde.</string>
+    <string name="closeSession">Cerrar sesión</string>
     <string name="errorDialog">Aceptar</string>
 </resources>

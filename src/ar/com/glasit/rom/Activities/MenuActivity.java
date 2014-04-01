@@ -2,12 +2,14 @@ package ar.com.glasit.rom.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import ar.com.glasit.rom.Fragments.ItemFragment;
 import ar.com.glasit.rom.Fragments.MenuFragment;
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.IItem;
 import ar.com.glasit.rom.Model.OnSelectItemListener;
 import ar.com.glasit.rom.R;
@@ -37,6 +39,13 @@ public class MenuActivity extends StackFragmentActivity implements OnSelectItemL
             case android.R.id.home:
                 popAll();
                 return true;
+            case R.id.close_Session:
+                BackendHelper.setLoggedUser("");
+                Intent intent = new Intent(this, StartSessionActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                break;
             default:
                 break;
         }

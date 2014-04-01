@@ -77,22 +77,6 @@ public class MenuFragment extends ItemFragment{
             case R.id.menu_refresh:
                 obtainData();
                 return true;
-            case R.id.menu_set_url:
-                AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
-                final EditText input = new EditText(getSherlockActivity());
-                input.setText(BackendHelper.getBackendUrl());
-                alert.setView(input);
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        BackendHelper.setBackendUrl(input.getText().toString());
-                    }
-                });
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                });
-                alert.show();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -100,7 +84,7 @@ public class MenuFragment extends ItemFragment{
 
     private void obtainData(){
         setListShown(false);
-        RestService.callGetService(serviceListener, BackendHelper.getBackendUrl(), WellKnownMethods.GetMenu, null);
+        RestService.callGetService(serviceListener, WellKnownMethods.GetMenu, null);
     }
 
     ServiceListener serviceListener = new ServiceListener() {

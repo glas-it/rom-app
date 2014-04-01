@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import ar.com.glasit.rom.Fragments.MenuFragment;
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Helpers.ContextHelper;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Model.SessionManager;
@@ -23,32 +24,21 @@ public class BootstrapActivity extends SherlockFragmentActivity{
         ContextHelper.setContextInstance(this.getApplicationContext());
         if (savedInstanceState == null) {
             if (isFirstTime()){
-                showSplash();
+                startLoginUser();
             } else {
                 startApp();
             }
         }
     }
 
-    private void onCloseSessionButtonTapped() {
-    	SessionManager.getInstance().closeSession();
-     	Intent intent = new Intent(this, StartSessionActivity.class);
-     	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);	
-	}
-    
     private boolean isFirstTime(){
-        return false;
-    }
-
-    private void showSplash() {
-        getSupportActionBar().hide();
-        //getSupportFragmentManager().beginTransaction().add(R.id.container, new SplashFragment()).commit();
-        startLoginUser();
+        return BackendHelper.getLoggedUser().isEmpty();
     }
 
     private void startLoginUser() {
-        // TODO:
+        getSupportActionBar().show();
+        startActivity(new Intent(this, StartSessionActivity.class));
+        finish();
     }
 
     private void startApp() {
