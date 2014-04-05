@@ -8,18 +8,26 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Vector;
 
-public class ItemRubro extends Item{
+public class ItemSubRubro extends Item{
 
     private List<IItem> items;
+    private List<Addition> additions;
 
-    public ItemRubro(JSONObject json) throws JSONException {
+    public ItemSubRubro(JSONObject json) throws JSONException {
         super(json);
         this.items = new Vector<IItem>();
+        additions = new Vector<Addition>();
         String keyItems = null;
-        if (json.has(WellKnownKeys.SUBRUBROS)) {
-            JSONArray jsonArray = json.getJSONArray(WellKnownKeys.SUBRUBROS);
+        if (json.has(WellKnownKeys.ITEMS)) {
+            JSONArray jsonArray = json.getJSONArray(WellKnownKeys.ITEMS);
             for (int i = 0; i < jsonArray.length(); i++) {
                 items.add(Item.fromJson(jsonArray.getJSONObject(i), this));
+            }
+        }
+        if (json.has(WellKnownKeys.ADDITIONS)) {
+            JSONArray jsonArray = json.getJSONArray(WellKnownKeys.ADDITIONS);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                additions.add(Addition.fromJson(jsonArray.getJSONObject(i), this));
             }
         }
     }
@@ -44,4 +52,7 @@ public class ItemRubro extends Item{
         return !items.isEmpty() ? items.get(pos) : null;
     }
 
+    public List<Addition> getAdditions() {
+        return additions;
+    }
 }

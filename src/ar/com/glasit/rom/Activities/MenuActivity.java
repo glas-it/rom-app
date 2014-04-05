@@ -6,14 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import ar.com.glasit.rom.Fragments.ItemFragment;
 import ar.com.glasit.rom.Fragments.MenuFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
-import ar.com.glasit.rom.Model.IItem;
-import ar.com.glasit.rom.Model.OnSelectItemListener;
+import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.R;
 import com.actionbarsherlock.view.MenuItem;
+
+import java.util.List;
 
 public class MenuActivity extends StackFragmentActivity implements OnSelectItemListener {
 
@@ -63,6 +66,32 @@ public class MenuActivity extends StackFragmentActivity implements OnSelectItemL
             view.findViewById(R.id.description_layout).setVisibility(View.VISIBLE);
             TextView textView = (TextView) view.findViewById(R.id.description);
             textView.setText(description);
+        }
+
+        List<Addition> additions = ((ItemSubRubro)item.getParent()).getAdditions();
+
+        if (!additions.isEmpty()) {
+            view.findViewById(R.id.addition_layout).setVisibility(View.VISIBLE);
+            RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.addition_radios);
+            for (Addition addition: additions) {
+                RadioButton rad = new RadioButton(this);
+                rad.setText(addition.toString());
+                radioGroup.addView(rad);
+            }
+            ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
+        }
+
+        List<String> prices = ((ItemProduct)item).getPrices();
+
+        if (!prices.isEmpty()) {
+            view.findViewById(R.id.price_layout).setVisibility(View.VISIBLE);
+            RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.price_radios);
+            for (String s: prices) {
+                RadioButton rad = new RadioButton(this);
+                rad.setText(s);
+                radioGroup.addView(rad);
+            }
+            ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
         }
 
         builder.setView(view);

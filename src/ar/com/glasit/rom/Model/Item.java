@@ -9,12 +9,12 @@ import java.util.List;
 public abstract class Item implements IItem {
 
     protected Long id;
-    protected String description;
+    protected String title;
     protected IItem parent;
 
     public Item(JSONObject jsonItem) throws JSONException {
         this.id = jsonItem.getLong(WellKnownKeys.ID);
-        this.description = jsonItem.getString(WellKnownKeys.DESCRIPTION);
+        this.title = jsonItem.getString(WellKnownKeys.TITLE);
     }
 
     public static IItem fromJson(JSONObject json, Item parent) {
@@ -29,11 +29,11 @@ public abstract class Item implements IItem {
         try {
             String itemType = json.getString(WellKnownKeys.CLASS);
             if (itemType.toLowerCase().contains("subrubro")) {
-                item = new ItemRubro(json);
+                item = new ItemSubRubro(json);
             } else if (itemType.toLowerCase().contains("rubro")) {
                 item = new ItemRubro(json);
             } else {
-                item = new ItemProducto(json);
+                item = new ItemProduct(json);
             }
         } catch (Exception e) {
         }
@@ -68,11 +68,11 @@ public abstract class Item implements IItem {
 
     @Override
     public String toString() {
-        return description;
+        return title;
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return toString();
     }
 }
