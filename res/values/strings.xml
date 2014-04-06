@@ -5,7 +5,7 @@
     <string name="userPass">Contraseña</string>
     <string name="userPassWord">Contraseña</string>
     <string name="attempLoginButton">Iniciar sesión</string>
-    <string name="errorMail">Nombre de usuario inválido</string>
+    <string name="errorMail">Usuario/PIN inválido</string>
     <string name="errorTooShortPass">La contraseña es corta</string>
     <string name="errorInvalidadPass">Contraseña incorrecta</string>
     <string name="errorFieldIncomplete">Por favor completa con tu usuario/PIN</string>

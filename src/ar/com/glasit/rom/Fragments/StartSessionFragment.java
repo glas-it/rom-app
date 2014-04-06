@@ -28,6 +28,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.devspark.progressfragment.SherlockProgressFragment;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 
 import java.util.List;
 import java.util.Vector;
@@ -157,10 +158,8 @@ public class StartSessionFragment extends SherlockProgressFragment{
             showError(getString(R.string.errorFieldIncomplete));
         } else {
             List<NameValuePair> nameValuePairs = new Vector<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("username", userName));
-            nameValuePairs.add(new BasicNameValuePair("password", userKey));
             setContentShown(false);
-            RestService.callPostService(serviceListener, WellKnownMethods.Login, nameValuePairs);
+            RestService.callGetService(serviceListener, WellKnownMethods.Login + userName + "/" + userKey, nameValuePairs);
         }
     }
 
@@ -172,8 +171,16 @@ public class StartSessionFragment extends SherlockProgressFragment{
         @Override
         public void onServiceCompleted(IServiceRequest request, ServiceResponse obj) {
             setContentShown(true);
-            BackendHelper.setLoggedUser(mUserView.getText().toString());
-            loginListener.loginSuccess();
+            try {
+                if (obj.getSuccess()) {
+                    BackendHelper.setLoggedUser(mUserView.getText().toString());
+                    loginListener.loginSuccess();
+                } else {
+                    showError(getString(R.string.errorMail));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
