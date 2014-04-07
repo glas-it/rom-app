@@ -77,7 +77,7 @@ public class ItemFragment extends ListSearcherFragment{
                     }
                 }
             });
+            setListShown(true);
         }
-        setListShown(true);
     }
 }
