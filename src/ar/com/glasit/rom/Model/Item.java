@@ -75,4 +75,9 @@ public abstract class Item implements IItem {
     public String getDescription() {
         return toString();
     }
+
+    @Override
+    public boolean isAvailable() {
+        return true;
+    }
 }

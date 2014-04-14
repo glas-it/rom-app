@@ -9,6 +9,7 @@ public class BackendHelper {
     private static final String BASE_URL = "BASE_URL";
     private static final String USER = "USER";
     private static final String KEY = "KEY";
+    private static final String APP_TYPE = "APP_TYPE";
     private static final String COMPANY = "COMPANY";
 
     private BackendHelper(){}
@@ -44,6 +45,14 @@ public class BackendHelper {
 
     public static void setSecretKey(String key) {
         ContextHelper.putSharedPrefenrece(BackendHelper.PREF_NAME, BackendHelper.KEY, key);
+    }
+
+    public static void setAppType(String key) {
+        ContextHelper.putSharedPrefenrece(BackendHelper.PREF_NAME, BackendHelper.APP_TYPE, key);
+    }
+
+    public static String getsetAppType(){
+        return ContextHelper.getSharedPrefenrece(BackendHelper.PREF_NAME, BackendHelper.APP_TYPE);
     }
 
     public static void setLoggedUser(String user) {

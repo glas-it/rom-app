@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="appTypes">
+        <item>Mozo</item>
+<!--
+        <item>Cocina</item>
+        <item>Barra</item>
+-->
+    </string-array>
 </resources>

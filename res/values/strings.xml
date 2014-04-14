@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">ROM</string>
     <string name="userName">Usuario/PIN</string>
+    <string name="restaurantKey">Id Restaurante</string>
     <string name="userPass">Contraseña</string>
     <string name="userPassWord">Contraseña</string>
     <string name="attempLoginButton">Iniciar sesión</string>
@@ -20,8 +21,11 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="settings">Preferencias</string>
+    <string name="setup">Configuración</string>
     <string name="empty">No hay resultados</string>
     <string name="connectivity_error">El servidor no responde, por favor revise si esta conectado y/o intente más tarde.</string>
     <string name="closeSession">Cerrar sesión</string>
     <string name="errorDialog">Aceptar</string>
+    <string name="continuar">Continuar</string>
+    <string name="empty_restaurant_key">Por favor completa la clave de identificación del restaurante</string>
 </resources>

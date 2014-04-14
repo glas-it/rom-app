@@ -16,6 +16,7 @@ public class ItemProduct extends Item{
 
     private String description;
     private List<NameValuePair> prices;
+    private boolean isAvailable;
 
     public ItemProduct(JSONObject json) throws JSONException {
         super(json);
@@ -29,6 +30,7 @@ public class ItemProduct extends Item{
                 prices.add(new BasicNameValuePair(next, jsonPrices.getString(next)));
             }
         }
+        this.isAvailable = json.getBoolean(WellKnownKeys.AVAILABLE);
     }
 
     @Override
@@ -54,6 +56,11 @@ public class ItemProduct extends Item{
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return isAvailable;
     }
 
     public List<String> getPrices() {

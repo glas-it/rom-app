@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/userName"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:singleLine="true">
-
         <requestFocus />
     </EditText>
 

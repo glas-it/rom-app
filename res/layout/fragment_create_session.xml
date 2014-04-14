@@ -8,24 +8,30 @@
     android:gravity="center">
 
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/applicationType"
+        android:layout_marginBottom="10px"
+        android:entries="@array/appTypes"/>
     <EditText
-        android:id="@+id/userLogin"
+        android:id="@+id/restaurantKey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/userName"
+        android:hint="@string/restaurantKey"
         android:inputType="textPassword"
-        android:singleLine="true">
-        <requestFocus />
+        android:singleLine="true"
+        android:layout_marginTop="10px">
     </EditText>
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="@string/attempLoginButton" />
+        android:text="@string/continuar" />
 </LinearLayout>

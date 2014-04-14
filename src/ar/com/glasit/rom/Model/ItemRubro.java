@@ -43,5 +43,4 @@ public class ItemRubro extends Item{
     public IItem getItem(int pos) {
         return !items.isEmpty() ? items.get(pos) : null;
     }
-
 }

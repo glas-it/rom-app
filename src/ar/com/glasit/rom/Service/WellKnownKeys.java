@@ -10,5 +10,6 @@ public class WellKnownKeys {
     public static final String CLASS = "class";
     public static final String PRICE = "precio";
     public static final String PRICES = "precios";
+    public static final String AVAILABLE = "disponible";
 
 }

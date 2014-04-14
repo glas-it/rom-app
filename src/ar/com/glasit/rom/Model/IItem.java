@@ -22,4 +22,6 @@ public interface IItem {
     public void setParent(IItem item);
 
     public String getDescription();
+
+    public boolean isAvailable();
 }

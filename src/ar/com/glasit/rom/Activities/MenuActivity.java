@@ -29,7 +29,7 @@ public class MenuActivity extends StackFragmentActivity implements OnSelectItemL
 
     @Override
     public void selectItem(IItem item) {
-        if (item.hasChildren()){
+        if (item.hasChildren() && item.isAvailable()){
             pushFragment(new ItemFragment(item, this));
         } else {
             showItemDialog(item);

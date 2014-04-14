@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import ar.com.glasit.rom.Fragments.MenuFragment;
+import ar.com.glasit.rom.Fragments.SetUpFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Helpers.ContextHelper;
 import ar.com.glasit.rom.R;
@@ -24,6 +25,8 @@ public class BootstrapActivity extends SherlockFragmentActivity{
         ContextHelper.setContextInstance(this.getApplicationContext());
         if (savedInstanceState == null) {
             if (isFirstTime()){
+                startSetup();
+            } else if (!isLoggedIn()) {
                 startLoginUser();
             } else {
                 startApp();
@@ -31,8 +34,12 @@ public class BootstrapActivity extends SherlockFragmentActivity{
         }
     }
 
+    private boolean isLoggedIn(){
+        return !BackendHelper.getLoggedUser().isEmpty();
+    }
+
     private boolean isFirstTime(){
-        return BackendHelper.getLoggedUser().isEmpty();
+        return BackendHelper.getsetAppType().isEmpty();
     }
 
     private void startLoginUser() {
@@ -44,6 +51,11 @@ public class BootstrapActivity extends SherlockFragmentActivity{
     private void startApp() {
         getSupportActionBar().show();
         startActivity(new Intent(this, MenuActivity.class));
+        finish();
+    }
+
+    private void startSetup() {
+        startActivity(new Intent(this, SetUpActivity.class));
         finish();
     }
 }

@@ -56,6 +56,11 @@ public class ItemAdapter extends BaseAdapter implements Filterable {
             TextView description = (TextView) rowView.findViewById(android.R.id.text1);
             description.setTextColor(Color.BLACK);
             description.setText(filteredData.get(position).toString());
+            if (!filteredData.get(position).isAvailable()) {
+                description.setTextColor(Color.GRAY);
+                Color.argb(128,160,160,160);
+                rowView.setEnabled(false);
+            }
         }
         return rowView;
     }
