@@ -11,7 +11,7 @@ import java.util.Vector;
 public class ItemRubro extends Item{
 
     private List<IItem> items;
-
+    private int order;
     public ItemRubro(JSONObject json) throws JSONException {
         super(json);
         this.items = new Vector<IItem>();
@@ -21,6 +21,9 @@ public class ItemRubro extends Item{
             for (int i = 0; i < jsonArray.length(); i++) {
                 items.add(Item.fromJson(jsonArray.getJSONObject(i), this));
             }
+        }
+        if (json.has(WellKnownKeys.ORDER)) {
+            this.order = json.getInt(WellKnownKeys.ORDER);
         }
     }
 
@@ -42,5 +45,9 @@ public class ItemRubro extends Item{
     @Override
     public IItem getItem(int pos) {
         return !items.isEmpty() ? items.get(pos) : null;
+    }
+
+    public int getOrder() {
+        return this.order;
     }
 }

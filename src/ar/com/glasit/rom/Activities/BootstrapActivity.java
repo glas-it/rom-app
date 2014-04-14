@@ -3,16 +3,10 @@ package ar.com.glasit.rom.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-import ar.com.glasit.rom.Fragments.MenuFragment;
-import ar.com.glasit.rom.Fragments.SetUpFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Helpers.ContextHelper;
 import ar.com.glasit.rom.R;
-import ar.com.glasit.rom.Model.SessionManager;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 
 public class BootstrapActivity extends SherlockFragmentActivity{
 

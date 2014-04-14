@@ -1,27 +1,15 @@
 package ar.com.glasit.rom.Fragments;
 
-import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-import ar.com.glasit.rom.Adapters.ItemAdapter;
-import ar.com.glasit.rom.Helpers.BackendHelper;
-import ar.com.glasit.rom.Model.IItem;
 import ar.com.glasit.rom.Model.Menu;
 import ar.com.glasit.rom.Model.OnSelectItemListener;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.widget.SearchView;
-import com.devspark.progressfragment.SherlockProgressListFragment;
 
 import java.util.List;
 import java.util.Vector;

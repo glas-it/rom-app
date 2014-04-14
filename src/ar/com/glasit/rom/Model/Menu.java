@@ -4,6 +4,8 @@ import ar.com.glasit.rom.Helpers.ContextHelper;
 import ar.com.glasit.rom.R;
 import org.json.JSONArray;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -35,6 +37,19 @@ public class Menu implements IItem{
             for (int i = 0; i < jsonMenu.length(); i++) {
                 items.add(Item.fromJson(jsonMenu.getJSONObject(i)));
             }
+            Collections.sort(items, new Comparator<IItem>() {
+                @Override
+                public int compare(IItem iItem, IItem iItem1) {
+                    ItemRubro r1 = (ItemRubro) iItem;
+                    ItemRubro r2 = (ItemRubro) iItem1;
+                    if (r1.getOrder() > r2.getOrder()) {
+                        return 1;
+                    } else if (r1.getOrder() < r2.getOrder()) {
+                        return -1;
+                    }
+                    return 0;
+                }
+            });
         } catch (Exception e) {
         }
     }

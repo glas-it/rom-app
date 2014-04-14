@@ -31,7 +31,7 @@ public class MenuActivity extends StackFragmentActivity implements OnSelectItemL
     public void selectItem(IItem item) {
         if (item.hasChildren() && item.isAvailable()){
             pushFragment(new ItemFragment(item, this));
-        } else {
+        } else if (item.getClass() == ItemProduct.class){
             showItemDialog(item);
         }
     }
@@ -71,27 +71,43 @@ public class MenuActivity extends StackFragmentActivity implements OnSelectItemL
         List<Addition> additions = ((ItemSubRubro)item.getParent()).getAdditions();
 
         if (!additions.isEmpty()) {
-            view.findViewById(R.id.addition_layout).setVisibility(View.VISIBLE);
             RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.addition_radios);
+            boolean showRadioGroup = false;
             for (Addition addition: additions) {
                 RadioButton rad = new RadioButton(this);
-                rad.setText(addition.toString());
-                radioGroup.addView(rad);
+                if (!addition.toString().isEmpty() &&
+                        !addition.toString().equals("null") &&
+                            !addition.toString().trim().equals("null")) {
+                    showRadioGroup = true;
+                    rad.setText(addition.toString());
+                    radioGroup.addView(rad);
+                }
             }
-            ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
+            if (showRadioGroup) {
+                view.findViewById(R.id.addition_layout).setVisibility(View.VISIBLE);
+                ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
+            }
         }
 
         List<String> prices = ((ItemProduct)item).getPrices();
 
         if (!prices.isEmpty()) {
-            view.findViewById(R.id.price_layout).setVisibility(View.VISIBLE);
             RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.price_radios);
+            boolean showRadioGroup = false;
             for (String s: prices) {
                 RadioButton rad = new RadioButton(this);
-                rad.setText(s);
-                radioGroup.addView(rad);
+                if (!s.toString().isEmpty() &&
+                        !s.toString().equals("null") &&
+                        !s.toString().trim().equals("null")) {
+                    showRadioGroup = true;
+                    rad.setText(s);
+                    radioGroup.addView(rad);
+                }
             }
-            ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
+            if (showRadioGroup) {
+                view.findViewById(R.id.price_layout).setVisibility(View.VISIBLE);
+                ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
+            }
         }
 
         builder.setView(view);

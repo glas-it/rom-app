@@ -11,5 +11,6 @@ public class WellKnownKeys {
     public static final String PRICE = "precio";
     public static final String PRICES = "precios";
     public static final String AVAILABLE = "disponible";
+    public static final String ORDER = "orden";
 
 }

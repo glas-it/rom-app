@@ -1,6 +1,5 @@
 package ar.com.glasit.rom.Helpers;
 
-import android.content.Context;
 import ar.com.glasit.rom.R;
 
 public class BackendHelper {
