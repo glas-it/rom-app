@@ -4,15 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Filterable;
 import ar.com.glasit.rom.R;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.widget.SearchView;
 import com.devspark.progressfragment.SherlockProgressListFragment;
-
-import java.io.File;
 
 public class ListSearcherFragment extends SherlockProgressListFragment implements SearchView.OnQueryTextListener{
 
