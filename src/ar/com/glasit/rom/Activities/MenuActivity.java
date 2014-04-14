@@ -31,7 +31,7 @@ public class MenuActivity extends StackFragmentActivity implements OnSelectItemL
     public void selectItem(IItem item) {
         if (item.hasChildren() && item.isAvailable()){
             pushFragment(new ItemFragment(item, this));
-        } else if (item.getClass() == ItemProduct.class){
+        } else if (item.getClass() == ItemProduct.class && item.isAvailable()){
             showItemDialog(item);
         }
     }

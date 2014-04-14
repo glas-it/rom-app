@@ -94,6 +94,11 @@ public class Menu implements IItem{
     }
 
     @Override
+    public boolean isAvailable() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return ContextHelper.getContextInstance().getText(R.string.menu).toString();
     }
