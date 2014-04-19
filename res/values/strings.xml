@@ -43,5 +43,6 @@
     <string name="closeTable">Cerrar</string>
     <string name="editTable">Editar</string>
     <string name="menuTable">Menu</string>
+    <string name="tableNotAvailable">Mesa no habilitada</string>
     <string name="actualOrder">Pedido actual</string>
 </resources>

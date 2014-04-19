@@ -169,11 +169,8 @@ public class OpenTableFragment extends SherlockFragment {
 	    	 
 					@Override
 					public void onClick(View v) {
-			            // row is your row, the parent of the clicked button
 			            View row = (View) v.getParent();
-			            // container contains all the rows, you could keep a variable somewhere else to the container which you can refer to here
 			            ViewGroup container = ((ViewGroup)row.getParent());
-			            // delete the row and invalidate your view so it gets redrawn
 			            container.removeView(row);
 			            container.invalidate();
 		 

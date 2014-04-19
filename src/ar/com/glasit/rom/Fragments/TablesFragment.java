@@ -23,17 +23,16 @@ import ar.com.glasit.rom.Model.TablesGestor;
 
 public class TablesFragment extends SherlockFragment {
 
-	   	String[] table;
-	    ListView list;
-	    ListViewAdapter adapter;
-	    TablesGestor tg;
-	    static int currentTab;
-	    int myTab;
+		private String[] table;
+	    private ListView list;
+	    private ListViewAdapter adapter;
+	    private TablesGestor tg;
+	    private static int currentTab;
+	    private int myTab;
 
 	    @Override 
 	    public void onResume() {
 	    	super.onResume();
-	    	//adapter.remove();
 	    	adapter.notifyDataSetChanged();
 	    }
 	    
@@ -43,9 +42,7 @@ public class TablesFragment extends SherlockFragment {
 	            Bundle savedInstanceState) {
 	        View rootView = inflater.inflate(R.layout.fragment_tables, container,
 	                false);
-
-	       
-	        // Generate sample data
+  
 	        
 	       Bundle b= this.getArguments();
 	       currentTab = b.getInt("tab");
@@ -126,6 +123,5 @@ public class TablesFragment extends SherlockFragment {
 	        return rootView;
 	    }
 	    
-	    
-	 
+ 
 }

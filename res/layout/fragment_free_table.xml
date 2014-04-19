@@ -49,12 +49,16 @@
         android:orientation="vertical"
         android:paddingTop="20dp" />
 
-    <RadioGroup
-        android:id="@+id/radiojoin"
+    <TextView
+        android:id="@+id/tableNotAvailable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/numberPicker1" >
-    </RadioGroup>
+        android:layout_below="@+id/cubiertos"
+        android:paddingTop="120dp"
+        android:text="@string/tableNotAvailable"
+        android:textColor="@color/red"
+        android:textSize="30sp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/openTable"

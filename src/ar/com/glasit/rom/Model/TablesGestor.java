@@ -49,6 +49,7 @@ public class TablesGestor {
 		f = new FreeTable();
 		f.setMaximunCapacity(4);
 		f.setNumber(10);
+		f.setEnabled(false);
 		allTables.add(f);
 		OpenTable o = new OpenTable();
 		o.setMaximunCapacity(2);

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import ar.com.glasit.rom.R;
+import ar.com.glasit.rom.Model.Table;
+import ar.com.glasit.rom.Model.TablesGestor;
  
 public class ListViewAdapter extends BaseAdapter {
  
@@ -42,6 +44,16 @@ public class ListViewAdapter extends BaseAdapter {
         View itemView = inflater.inflate(R.layout.listview_item, parent, false);
  
         txtrank = (TextView) itemView.findViewById(R.id.table);
+
+        TablesGestor tb = TablesGestor.getInstance();
+        int nroTable =Integer.parseInt((table[position]));
+        Table currentTable = tb.getTable(nroTable);
+       
+        if (!(currentTable.isEnabled())) {
+        	txtrank.setEnabled(false);
+        	TextView txtranklab = (TextView) itemView.findViewById(R.id.tablelabel);
+        	txtranklab.setEnabled(false);
+        }
 
         txtrank.setText(table[position]);
 

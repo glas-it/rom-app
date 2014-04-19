@@ -2,7 +2,6 @@ package ar.com.glasit.rom.Fragments;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-import android.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,12 +18,12 @@ import ar.com.glasit.rom.Model.TablesGestor;
 
 public class FreeTableFragment extends SherlockFragment{
 
-	TextView txtmozo;
-    TextView txtcapacity;
-    NumberPicker np;
-    Button open;
-    int tableNumber;
-    int tab;
+	private static int MIN_COMENSALES =1;;
+    private TextView txtcapacity;
+    private NumberPicker np;
+    private Button open;
+    private int tableNumber;
+    private int tab;
  
 	  @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,8 +37,10 @@ public class FreeTableFragment extends SherlockFragment{
 	        tableNumber = ((TableDetailActivity)getActivity()).getTableNumber();
 	        tab = ((TableDetailActivity)getActivity()).getTab();
 	        
+	        TablesGestor tgGestor = TablesGestor.getInstance();
+	        Table t = tgGestor.getTable(tableNumber);
 	        open = (Button) rootView.findViewById(ar.com.glasit.rom.R.id.openTable);
-
+	        
 	        open.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
@@ -64,19 +65,35 @@ public class FreeTableFragment extends SherlockFragment{
 			        return;
 				} 
 	        });
-	        TablesGestor tgGestor = TablesGestor.getInstance();
-	        Table t = tgGestor.getTable(tableNumber);
+	 
 	        
 	        
 	        np = (NumberPicker) rootView.findViewById(ar.com.glasit.rom.R.id.numberPicker1);
 	        np.setMaxValue((t.getMaximunCapacity()));
-	        np.setMinValue(1);
+	        np.setMinValue(MIN_COMENSALES);
 	        np.setValue((t.getMaximunCapacity()));
 	       
 	        txtcapacity = (TextView) rootView.findViewById(ar.com.glasit.rom.R.id.capacity);
 	        txtcapacity.setText(Integer.toString(t.getMaximunCapacity()));
 	        
+	        this.validateEnableTable(rootView);
+	        
 	        return rootView;
 
+	  }
+	  
+	  private void validateEnableTable(View root) {
+	        TablesGestor tgGestor = TablesGestor.getInstance();
+	        Table t = tgGestor.getTable(tableNumber);
+	        
+	        if(!t.isEnabled() ) {
+	        	open.setClickable(false);
+	        	open.setEnabled(false);
+	        	np.setEnabled(false);
+	        	np.setClickable(false);
+	        	TextView alertmessage = (TextView) root.findViewById(ar.com.glasit.rom.R.id.tableNotAvailable);
+	        	alertmessage.setVisibility(View.VISIBLE);
+	        	
+	        }
 	  }
 }
