@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/food" >
+
+    <TextView
+        android:id="@+id/mozo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/capacitylabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingTop="60dp"
+        android:text="@string/capacitylabel"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/capacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/capacitylabel"
+        android:layout_toRightOf="@+id/capacitylabel"
+        android:paddingLeft="5dp"
+        android:paddingTop="60dp"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/cubiertos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/capacitylabel"
+        android:paddingTop="80dp"
+        android:text="@string/cubiertoslabel"
+        android:textSize="22sp" />
+
+    <NumberPicker
+        android:id="@+id/numberPicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/capacitylabel"
+        android:layout_toRightOf="@+id/cubiertos"
+        android:orientation="vertical"
+        android:paddingTop="20dp" />
+
+    <RadioGroup
+        android:id="@+id/radiojoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/numberPicker1" >
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/openTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/cancelFreeTable"
+        android:text="@string/abrirmesa"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/cancelFreeTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/openTable"
+        android:text="@string/cancel"
+        android:textSize="25sp" />
+
+</RelativeLayout>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/food" >
+
+    <TextView
+        android:id="@+id/mozolabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mozolabel"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/mozo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/mozolabel"
+        android:paddingLeft="5dp"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/capacitylabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mozolabel"
+        android:paddingTop="20dp"
+        android:text="@string/capacitylabel"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/capacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mozo"
+        android:layout_toRightOf="@+id/capacitylabel"
+        android:paddingLeft="5dp"
+        android:paddingTop="20dp"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/cubiertoslabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/capacitylabel"
+        android:paddingTop="20dp"
+        android:text="@string/cubiertoslabel"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/closeTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/menuTable"
+        android:text="@string/closeTable"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/editTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/menuTable"
+        android:textSize="25sp"
+        android:text="@string/editTable" />
+
+    <Button
+        android:id="@+id/menuTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/menuTable"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/cubiertos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/capacity"
+        android:layout_toRightOf="@+id/cubiertoslabel"
+        android:paddingTop="20dp"
+        android:paddingLeft="5dp"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/pedidos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/cubiertoslabel"
+        android:layout_marginTop="22dp"
+        android:text="@string/actualOrder"
+        android:textSize="22sp" />
+    
+    	<ScrollView android:id="@+id/ScrollView01" 
+   			 android:layout_width="wrap_content" 
+   			 android:layout_below="@+id/pedidos"
+    			android:layout_height="wrap_content">
+
+  		<TableLayout android:id="@+id/TableLayout01" 
+     		 	android:layout_width="fill_parent" 
+      			android:layout_height="wrap_content" 
+      			android:stretchColumns="0">
+		 </TableLayout>
+	</ScrollView>
+
+</RelativeLayout>
