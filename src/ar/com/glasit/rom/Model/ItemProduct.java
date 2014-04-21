@@ -62,11 +62,23 @@ public class ItemProduct extends Item{
         return isAvailable;
     }
 
-    public List<String> getPrices() {
+    public List<String> getPricesTags() {
         List<String> pricesTags = new ArrayList<String>(prices.size());
         for (NameValuePair nameValuePair: prices) {
             pricesTags.add(nameValuePair.getName());
         }
         return pricesTags;
+    }
+
+    public List<NameValuePair> getPrices() {
+        return prices;
+    }
+
+    public float getPrice(String tag) {
+        for (NameValuePair valuePair : prices) {
+            if (valuePair.getName().equals(tag))
+                return Float.parseFloat(valuePair.getValue());
+        }
+        return 0.f;
     }
 }

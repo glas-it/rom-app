@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.LoginListener;
+import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
 import com.devspark.progressfragment.SherlockProgressFragment;
@@ -162,6 +163,9 @@ public class StartSessionFragment extends SherlockProgressFragment{
                 if (obj.getSuccess()) {
                     BackendHelper.setLoggedUser(mUserView.getText().toString());
                     loginListener.loginSuccess();
+                    try {
+                        TablesGestor.myName = obj.getJsonObject().getString("nombre");
+                    } catch (Exception e) {}
                 } else {
                     showError(getString(R.string.errorMail));
                 }

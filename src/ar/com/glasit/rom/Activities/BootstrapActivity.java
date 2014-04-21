@@ -18,14 +18,18 @@ public class BootstrapActivity extends SherlockFragmentActivity{
         setContentView(R.layout.activity_main);
         ContextHelper.setContextInstance(this.getApplicationContext());
         if (savedInstanceState == null) {
-        	startTables();
-//            if (isFirstTime()){
-//                startSetup();
-//            } else if (!isLoggedIn()) {
-//                startLoginUser();
-//            } else {
-//                startApp();
-//            }
+            if (isFirstTime()){
+                startSetup();
+            } else if (!isLoggedIn()) {
+                startLoginUser();
+            } else {
+                if (BackendHelper.getAppType() == "Mozo") {
+                    startTables();
+                } else {
+                    startTables();
+                    //startApp();
+                }
+            }
         }
     }
 
@@ -34,7 +38,7 @@ public class BootstrapActivity extends SherlockFragmentActivity{
     }
 
     private boolean isFirstTime(){
-        return BackendHelper.getsetAppType().isEmpty();
+        return BackendHelper.getAppType().isEmpty();
     }
 
     private void startLoginUser() {

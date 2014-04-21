@@ -1,47 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-    	android:id="@+id/TableRow01" >
-
-       <ImageButton
-           android:id="@+id/plus"
-           android:layout_width="0dip"
-           android:layout_height="wrap_content"
-           android:layout_weight="0.3"
-           android:src="@drawable/plus" />
-
-       <ImageButton
-           android:id="@+id/minus"
-           android:layout_width="0dip"
-           android:layout_height="wrap_content"
-           android:layout_weight="0.3"
-           android:src="@drawable/minus" />
-
-        <TextView
-            android:id="@+id/nombre"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Empanadas" >
-		</TextView>
-
-      <TextView
-          android:id="@+id/cantidad"
-          android:layout_width="0dip"
-          android:layout_height="wrap_content"
-          android:layout_weight="0.2"
-          android:text="3" />
-
-      <TextView
-          android:id="@+id/precio"
-          android:layout_width="0dip"
-          android:layout_height="wrap_content"
-          android:layout_weight="0.2"
-          android:text="$10" />
-
-      <ImageButton
-          android:id="@+id/delete"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/delete" />
-
+    	android:id="@+id/TableRow01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/rest">
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/add">
+            </LinearLayout>
+        </LinearLayout>
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <TextView
+                    android:id="@+id/orderId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+            </TextView>
+            <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Empanadas"
+                    android:ems="5"
+                    android:layout_weight="0.75">
+            </TextView>
+            <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="3"
+                    android:ems="1"
+                    android:layout_weight="0.05"/>
+            <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="$10"
+                    android:gravity="right"
+                    android:ems="3"
+                    android:layout_weight="0.20"/>
+        </TableRow>
+    </RelativeLayout>
 </TableRow>

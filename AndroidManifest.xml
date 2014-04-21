@@ -47,6 +47,7 @@
         </activity>
         <activity android:name=".Activities.TableDetailActivity"
                   android:screenOrientation="portrait"
+                  android:uiOptions="splitActionBarWhenNarrow"
                   android:label="@string/tablelabel">
         </activity>
     </application>

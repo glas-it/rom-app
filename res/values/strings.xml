@@ -11,8 +11,10 @@
     <string name="errorInvalidadPass">Contraseña incorrecta</string>
     <string name="errorFieldIncomplete">Por favor completa con tu usuario/PIN</string>
     <string name="loginProcess">Iniciando sesión ..</string>
-    <string name="backend_url">http://192.168.1.104/</string>
+    <string name="backend_url">http://192.168.1.101/</string>
     <string name="refresh">Refrescar</string>
+    <string name="open">Abrir</string>
+    <string name="close">Cerrar</string>
     <string name="menu">Carta</string>
     <string name="search">Buscar</string>
     <string name="notes">Notas:</string>
@@ -33,7 +35,7 @@
     <string name="tablelabel">Mesa </string>
     <string name="mozolabel">Tomada por mozo  :</string>
     <string name="capacitylabel">Capacidad máxima:</string>
-    <string name="cubiertoslabel">Cantidad de comensales:</string>  
+    <string name="cubiertoslabel">Cubiertos:</string>
     <string name="opentable">Abrir mesa:</string>
     <string name="radiono">No:</string>
     <string name="radiosi">Si:</string>
@@ -43,5 +45,11 @@
     <string name="closeTable">Cerrar</string>
     <string name="editTable">Editar</string>
     <string name="menuTable">Menu</string>
-    <string name="actualOrder">Pedido actual</string>
+    <string name="actualOrder">Pedido</string>
+    <string name="my_tables">Mías</string>
+    <string name="free_tables">Libres</string>
+    <string name="all_tables">Todas</string>
+    <string name="order_items">Pedir</string>
+    <string name="close_table">Cerrar</string>
+    <string name="total">Total</string>
 </resources>

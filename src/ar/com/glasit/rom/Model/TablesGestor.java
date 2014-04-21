@@ -1,21 +1,17 @@
 package ar.com.glasit.rom.Model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import ar.com.glasit.rom.Fragments.TableGridFragment;
+
+import java.util.*;
 
 public class TablesGestor {
 
 	private List<Table> allTables;
 	private static TablesGestor instance = null;
-	private static String myName = "pepe";
+	public static String myName = "Pablo";
 	
 	private TablesGestor() {
-		this.allTables = new ArrayList<Table>();
-		
-		//TODO:remove
-		this.setMockData();
+		this.allTables = new Vector<Table>();
 	}
 	
     public static TablesGestor getInstance() {
@@ -25,81 +21,26 @@ public class TablesGestor {
         return TablesGestor.instance;
     }
 
-    private void setMockData() {
-		FreeTable f = new FreeTable();
-		f.setMaximunCapacity(6);
-		f.setNumber(2);
+    public void updateData(List<Table> tables) {
+        this.allTables = tables;
+    }
 
-		allTables.add(f);
-		f = new FreeTable();
-		f.setMaximunCapacity(4);
-		f.setNumber(5);
-
-		allTables.add(f);
-		f = new FreeTable();
-		f.setMaximunCapacity(2);
-		f.setNumber(7);
-
-		allTables.add(f);
-		f = new FreeTable();
-		f.setMaximunCapacity(4);
-		f.setNumber(9);
-		allTables.add(f);
-
-		f = new FreeTable();
-		f.setMaximunCapacity(4);
-		f.setNumber(10);
-		allTables.add(f);
-		OpenTable o = new OpenTable();
-		o.setMaximunCapacity(2);
-		o.setFellowDiner(3);
-		o.setNumber(1);
-		o.setWaiter("pepe");
-		allTables.add(o);
-		
-		 o = new OpenTable();
-		o.setMaximunCapacity(4);
-		o.setFellowDiner(3);
-		o.setNumber(4);
-		o.setWaiter("pepe");
-		allTables.add(o);
-		
-		 o = new OpenTable();
-		o.setMaximunCapacity(2);
-		o.setFellowDiner(3);
-		o.setNumber(8);
-		o.setWaiter("pepe");
-		allTables.add(o);
-		
-		o = new OpenTable();
-		o.setMaximunCapacity(4);
-		o.setFellowDiner(3);
-		o.setNumber(3);
-		o.setWaiter("florencia");
-		allTables.add(o);
-		
-		o = new OpenTable();
-		o.setMaximunCapacity(2);
-		o.setFellowDiner(3);
-		o.setNumber(6);
-		o.setWaiter("florencia");
-		allTables.add(o);
-
-		Collections.sort(allTables);
+    public void updateTable(Table table) {
+        this.allTables.set(this.allTables.lastIndexOf(table), table);
     }
 
 	public List<Table> getAllTables() {
 		return allTables;
 	}
 	
-	public List<OpenTable> getMyTables() {
+	public List<Table> getMyTables() {
 		Iterator<Table> it = allTables.iterator();
-		List<OpenTable> my = new ArrayList<OpenTable>();
+		List<Table> my = new Vector<Table>();
 		while (it.hasNext()) {
 			Table t = it.next();
 			if (t.open)  {
 				OpenTable op = (OpenTable) t;
-				if (op.getWaiter().contentEquals(myName)) {
+				if (op.getWaiter() != null && op.getWaiter().contentEquals(myName)) {
 					my.add(op);
 				}
 			}
@@ -108,9 +49,9 @@ public class TablesGestor {
 	}
 
 	
-	public List<FreeTable> getFreeTables() {
+	public List<Table> getFreeTables() {
 		Iterator<Table> it = allTables.iterator();
-		List<FreeTable> free = new ArrayList<FreeTable>();
+		List<Table> free = new Vector<Table>();
 		while (it.hasNext()) {
 			Table t = it.next();
 			if (!t.open)  {
@@ -132,6 +73,7 @@ public class TablesGestor {
 				it.remove();
 				this.allTables.add(ot.close());
 				found = true;
+                break;
 			}
 		}
 		Collections.sort(allTables);
@@ -149,12 +91,25 @@ public class TablesGestor {
 				FreeTable ft = (FreeTable) t;
 				this.allTables.add(ft.open(myName,fellowDiner));
 				found = true;
+                break;
 			}
 		}
 		Collections.sort(allTables);
 
 	}
 
+    public List<Table> getTables (TableGridFragment.Type type) {
+        switch (type) {
+            case MINE:
+                return getMyTables();
+            case FREE:
+                return getFreeTables();
+            case ALL:
+                return getAllTables();
+            default:
+                return getMyTables();
+        }
+    }
 	public Table getTable(int tableNumber) {
 		
 		Iterator<Table> it = allTables.iterator();
@@ -173,5 +128,6 @@ public class TablesGestor {
 			return t;
 		}
 	}
+
 
 }

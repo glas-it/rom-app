@@ -50,7 +50,7 @@ public class BackendHelper {
         ContextHelper.putSharedPrefenrece(BackendHelper.PREF_NAME, BackendHelper.APP_TYPE, key);
     }
 
-    public static String getsetAppType(){
+    public static String getAppType(){
         return ContextHelper.getSharedPrefenrece(BackendHelper.PREF_NAME, BackendHelper.APP_TYPE);
     }
 

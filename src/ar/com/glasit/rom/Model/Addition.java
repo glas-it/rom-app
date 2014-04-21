@@ -8,6 +8,7 @@ public class Addition {
     private Long id;
     private IItem parent = null;
     private String title, description;
+    private float price;
 
     public static Addition fromJson(JSONObject json, Item parent) {
         Addition addition = fromJson(json);
@@ -23,6 +24,7 @@ public class Addition {
             addition.id = json.getLong("id");
             addition.title = json.getString(WellKnownKeys.TITLE);
             addition.description = json.getString(WellKnownKeys.DESCRIPTION);
+            addition.price = (float) json.getDouble(WellKnownKeys.PRICE);
         } catch (Exception e) {
         }
         return addition;
@@ -39,5 +41,9 @@ public class Addition {
     @Override
     public String toString() {
         return title;
+    }
+
+    public float getPrice() {
+        return price;
     }
 }

@@ -1,113 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/food" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/food" >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/mozolabel"
+                    android:id="@+id/textView"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"/>
+            <TextView
+                    android:id="@+id/mozo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/mozolabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mozolabel"
-        android:textSize="22sp" />
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+            <TextView
+                    android:id="@+id/capacitylabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/capacitylabel"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"/>
+            <TextView
+                    android:id="@+id/capacity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/mozo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/mozolabel"
-        android:paddingLeft="5dp"
-        android:textSize="22sp" />
-
-    <TextView
-        android:id="@+id/capacitylabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/mozolabel"
-        android:paddingTop="20dp"
-        android:text="@string/capacitylabel"
-        android:textSize="22sp" />
-
-    <TextView
-        android:id="@+id/capacity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mozo"
-        android:layout_toRightOf="@+id/capacitylabel"
-        android:paddingLeft="5dp"
-        android:paddingTop="20dp"
-        android:textSize="22sp" />
-
-    <TextView
-        android:id="@+id/cubiertoslabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/capacitylabel"
-        android:paddingTop="20dp"
-        android:text="@string/cubiertoslabel"
-        android:textSize="22sp" />
-
-    <Button
-        android:id="@+id/closeTable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/menuTable"
-        android:text="@string/closeTable"
-        android:textSize="25sp" />
-
-    <Button
-        android:id="@+id/editTable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/menuTable"
-        android:textSize="25sp"
-        android:text="@string/editTable" />
-
-    <Button
-        android:id="@+id/menuTable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/menuTable"
-        android:textSize="25sp" />
-
-    <TextView
-        android:id="@+id/cubiertos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/capacity"
-        android:layout_toRightOf="@+id/cubiertoslabel"
-        android:paddingTop="20dp"
-        android:paddingLeft="5dp"
-        android:textSize="22sp" />
-
-    <TextView
-        android:id="@+id/pedidos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/cubiertoslabel"
-        android:layout_marginTop="22dp"
-        android:text="@string/actualOrder"
-        android:textSize="22sp" />
-    
-    	<ScrollView android:id="@+id/ScrollView01" 
-   			 android:layout_width="wrap_content" 
-   			 android:layout_below="@+id/pedidos"
-    			android:layout_height="wrap_content">
-
-  		<TableLayout android:id="@+id/TableLayout01" 
-     		 	android:layout_width="fill_parent" 
-      			android:layout_height="wrap_content" 
-      			android:stretchColumns="0">
-		 </TableLayout>
-	</ScrollView>
-
-</RelativeLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+            <TextView
+                    android:id="@+id/cubiertoslabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/cubiertoslabel"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"/>
+            <TextView
+                    android:id="@+id/cubiertos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="0"/>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|right"
+                    android:paddingRight="10dp">
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+"
+                        android:id="@+id/plus"
+                        android:layout_marginLeft="5dp"
+                        android:ems="3"
+                        style="?android:attr/buttonStyleSmall"/>
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:id="@+id/less"
+                        android:layout_marginLeft="5dp"
+                        android:ems="3"
+                        style="?android:attr/buttonStyleSmall"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+            <TableLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="0"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:background="@android:color/darker_gray">
+                <TableRow
+                        android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView style="@style/TextAppearance.Styled.Medium"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/actualOrder"
+                              android:id="@+id/textView2"
+                              android:layout_column="0"/>
+                    <Button
+                            android:id="@+id/newItem"
+                            android:layout_column="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:drawable/ic_input_add"/>
+                </TableRow>
+            </TableLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:minHeight="100dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+                <TableLayout android:id="@+id/orders"
+                             android:layout_width="fill_parent"
+                             android:layout_height="wrap_content"
+                             android:stretchColumns="0">
+                </TableLayout>
+            </LinearLayout>
+            <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/TableRow01"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:padding="10dp"
+                    android:background="@android:color/darker_gray">
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.5"
+                                android:id="@+id/rest">
+                        </LinearLayout>
+                        <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.5"
+                                android:id="@+id/add">
+                        </LinearLayout>
+                    </LinearLayout>
+                    <TableRow
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent">
+                        <TextView
+                                android:id="@+id/orderId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
+                        </TextView>
+                        <TextView
+                                android:id="@+id/name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:ems="5"
+                                android:text="@string/total"
+                                android:layout_weight="0.75">
+                        </TextView>
+                        <TextView
+                                android:id="@+id/amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:ems="3"
+                                android:layout_weight="0.05"/>
+                        <TextView
+                                android:id="@+id/total"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="right"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:text="$ 0.0"
+                                android:ems="3"
+                                android:layout_weight="0.20"/>
+                    </TableRow>
+                </RelativeLayout>
+            </TableRow>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

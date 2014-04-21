@@ -56,4 +56,6 @@ public class ServiceResponse{
 	public Boolean getSuccess() throws JSONException{
 		return getJsonObject().getBoolean("success");
 	}
+
+
 }

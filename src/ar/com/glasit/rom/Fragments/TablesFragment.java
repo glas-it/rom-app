@@ -22,7 +22,7 @@ import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.Model.TablesGestor;
 
 public class TablesFragment extends SherlockFragment {
-
+          /*
 	   	String[] table;
 	    ListView list;
 	    ListViewAdapter adapter;
@@ -127,5 +127,5 @@ public class TablesFragment extends SherlockFragment {
 	    }
 	    
 	    
-	 
+	        */
 }

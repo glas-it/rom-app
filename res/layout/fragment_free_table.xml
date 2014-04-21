@@ -1,79 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/food" >
 
-    <TextView
-        android:id="@+id/mozo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:textSize="25sp" />
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/mozolabel"
+                android:id="@+id/textView"
+                android:paddingRight="10dp"/>
+        <TextView
+            android:id="@+id/mozo"
+            android:text="-- LIBRE --"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/capacitylabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:paddingTop="60dp"
-        android:text="@string/capacitylabel"
-        android:textSize="22sp" />
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+        <TextView
+            android:id="@+id/capacitylabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/capacitylabel"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingRight="10dp"/>
+        <TextView
+            android:id="@+id/capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/capacity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/capacitylabel"
-        android:layout_toRightOf="@+id/capacitylabel"
-        android:paddingLeft="5dp"
-        android:paddingTop="60dp"
-        android:textSize="22sp" />
-
-    <TextView
-        android:id="@+id/cubiertos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/capacitylabel"
-        android:paddingTop="80dp"
-        android:text="@string/cubiertoslabel"
-        android:textSize="22sp" />
-
-    <NumberPicker
-        android:id="@+id/numberPicker1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/capacitylabel"
-        android:layout_toRightOf="@+id/cubiertos"
-        android:orientation="vertical"
-        android:paddingTop="20dp" />
-
-    <RadioGroup
-        android:id="@+id/radiojoin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/numberPicker1" >
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/openTable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/cancelFreeTable"
-        android:text="@string/abrirmesa"
-        android:textSize="25sp" />
-
-    <Button
-        android:id="@+id/cancelFreeTable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/openTable"
-        android:text="@string/cancel"
-        android:textSize="25sp" />
-
-</RelativeLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+        <TextView
+            android:id="@+id/cubiertoslabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/cubiertoslabel"
+            android:paddingRight="10dp"/>
+        <TextView
+                android:id="@+id/cubiertos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0" />
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|right">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:id="@+id/plus"
+                    android:layout_marginLeft="5dp"
+                    android:ems="3"
+                    style="?android:attr/buttonStyleSmall"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:id="@+id/less"
+                    android:ems="3"
+                    android:layout_marginLeft="5dp"
+                    style="?android:attr/buttonStyleSmall"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
