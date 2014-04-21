@@ -71,7 +71,7 @@ public class TablesFragment extends GridSearcherFragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setEmptyText(R.string.empty);
-        obtainData();
+        setGridShown(false);
     }
 
     @Override
@@ -91,6 +91,7 @@ public class TablesFragment extends GridSearcherFragment{
     }
 
     public void setTables(){
+        setGridShown(true);
         this.tables = TablesGestor.getInstance().getTables(type);
         setGridAdapter(new TableAdapter(tables));
     }
@@ -103,13 +104,6 @@ public class TablesFragment extends GridSearcherFragment{
     public void showMessage(String msg) {
         if (isVisible) {
             Toast.makeText(getSherlockActivity(), msg, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    protected void obtainData() {
-        searching = true;
-        if (!TablesGestor.getInstance().getAllTables().isEmpty()) {
-            setTables();
         }
     }
 

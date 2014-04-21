@@ -18,7 +18,7 @@ public class StartSessionActivity extends StackFragmentActivity implements Login
     @Override
     public void loginSuccess() {
         getSupportActionBar().show();
-        startActivity(new Intent(this, MenuActivity.class));
+        startActivity(new Intent(this, TablesActivity.class));
         finish();
     }
 }

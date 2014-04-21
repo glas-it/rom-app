@@ -1,4 +1,3 @@
-
 package ar.com.glasit.rom.Activities;
 
 import java.util.ArrayList;
@@ -30,16 +29,20 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
     private ViewPager viewPager;
     private TabsAdapter viewPagerAdapter;
     private int currentTab = 0;
+    private boolean updating = false;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tables);
+        actionBar = getSupportActionBar();
         viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setOnPageChangeListener(onPageChangeListener);
         if (savedInstanceState != null) {
             currentTab = savedInstanceState.getInt(TablesActivity.KEY_TAB, 0);
         }
-	}
+        addActionBarTabs();
+    }
 
     private ViewPager.SimpleOnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
@@ -50,10 +53,8 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
     };
 
     private void addActionBarTabs() {
-        viewPager.setOnPageChangeListener(onPageChangeListener);
         viewPagerAdapter = new TabsAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
-        actionBar = getSupportActionBar();
         int[] tabs = {
                 R.string.my_tables,
                 R.string.free_tables,
@@ -118,11 +119,17 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
         public int getCount() {
             return fragments.size();
         }
-	}
+
+        public List<Fragment> getFragments() {
+            return this.fragments;
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_refresh:
+                RestService.callGetService(this, WellKnownMethods.GetTables, null);
             case R.id.close_Session:
                 BackendHelper.setLoggedUser("");
                 Intent intent = new Intent(this, StartSessionActivity.class);
@@ -142,12 +149,17 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
             List<Table> newTables =  new Vector<Table>();
             JSONArray tables = serviceResponse.getJsonArray();
             for(int i=0;i<tables.length();i++){
-                newTables.add(Table.buildTable(tables.getJSONObject(i)));
+                Table t = Table.buildTable(tables.getJSONObject(i));
+                if (t != null) {
+                    newTables.add(t);
+                }
             }
             TablesGestor.getInstance().updateData(newTables);
-            if (viewPager.getAdapter() == null) {
-                addActionBarTabs();
+            for (Fragment f: viewPagerAdapter.getFragments()) {
+                TablesFragment tF = (TablesFragment) f;
+                tF.setTables();
             }
+            updating= false;
         } catch (Exception e) {
         }
     }
@@ -156,11 +168,10 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
     public void onError(String error) {
     }
 
-    protected void obtainData() {
-        if (TablesGestor.getInstance().getAllTables().isEmpty()) {
+    protected synchronized void obtainData() {
+        if (!updating && TablesGestor.getInstance().getAllTables().isEmpty()) {
+            updating = true;
             RestService.callGetService(this, WellKnownMethods.GetTables, null);
-        } else if (viewPager.getAdapter() == null) {
-            addActionBarTabs();
         }
     }
 }
