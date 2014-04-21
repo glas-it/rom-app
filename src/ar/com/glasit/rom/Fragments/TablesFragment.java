@@ -1,131 +1,116 @@
 package ar.com.glasit.rom.Fragments;
 
-import java.util.Iterator;
-import java.util.List;
-
-import com.actionbarsherlock.app.SherlockFragment;
-
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
-import ar.com.glasit.rom.R;
+import android.widget.Filterable;
+import android.widget.Toast;
 import ar.com.glasit.rom.Activities.TableDetailActivity;
-import ar.com.glasit.rom.Adapters.ListViewAdapter;
-import ar.com.glasit.rom.Model.FreeTable;
-import ar.com.glasit.rom.Model.OpenTable;
+import ar.com.glasit.rom.Adapters.TableAdapter;
 import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.Model.TablesGestor;
+import ar.com.glasit.rom.R;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 
-public class TablesFragment extends SherlockFragment {
-          /*
-	   	String[] table;
-	    ListView list;
-	    ListViewAdapter adapter;
-	    TablesGestor tg;
-	    static int currentTab;
-	    int myTab;
+import java.util.List;
+import java.util.Vector;
 
-	    @Override 
-	    public void onResume() {
-	    	super.onResume();
-	    	//adapter.remove();
-	    	adapter.notifyDataSetChanged();
-	    }
-	    
-	     
-	    @Override
-	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	            Bundle savedInstanceState) {
-	        View rootView = inflater.inflate(R.layout.fragment_tables, container,
-	                false);
+public class TablesFragment extends GridSearcherFragment{
 
-	       
-	        // Generate sample data
-	        
-	       Bundle b= this.getArguments();
-	       currentTab = b.getInt("tab");
-	       myTab = currentTab;
-	       
-	        if(currentTab == 1) {
-	            tg = TablesGestor.getInstance();
-		        List<OpenTable> t;
-		        t = tg.getMyTables();
-		        table = new String [t.size()];
-		        int i = 0;
-		        Iterator<OpenTable> it = t.iterator();
-		        while (it.hasNext()) {
-		        	OpenTable f = it.next();
-		        	table[i] = Integer.toString(f.getNumber());
-		        	i++;
-		        }
-	        }
-	        else {
-	        	if (currentTab == 2) {
-	        		tg = TablesGestor.getInstance();
-	        		List<FreeTable> t;
-	        		t = tg.getFreeTables();
-	        		table = new String [t.size()];
-	        		int i = 0;
-	        		Iterator<FreeTable> it = t.iterator();
-	        		while (it.hasNext()) {
-	        			FreeTable f = it.next();
-	        			table[i] = Integer.toString(f.getNumber());
-	        			i++;
-	        		}
-	        	}
-	        	else {
-	        		tg = TablesGestor.getInstance();
-	        		List<Table> t;
-	        		t = tg.getAllTables();
-	        		if ( t!= null ) {
-	        			table = new String [t.size()];
-	        			int i = 0;
-	        			Iterator<Table> it = t.iterator();
-	        			while (it.hasNext()) {
-	        					Table f = it.next();
-	        					table[i] = Integer.toString(f.getNumber());
-	        					i++;
-	        			}
-	        		}
-	        	}
-	        }
+    public enum Type {
+        MINE, FREE, ALL
+    }
+    protected List<Table> tables = null;
+    protected boolean isVisible = true, searching = false;
+    protected Type type;
 
-	        // Locate the ListView in fragmenttab1.xml
-	        list = (ListView) rootView.findViewById(R.id.listview);
-	 
-	        // Pass results to ListViewAdapter Class
-	        adapter = new ListViewAdapter(getActivity(), table);
-	        // Binds the Adapter to the ListView
-	        list.setAdapter(adapter);
-	        
-	        // Capture clicks on ListView items
-	       adapter.notifyDataSetChanged();
-	        list.setOnItemClickListener(new OnItemClickListener() {
-	        	 
-	            @Override
-	            public void onItemClick(AdapterView<?> parent, View view,
-	                    int position, long id) {
-	                Intent i = new Intent(getActivity(), TableDetailActivity.class);
+    public TablesFragment(Type type){
+        this(new Vector<Table>(),type);
+    }
 
-	                String tableNumber = table[position];
-	                i.putExtra("tableNumber", tableNumber);
+    public TablesFragment(List<Table> tables, Type type){
+        super();
+        this.type = type;
+        this.tables = tables;
+    }
 
-	                i.putExtra("currentTab", myTab);
+    @Override
+    public void onResume() {
+        super.onResume();
+        isVisible = true;
+        setTables();
+    }
 
-	                startActivity(i);
-	                getActivity().finish();
-	            }
-	 
-	        });
+    @Override
+    public void onStop() {
+        super.onStop();
+        isVisible = false;
+    }
 
-	        return rootView;
-	    }
-	    
-	    
-	        */
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getGridView().setBackgroundColor(Color.TRANSPARENT);
+        getGridView().setCacheColorHint(Color.TRANSPARENT);
+        getGridView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getActivity(), TableDetailActivity.class);
+                Table table = (Table) getGridAdapter().getItem(position);
+                i.putExtra("tableNumber", table.getNumber());
+                startActivity(i);
+            }
+        });
+        getGridView().setNumColumns(4);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setEmptyText(R.string.empty);
+        obtainData();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        try {
+            ((Filterable) getGridAdapter()).getFilter().filter(query);
+        } catch (NullPointerException ex) {}
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        try {
+            ((Filterable) getGridAdapter()).getFilter().filter(newText);
+        } catch (NullPointerException ex) {}
+        return false;
+    }
+
+    public void setTables(){
+        this.tables = TablesGestor.getInstance().getTables(type);
+        setGridAdapter(new TableAdapter(tables));
+    }
+
+    @Override
+    protected void inflateMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.refresh, menu);
+    }
+
+    public void showMessage(String msg) {
+        if (isVisible) {
+            Toast.makeText(getSherlockActivity(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    protected void obtainData() {
+        searching = true;
+        if (!TablesGestor.getInstance().getAllTables().isEmpty()) {
+            setTables();
+        }
+    }
+
 }

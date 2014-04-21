@@ -1,6 +1,6 @@
 package ar.com.glasit.rom.Model;
 
-import ar.com.glasit.rom.Fragments.TableGridFragment;
+import ar.com.glasit.rom.Fragments.TablesFragment;
 
 import java.util.*;
 
@@ -54,7 +54,7 @@ public class TablesGestor {
 		List<Table> free = new Vector<Table>();
 		while (it.hasNext()) {
 			Table t = it.next();
-			if (!t.open)  {
+			if (!t.open && t.isEnabled())  {
 				FreeTable op = (FreeTable) t;
 				free.add(op);
 			}
@@ -98,7 +98,7 @@ public class TablesGestor {
 
 	}
 
-    public List<Table> getTables (TableGridFragment.Type type) {
+    public List<Table> getTables (TablesFragment.Type type) {
         switch (type) {
             case MINE:
                 return getMyTables();

@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import android.content.Intent;
 import android.support.v4.app.*;
-import ar.com.glasit.rom.Fragments.TableGridFragment;
+import ar.com.glasit.rom.Fragments.TablesFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.Model.TablesGestor;
@@ -104,9 +104,9 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
             super(fm);
             this.context = context;
             this.fragments = new ArrayList<Fragment>();
-            fragments.add(new TableGridFragment(TableGridFragment.Type.MINE));
-            fragments.add(new TableGridFragment(TableGridFragment.Type.FREE));
-            fragments.add(new TableGridFragment(TableGridFragment.Type.ALL));
+            fragments.add(new TablesFragment(TablesFragment.Type.MINE));
+            fragments.add(new TablesFragment(TablesFragment.Type.FREE));
+            fragments.add(new TablesFragment(TablesFragment.Type.ALL));
         }
 
         @Override

@@ -222,5 +222,4 @@ public class OpenTableFragment extends SherlockFragment {
             addRow(o);
         }
     }
-
 }

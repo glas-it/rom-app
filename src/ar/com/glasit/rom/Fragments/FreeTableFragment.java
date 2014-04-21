@@ -69,12 +69,17 @@ public class FreeTableFragment extends SherlockFragment{
 
         TextView maxCapacity = (TextView) rootView.findViewById(R.id.capacity);
         maxCapacity.setText(Integer.toString(table.getMaximunCapacity()));
+        this.validateEnableTable(rootView);
 	    return rootView;
 	  }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(ar.com.glasit.rom.R.menu.free_table, menu);
+        if (table.isEnabled()) {
+            inflater.inflate(R.menu.free_table, menu);
+        } else {
+            inflater.inflate(R.menu.cancel, menu);
+        }
     }
 
     @Override
@@ -90,5 +95,12 @@ public class FreeTableFragment extends SherlockFragment{
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void validateEnableTable(View root) {
+        if(!table.isEnabled() ) {
+            root.findViewById(R.id.plus).setClickable(false);
+            root.findViewById(R.id.less).setClickable(false);
+        }
     }
 }
