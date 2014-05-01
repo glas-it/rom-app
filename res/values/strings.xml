@@ -54,4 +54,9 @@
     <string name="total">Total</string>
     <string name="tableNotAvailable">Mesa no habilitada</string>
     <string name="actualOrder">Pedido actual</string>
+    <string name="pendant">Pendientes</string>
+    <string name="doing">Preparandose</string>
+    <string name="done">Terminados</string>
+    <string name="deleteItemConfirmation">Está seguro que desea eliminar el/los platos</string>
+    <string name="cancelOrderConfirmation">Está seguro que desea cancelar el plato</string>
 </resources>

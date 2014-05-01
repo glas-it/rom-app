@@ -27,7 +27,9 @@ public class RestService extends AsyncTask<Void, Void, ServiceResponse> {
     }
 
     private void addListener(ServiceListener serviceListener) {
-        this.serviceListeners.add(serviceListener);
+        if (serviceListener != null) {
+            this.serviceListeners.add(serviceListener);
+        }
     }
 
 

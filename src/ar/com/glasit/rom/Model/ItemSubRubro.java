@@ -1,5 +1,6 @@
 package ar.com.glasit.rom.Model;
 
+import android.app.AlertDialog;
 import ar.com.glasit.rom.Service.WellKnownKeys;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,5 +55,13 @@ public class ItemSubRubro extends Item{
 
     public List<Addition> getAdditions() {
         return additions;
+    }
+    
+    public Addition getAdditionById(long id) {
+        for (Addition addition : additions) {
+            if (addition.getId() == id)
+                return addition;
+        }
+        return null;
     }
 }

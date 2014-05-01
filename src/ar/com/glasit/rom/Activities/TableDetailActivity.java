@@ -1,7 +1,10 @@
 package ar.com.glasit.rom.Activities;
 
 import ar.com.glasit.rom.Fragments.OpenTableFragment;
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
+import ar.com.glasit.rom.Service.RestService;
+import ar.com.glasit.rom.Service.WellKnownMethods;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.content.Intent;
@@ -11,6 +14,13 @@ import android.support.v4.app.FragmentTransaction;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Fragments.FreeTableFragment;
 import com.actionbarsherlock.view.MenuItem;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.List;
+import java.util.Vector;
 
 public class TableDetailActivity extends StackFragmentActivity implements TableManager {
 	private final static String tittle = "Mesa "; 
@@ -84,6 +94,15 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     public void onTableOrder(OpenTable table) {
         TablesGestor.getInstance().updateTable(table);
         cancelled = false;
+        JSONArray json = new JSONArray();
+        for (Order o : table.getOrderRequest()) {
+            json.put(o.toJSON());
+        }
+        List<NameValuePair> params = new Vector<NameValuePair>();
+        params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
+        params.add(new BasicNameValuePair("order", json.toString()));
+        RestService.callPostService(null, WellKnownMethods.NewOrder, params);
+
     }
 
     @Override

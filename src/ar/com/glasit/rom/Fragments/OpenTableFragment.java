@@ -1,4 +1,6 @@
 package ar.com.glasit.rom.Fragments;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import ar.com.glasit.rom.Activities.MenuActivity;
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
 
 import ar.com.glasit.rom.R;
@@ -120,9 +123,20 @@ public class OpenTableFragment extends SherlockFragment {
 
         @Override
         public boolean onLongClick(View v) {
-            list.removeView(rowToBeRemoved);
-            table.removeOrder(order);
-            total.setText("$ " + Float.toString(table.getPrice()));
+            AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+            alert.setMessage(R.string.deleteItemConfirmation);
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    list.removeView(rowToBeRemoved);
+                    table.removeOrder(order);
+                    total.setText("$ " + Float.toString(table.getPrice()));
+                }
+            });
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                }
+            });
+            alert.show();
             return true;
         }
     }

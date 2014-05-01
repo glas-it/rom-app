@@ -23,11 +23,13 @@ public class BootstrapActivity extends SherlockFragmentActivity{
             } else if (!isLoggedIn()) {
                 startLoginUser();
             } else {
-                if (BackendHelper.getAppType() == "Mozo") {
+                String type = BackendHelper.getAppType();
+                if (type == "Mozo") {
                     startTables();
+                } else if (type == "Cocina"){
+                    startKitchen();
                 } else {
-                    startTables();
-                    //startApp();
+                    startBar();
                 }
             }
         }
@@ -60,6 +62,20 @@ public class BootstrapActivity extends SherlockFragmentActivity{
     
     private void startTables() {
         startActivity(new Intent(this, TablesActivity.class));
+        finish();
+    }
+
+    private void startKitchen() {
+        Intent intent = new Intent(this, KitchenActivity.class);
+        intent.putExtra("type", "KITCHEN");
+        startActivity(intent);
+        finish();
+    }
+
+    private void startBar() {
+        Intent intent = new Intent(this, KitchenActivity.class);
+        intent.putExtra("type", "BAR");
+        startActivity(intent);
         finish();
     }
 }

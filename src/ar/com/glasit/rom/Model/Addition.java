@@ -46,4 +46,8 @@ public class Addition {
     public float getPrice() {
         return price;
     }
+
+    public long getId() {
+        return id;
+    }
 }

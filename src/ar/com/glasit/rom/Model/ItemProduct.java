@@ -29,7 +29,11 @@ public class ItemProduct extends Item{
                 prices.add(new BasicNameValuePair(next, jsonPrices.getString(next)));
             }
         }
-        this.isAvailable = json.getBoolean(WellKnownKeys.AVAILABLE);
+        try {
+            this.isAvailable = json.getBoolean(WellKnownKeys.AVAILABLE);
+        } catch (Exception e) {
+            this.isAvailable = true;
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ar.com.glasit.rom.Model;
 
+import ar.com.glasit.rom.Activities.MainActivity;
 import ar.com.glasit.rom.Helpers.ContextHelper;
 import ar.com.glasit.rom.R;
 import org.json.JSONArray;
@@ -101,5 +102,30 @@ public class Menu implements IItem{
     @Override
     public String toString() {
         return ContextHelper.getContextInstance().getText(R.string.menu).toString();
+    }
+    
+    public Addition getAdditionById(long rubroId, long subrubroId, long additionId) {
+        return getSubRubroById(rubroId, rubroId).getAdditionById(additionId);
+    }
+
+    public ItemProduct getProductById(long rubroId, long subrubroId, long productId) {
+        return (ItemProduct) getItemById(getSubRubroById(rubroId, subrubroId).getChildren(), productId);
+    }
+
+    public ItemSubRubro getSubRubroById(long rubroId, long subrubroId) {
+        return (ItemSubRubro) getItemById(getRubroById(rubroId).getChildren(), subrubroId);
+    }
+
+    public ItemRubro getRubroById(long id) {
+        return (ItemRubro) getItemById(items, id);
+    }
+
+    public Item getItemById(List<IItem> itemsList, long id) {
+        for (IItem rubro: itemsList) {
+            if (rubro.getId() == id) {
+                return (ItemRubro)rubro;
+            }
+        }
+        return null;
     }
 }
