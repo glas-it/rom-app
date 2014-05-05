@@ -16,8 +16,11 @@ import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Adapters.OrderAdapter;
 import ar.com.glasit.rom.Adapters.TableAdapter;
 import ar.com.glasit.rom.Model.Order;
+import ar.com.glasit.rom.Model.OrderGestor;
 import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.R;
+import ar.com.glasit.rom.Service.RestService;
+import ar.com.glasit.rom.Service.WellKnownMethods;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
@@ -27,7 +30,20 @@ import java.util.Vector;
 public class KitchenFragment extends ListSearcherFragment{
 
     public enum Type {
-        PENDANT, DOING, DONE
+        PENDANT, DOING, DONE;
+
+        Order.Status getOrderStatus() {
+            switch (this) {
+                case PENDANT:
+                    return Order.Status.PENDANT;
+                case DOING:
+                    return Order.Status.DOING;
+                case DONE:
+                    return Order.Status.DONE;
+                default:
+                    return null;
+            }
+        }
     }
 
     protected List<Order> orders = null;
@@ -80,7 +96,7 @@ public class KitchenFragment extends ListSearcherFragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setEmptyText(R.string.empty);
+        setEmptyText(R.string.empty_orders);
         setListShown(false);
     }
 
@@ -102,6 +118,12 @@ public class KitchenFragment extends ListSearcherFragment{
 
     public void setOrders(){
         setListShown(true);
+        this.orders = OrderGestor.getInstance().getOrders(type.getOrderStatus());
+        setListAdapter(new OrderAdapter(orders));
+    }
+
+    public void refreshOrders(){
+        this.orders = OrderGestor.getInstance().getOrders(type.getOrderStatus());
         setListAdapter(new OrderAdapter(orders));
     }
 
@@ -120,19 +142,22 @@ public class KitchenFragment extends ListSearcherFragment{
     }
 
     private void onLTRFling(int position) {
-        Order o = (Order) getListAdapter().getItem(position);
-        o.stageCompleted();
-        setListShown(false);
-        setOrders();
+        try {
+            Order o = (Order) getListAdapter().getItem(position);
+            o.stageCompleted();
+            setListShown(false);
+        } catch (ArrayIndexOutOfBoundsException e){}
     }
 
     private void onRTLFling(int position) {
-        final Order o = (Order) getListAdapter().getItem(position);
-        AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
-        alert.setMessage(R.string.cancelOrderConfirmation);
-        alert.setPositiveButton("Ok", new CancelOrder(o));
-        alert.setNegativeButton("Cancel", null);
-        alert.show();
+        if (this.type == Type.PENDANT) {
+            final Order o = (Order) getListAdapter().getItem(position);
+            AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+            alert.setMessage(R.string.cancelOrderConfirmation);
+            alert.setPositiveButton("Ok", new CancelOrder(o));
+            alert.setNegativeButton("Cancel", null);
+            alert.show();
+        }
     }
 
     public class CancelOrder implements DialogInterface.OnClickListener {

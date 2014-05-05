@@ -6,10 +6,10 @@ import java.util.Vector;
 
 import android.content.Intent;
 import android.support.v4.app.*;
+import ar.com.glasit.rom.Fragments.KitchenFragment;
 import ar.com.glasit.rom.Fragments.TablesFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
-import ar.com.glasit.rom.Model.Table;
-import ar.com.glasit.rom.Model.TablesGestor;
+import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.Service.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -31,6 +31,40 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
     private int currentTab = 0;
     private boolean updating = false;
 
+    private ServiceListener serviceListenerOrders = new ServiceListener() {
+        @Override
+        public void onServiceCompleted(IServiceRequest request, ServiceResponse serviceResponse) {
+            try {
+                JSONArray orders = serviceResponse.getJsonArray();
+                for(int i=0;i<orders.length();i++){
+                    Order order = Order.buildOrder(orders.getJSONObject(i));
+                    if (order.getStatus().equals(Order.Status.DONE)){
+                        //Notificar
+                    }
+                }
+                updating = false;
+            } catch (Exception e) {
+            }
+        }
+
+        @Override
+        public void onError(String error) {
+
+        }
+    };
+
+    ServiceListener serviceListenerMenu = new ServiceListener() {
+        @Override
+        public void onServiceCompleted(IServiceRequest request, ServiceResponse obj) {
+            Menu.getInstance().update(obj.getJsonArray());
+            RestService.callGetService(serviceListenerOrders, WellKnownMethods.GetOrders, null);
+        }
+
+        @Override
+        public void onError(String error) {
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +76,32 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
             currentTab = savedInstanceState.getInt(TablesActivity.KEY_TAB, 0);
         }
         addActionBarTabs();
+
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(2000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!updating){
+                                    updating = true;
+                                    if (Menu.getInstance().getChildrenCount() > 0) {
+                                        RestService.callGetService(serviceListenerOrders, WellKnownMethods.GetOrders, null);
+                                    } else {
+                                        RestService.callGetService(serviceListenerMenu, WellKnownMethods.GetMenu, null);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+        t.start();
     }
 
     private ViewPager.SimpleOnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -130,6 +190,7 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
         switch (item.getItemId()) {
             case R.id.menu_refresh:
                 RestService.callGetService(this, WellKnownMethods.GetTables, null);
+                break;
             case R.id.close_Session:
                 BackendHelper.setLoggedUser("");
                 Intent intent = new Intent(this, StartSessionActivity.class);
@@ -154,12 +215,12 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
                     newTables.add(t);
                 }
             }
+            updating= false;
             TablesGestor.getInstance().updateData(newTables);
             for (Fragment f: viewPagerAdapter.getFragments()) {
                 TablesFragment tF = (TablesFragment) f;
                 tF.setTables();
             }
-            updating= false;
         } catch (Exception e) {
         }
     }

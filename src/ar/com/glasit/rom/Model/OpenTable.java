@@ -29,6 +29,9 @@ public class OpenTable extends Table {
         return null;
     }
 
+    public void clearOrders(){
+        this.orderRequest = new Vector<Order>();
+    }
     public void removeOthers(List<String> uuids) {
         Iterator<Order> it = orderRequest.iterator();
         while(it.hasNext()) {

@@ -136,9 +136,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
-                    android:minHeight="100dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:minHeight="100dp">
                 <TableLayout android:id="@+id/orders"
                              android:layout_width="fill_parent"
                              android:layout_height="wrap_content"

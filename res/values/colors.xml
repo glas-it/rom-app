@@ -1,22 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <color name="black">#1A1A1A</color>
     <color name="black_overlay">#66000000</color>
 
-    <color name="transparent">#00000000</color>
+    <color name="dark_mid_blue">#22313f</color>
+    <color name="mid_blue">#34495e</color>
 
-    <color name="cyan">#FF009999</color>
-    <color name="darkCyan">#FF006363</color>
+    <color name="dark_blue">#2980b9</color>
+    <color name="blue">#3699db</color>
 
-    <color name="green">#FF9FEE00</color>
-    <color name="darkGreen">#FF679B00</color>
+    <color name="dark_green">#16a085</color>
+    <color name="green">#1abc9c</color>
 
-    <color name="red">#FFFF0000</color>
-    <color name="darkRed">#FFA60000</color>
+    <color name="dark_red">#cc3333</color>
+    <color name="red">#e74c3c</color>
 
-    <color name="blue">#FF0A64A4</color>
-    <color name="darkBlue">#FF03406A</color>
+    <color name="dark_oragen">#f9690e</color>
+    <color name="oragen">#F39C12</color>
 
-    <color name="orange">#FFC579</color>
-    <color name="darkOrange">#FF9D23</color>
+    <color name="dark_yellow">#f39c12</color>
+    <color name="yellow">#f1c40f</color>
 
+    <color name="dark_gray">#C5C4C2</color>
+    <color name="gray">#F2F1EF</color>
+
+    <color name="dark_violet">#342c53</color>
+    <color name="violet">#5f5977</color>
 </resources>

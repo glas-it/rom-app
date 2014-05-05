@@ -1,21 +1,14 @@
 package ar.com.glasit.rom.Activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import ar.com.glasit.rom.Fragments.ItemDialog;
+import ar.com.glasit.rom.Dialogs.ItemDialog;
 import ar.com.glasit.rom.Fragments.ItemFragment;
 import ar.com.glasit.rom.Fragments.MenuFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.R;
 import com.actionbarsherlock.view.MenuItem;
-
-import java.util.List;
 
 public class MenuActivity extends StackFragmentActivity implements OnSelectItemListener {
 

@@ -1,5 +1,7 @@
 package ar.com.glasit.rom.Activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +10,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.widget.Adapter;
+import android.widget.BaseAdapter;
+import android.widget.Toast;
 import ar.com.glasit.rom.Fragments.KitchenFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
+import ar.com.glasit.rom.Model.Menu;
 import ar.com.glasit.rom.Model.Order;
 import ar.com.glasit.rom.Model.OrderGestor;
 import ar.com.glasit.rom.Model.TablesGestor;
@@ -23,6 +30,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -39,7 +47,7 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tables);
+        setContentView(R.layout.activity_orders);
         actionBar = getSupportActionBar();
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setOnPageChangeListener(onPageChangeListener);
@@ -47,6 +55,34 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
             currentTab = savedInstanceState.getInt(KitchenActivity.KEY_TAB, 0);
         }
         addActionBarTabs();
+
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(2000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!updating){
+                                    try {
+                                        for (Fragment f: viewPagerAdapter.getFragments()) {
+                                            ((KitchenFragment) f).refreshOrders();
+                                        }
+                                    }catch (Exception e){
+                                    }
+                                    RestService.callGetService(KitchenActivity.this, WellKnownMethods.GetOrders, null);
+                                    updating = true;
+                                }
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+        t.start();
     }
 
     private ViewPager.SimpleOnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -54,6 +90,13 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
         public void onPageSelected(int position) {
             super.onPageSelected(position);
             actionBar.setSelectedNavigationItem(position);
+            try {
+                for (Fragment f: viewPagerAdapter.getFragments()) {
+                    ((KitchenFragment) f).refreshOrders();
+                }
+            }catch (Exception e){
+
+            }
         }
     };
 
@@ -135,11 +178,8 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
         switch (item.getItemId()) {
             case R.id.menu_refresh:
                 RestService.callGetService(this, WellKnownMethods.GetOrders, null);
+                break;
             case R.id.close_Session:
-                BackendHelper.setLoggedUser("");
-                Intent intent = new Intent(this, StartSessionActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
                 finish();
                 break;
             default:
@@ -160,11 +200,8 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
                 }
             }
             OrderGestor.getInstance().updateData(newOrder);
-            for (Fragment f: viewPagerAdapter.getFragments()) {
-                KitchenFragment kitchentFragment = (KitchenFragment) f;
-                kitchentFragment.setOrders();
-            }
             updating= false;
+            updateUIs();
         } catch (Exception e) {
         }
     }
@@ -176,7 +213,31 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
     protected synchronized void obtainData() {
         if (!updating && TablesGestor.getInstance().getAllTables().isEmpty()) {
             updating = true;
-            RestService.callGetService(this, WellKnownMethods.GetTables, null);
+            if (Menu.getInstance().getChildrenCount() > 0) {
+                RestService.callGetService(this, WellKnownMethods.GetOrders, null);
+            } else {
+                RestService.callGetService(serviceListener, WellKnownMethods.GetMenu, null);
+            }
+        }
+    }
+
+    ServiceListener serviceListener = new ServiceListener() {
+        @Override
+        public void onServiceCompleted(IServiceRequest request, ServiceResponse obj) {
+            Menu.getInstance().update(obj.getJsonArray());
+            RestService.callGetService(KitchenActivity.this, WellKnownMethods.GetOrders, null);
+        }
+
+        @Override
+        public void onError(String error) {
+        }
+    };
+
+    public void updateUIs() {
+        for (Fragment f: viewPagerAdapter.getFragments()) {
+            try{
+                ((KitchenFragment) f).setOrders();
+            } catch (Exception e){}
         }
     }
 }

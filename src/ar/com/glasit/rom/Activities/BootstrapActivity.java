@@ -24,9 +24,9 @@ public class BootstrapActivity extends SherlockFragmentActivity{
                 startLoginUser();
             } else {
                 String type = BackendHelper.getAppType();
-                if (type == "Mozo") {
+                if (type.equals("Mozo")) {
                     startTables();
-                } else if (type == "Cocina"){
+                } else if (type.equals("Cocina")){
                     startKitchen();
                 } else {
                     startBar();

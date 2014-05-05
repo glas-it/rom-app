@@ -1,4 +1,4 @@
-package ar.com.glasit.rom.Fragments;
+package ar.com.glasit.rom.Dialogs;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -98,7 +98,7 @@ public class ItemDialog extends SherlockDialogFragment{
                         !s.getName().equals("null") &&
                         !s.getName().trim().equals("null")) {
                     showRadioGroup = true;
-                    rad.setText(s.getName());
+                    rad.setText((prices.size() == 1) ? "$ " + s.getValue() : s.getName());
                     rad.setOnCheckedChangeListener(new OnPriceSelected(s));
                     radioGroup.addView(rad);
                 }

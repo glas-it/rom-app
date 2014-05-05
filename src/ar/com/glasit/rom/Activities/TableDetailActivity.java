@@ -17,6 +17,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -81,12 +82,22 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     public void onTableOpened(OpenTable table) {
         oldTable = table;
         replaceFragment(new OpenTableFragment(this, table));
+        List<NameValuePair> params = new Vector<NameValuePair>();
+        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+        params.add(new BasicNameValuePair("nroMesa", Integer.toString(table.getNumber())));
+        params.add(new BasicNameValuePair("usernameMozo", BackendHelper.getLoggedUser()));
+        params.add(new BasicNameValuePair("comensales", Integer.toString(table.getFellowDiner())));
+        RestService.callPostService(null, WellKnownMethods.OpenTable, params);
     }
 
     @Override
     public void onTableClosed(FreeTable table) {
         oldTable = table;
         replaceFragment(new FreeTableFragment(this, table));
+        List<NameValuePair> params = new Vector<NameValuePair>();
+        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+        params.add(new BasicNameValuePair("nroMesa", Integer.toString(table.getNumber())));
+        RestService.callPostService(null, WellKnownMethods.CloseTable, params);
         cancelled = false;
     }
 
@@ -96,13 +107,24 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         cancelled = false;
         JSONArray json = new JSONArray();
         for (Order o : table.getOrderRequest()) {
-            json.put(o.toJSON());
+            if (o.isLocal()){
+                o.stageCompleted();
+                for (int i = 0; i < o.getCount(); i++) {
+                    JSONObject jsonTable = o.toJSON();
+                    try {
+                        jsonTable.put("id", o.getId()+"-"+i);
+                    } catch (JSONException e) {
+
+                    }
+                    json.put(jsonTable);
+                }
+            }
         }
         List<NameValuePair> params = new Vector<NameValuePair>();
-        params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
-        params.add(new BasicNameValuePair("order", json.toString()));
+        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+        params.add(new BasicNameValuePair("nroMesa", Integer.toString(table.getNumber())));
+        params.add(new BasicNameValuePair("platos", json.toString()));
         RestService.callPostService(null, WellKnownMethods.NewOrder, params);
-
     }
 
     @Override

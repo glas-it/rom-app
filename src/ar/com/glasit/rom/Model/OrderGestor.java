@@ -22,6 +22,18 @@ public class OrderGestor {
 
     public void updateData(List<Order> orders) {
         this.allOrders = orders;
+        for (Order o: orders){
+            int index = allOrders.indexOf(o);
+            if (index != -1) {
+                if (o.getStatus().equals(Order.Status.CANCELLED) ||
+                        o.getStatus().equals(Order.Status.DELIVERED) ||
+                        o.getStatus().equals(Order.Status.REJECTED)) {
+                    allOrders.get(index).setStatus(o.getStatus());
+                }
+            } else {
+                allOrders.add(o);
+            }
+        }
     }
 
     public void updateOrder(Order order) {

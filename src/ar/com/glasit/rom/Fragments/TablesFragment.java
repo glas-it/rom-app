@@ -9,11 +9,16 @@ import android.widget.Filterable;
 import android.widget.Toast;
 import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Adapters.TableAdapter;
+import ar.com.glasit.rom.Model.OpenTable;
+import ar.com.glasit.rom.Model.Order;
 import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
+import ar.com.glasit.rom.Service.*;
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import org.json.JSONArray;
 
 import java.util.List;
 import java.util.Vector;
@@ -58,10 +63,8 @@ public class TablesFragment extends GridSearcherFragment{
         getGridView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getActivity(), TableDetailActivity.class);
                 Table table = (Table) getGridAdapter().getItem(position);
-                i.putExtra("tableNumber", table.getNumber());
-                startActivity(i);
+                RestService.callGetService(new TableListener(table), WellKnownMethods.GetOrders, null);
             }
         });
         getGridView().setNumColumns(4);
@@ -70,7 +73,7 @@ public class TablesFragment extends GridSearcherFragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setEmptyText(R.string.empty);
+        setEmptyText(R.string.empty_tables);
         setGridShown(false);
     }
 
@@ -107,4 +110,37 @@ public class TablesFragment extends GridSearcherFragment{
         }
     }
 
+    private class TableListener implements ServiceListener {
+        Table table;
+        TableListener(Table table) {
+            this.table = table;
+        }
+        @Override
+        public void onServiceCompleted(IServiceRequest request, ServiceResponse serviceResponse) {
+            try {
+                JSONArray orders = serviceResponse.getJsonArray();
+                boolean clear = true;
+                for(int i=0;i<orders.length();i++){
+                    Order order = Order.buildOrder(orders.getJSONObject(i));
+                    if (table.getNumber() == Integer.parseInt(order.getTableNumber())){
+                        OpenTable openTable = (OpenTable) table;
+                        if (clear) {
+                            openTable.clearOrders();
+                            clear = false;
+                        }
+                        openTable.addOrder(order);
+                    }
+                }
+                Intent i = new Intent(getActivity(), TableDetailActivity.class);
+                i.putExtra("tableNumber", table.getNumber());
+                startActivity(i);
+            } catch (Exception e) {
+            }
+        }
+
+        @Override
+        public void onError(String error) {
+
+        }
+    };
 }

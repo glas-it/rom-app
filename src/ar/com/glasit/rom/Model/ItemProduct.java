@@ -3,6 +3,7 @@ package ar.com.glasit.rom.Model;
 import ar.com.glasit.rom.Service.WellKnownKeys;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,11 +23,11 @@ public class ItemProduct extends Item{
         this.prices = new Vector<NameValuePair>();
         this.description = json.getString(WellKnownKeys.DESCRIPTION);
         if (json.has(WellKnownKeys.PRICES)) {
-            JSONObject jsonPrices= json.getJSONObject(WellKnownKeys.PRICES);
-            Iterator<String> it = jsonPrices.keys();
-            while (it.hasNext()) {
-                String next = it.next();
-                prices.add(new BasicNameValuePair(next, jsonPrices.getString(next)));
+            JSONArray jsonPrices= json.getJSONArray(WellKnownKeys.PRICES);
+            for (int i = 0; i < jsonPrices.length(); i++) {
+                JSONObject price = jsonPrices.getJSONObject(i);
+                prices.add(new BasicNameValuePair(price.getString(WellKnownKeys.DESCRIPTION),
+                        price.getString(WellKnownKeys.VALUE)));
             }
         }
         try {

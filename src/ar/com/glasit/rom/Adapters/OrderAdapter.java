@@ -50,13 +50,19 @@ public class OrderAdapter extends BaseAdapter implements Filterable {
             // Create a new view into the list.
             LayoutInflater inflater = (LayoutInflater) ContextHelper.getContextInstance()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            rowView = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            rowView = inflater.inflate(R.layout.listview_order_item, parent, false);
         }
 
         if (filteredData != null && filteredData.size() > 0){
-            TextView description = (TextView) rowView.findViewById(android.R.id.text1);
+            TextView table = (TextView) rowView.findViewById(R.id.text1);
+            table.setTextColor(Color.BLACK);
+            table.setText(filteredData.get(position).getTableNumber());
+            TextView description = (TextView) rowView.findViewById(R.id.text2);
             description.setTextColor(Color.BLACK);
             description.setText(filteredData.get(position).toString());
+            TextView time = (TextView) rowView.findViewById(R.id.text3);
+            time.setTextColor(Color.BLACK);
+            time.setText(filteredData.get(position).getTime());
         }
         return rowView;
     }

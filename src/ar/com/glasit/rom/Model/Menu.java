@@ -120,10 +120,10 @@ public class Menu implements IItem{
         return (ItemRubro) getItemById(items, id);
     }
 
-    public Item getItemById(List<IItem> itemsList, long id) {
-        for (IItem rubro: itemsList) {
-            if (rubro.getId() == id) {
-                return (ItemRubro)rubro;
+    public IItem getItemById(List<IItem> itemsList, long id) {
+        for (IItem iitem: itemsList) {
+            if (iitem.getId() == id) {
+                return iitem;
             }
         }
         return null;

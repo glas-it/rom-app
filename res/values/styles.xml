@@ -40,8 +40,14 @@
         <item name="android:paddingBottom">0dp</item>
         <item name="android:background">@android:drawable/bottom_bar</item>
     </style>
-
-
+    <style name="TextAppearance.Styled.Medium"
+           parent="android:TextAppearance.Medium">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="TextAppearance.Styled.Large"
+           parent="android:TextAppearance.Large">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
     <style name="ButtonBarButton" />
 
 </resources>
