@@ -74,6 +74,7 @@ public class Order {
     private NameValuePair price;
     private int count;
     private String id;
+    private String user;
     private Status status;
     private List<Status> statusList;
     private Date created;
@@ -118,6 +119,7 @@ public class Order {
             orden.statusList.add(0, orden.status);
             orden.created = new Date(json.getJSONObject("creado").getLong("tiempo"));
             orden.tableNumber = json.getInt("mesa");
+            orden.user = json.getString("username");
             return orden;
         } catch (Exception e) {
 
@@ -134,6 +136,10 @@ public class Order {
         this.statusList = new Vector<Status>();
         this.tableNumber = 0;
         this.created = new Date();
+    }
+
+    public String getUser() {
+        return this.user;
     }
 
     public String getId() {

@@ -8,6 +8,7 @@ public class WellKnownMethods {
     public final static String GetOrders= "orden/cocina";
     public final static String NewOrder= "orden/alta";
 	public final static String Login= "autenticacion/";
+	public final static String GetMyOrders= "pedido/mozo";
 	public final static String OpenTable= "pedido/apertura";
 	public final static String CloseTable= "pedido/cierre";
 	public final static String OrderDoing= "orden/preparando";

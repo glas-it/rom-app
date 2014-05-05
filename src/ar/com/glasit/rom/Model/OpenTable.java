@@ -9,7 +9,15 @@ public class OpenTable extends Table {
 	private int fellowDiner;
 	private String waiter;
 	private List<Order> orderRequest;
-	
+
+    public OpenTable(int number, int maxCapacity, String waiter) {
+        super(number, maxCapacity);
+        orderRequest = new Vector<Order>();
+        enabled=true;
+        open=true;
+        this.waiter = waiter;
+    }
+    
 	public OpenTable(int number, int maxCapacity) {
         super(number, maxCapacity);
         orderRequest = new Vector<Order>();

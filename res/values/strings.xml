@@ -63,4 +63,5 @@
     <string name="deleteItemConfirmation">¿Está seguro que desea eliminar el/los platos?</string>
     <string name="cancelOrderConfirmation">¿Está seguro que desea cancelar el plato?</string>
     <string name="deliveredOrderConfirmation">¿Ya entregó este plato?</string>
+    <string name="rejectOrderConfirmation">¿Está seguro que va a devolver este plato?</string>
 </resources>

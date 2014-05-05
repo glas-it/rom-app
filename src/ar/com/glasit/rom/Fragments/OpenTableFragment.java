@@ -244,7 +244,7 @@ public class OpenTableFragment extends SherlockFragment {
                 alert.show();
             } else if (order.isDelivered()) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
-                alert.setMessage(R.string.cancelOrderConfirmation);
+                alert.setMessage(R.string.rejectOrderConfirmation);
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         order.setStatus(Order.Status.CANCELLED);

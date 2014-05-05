@@ -8,7 +8,7 @@ public class TablesGestor {
 
 	private List<Table> allTables;
 	private static TablesGestor instance = null;
-	public static String myName = "Pablo";
+	public static String myName = "Juan";
 	
 	private TablesGestor() {
 		this.allTables = new Vector<Table>();

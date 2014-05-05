@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.*;
 import ar.com.glasit.rom.Fragments.KitchenFragment;
@@ -19,12 +21,14 @@ import android.content.Context;
 import android.os.Bundle;
 import ar.com.glasit.rom.R;
 import com.actionbarsherlock.view.MenuItem;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 
 public class TablesActivity extends SherlockFragmentActivity implements ServiceListener{
 
     public static final String KEY_TAB = "KEY_TAB";
-
+    public static List<String> notif = new Vector<String>();
     private ActionBar actionBar;
     private ViewPager viewPager;
     private TabsAdapter viewPagerAdapter;
@@ -38,8 +42,20 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
                 JSONArray orders = serviceResponse.getJsonArray();
                 for(int i=0;i<orders.length();i++){
                     Order order = Order.buildOrder(orders.getJSONObject(i));
-                    if (order.getStatus().equals(Order.Status.DONE)){
-                        //Notificar
+                    if (order.getStatus().equals(Order.Status.DONE) &&
+                            order.getUser().equals(BackendHelper.getLoggedUser())
+                            && !notif.contains(order.getId())){
+                        notif.add(order.getId());
+                        Intent intent = new Intent();
+                        PendingIntent pIntent = PendingIntent.getActivity(TablesActivity.this, 0, intent, 0);
+                        NotificationCompat.Builder noti = new NotificationCompat.Builder(TablesActivity.this)
+                                .setTicker(order.toString())
+                                .setContentTitle(order.getTableNumber())
+                                .setContentText(order.toString())
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentIntent(pIntent);
+                        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        notificationManager.notify(0, noti.getNotification());
                     }
                 }
                 updating = false;

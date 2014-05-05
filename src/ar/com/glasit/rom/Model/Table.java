@@ -28,7 +28,7 @@ public abstract class Table implements Comparable<Table> {
             boolean open= json.getBoolean(OPEN);
             if (enabled) {
                 if (open) {
-                    return new OpenTable(number, maximunCapacity);
+                    return new OpenTable(number, maximunCapacity, json.getString("mozo"));
                 } else {
                     return new FreeTable(number, maximunCapacity);
                 }
