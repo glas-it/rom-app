@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import ar.com.glasit.rom.Activities.MenuActivity;
-import ar.com.glasit.rom.Dialogs.OrderDialog;
+import ar.com.glasit.rom.Dialogs.ItemDialog;
+import ar.com.glasit.rom.Dialogs.RejectOrderDialog;
 import ar.com.glasit.rom.Model.*;
 
 import ar.com.glasit.rom.R;
@@ -231,7 +232,7 @@ public class OpenTableFragment extends SherlockFragment {
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         order.setStatus(Order.Status.CANCELLED);
-                        rowToBeModified.findViewById(R.id.image).setVisibility(View.VISIBLE);
+                        rowToBeModified.findViewById(R.id.image).setBackgroundResource(R.drawable.semaphore_item_delivered);
                         List<NameValuePair> param = new Vector<NameValuePair>();
                         param.add(new BasicNameValuePair("uuidOrden", order.getId()));
                         RestService.callPostService(null, WellKnownMethods.OrderDelivered, param);
@@ -243,29 +244,47 @@ public class OpenTableFragment extends SherlockFragment {
                 });
                 alert.show();
             } else if (order.isDelivered()) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
-                alert.setMessage(R.string.rejectOrderConfirmation);
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        order.setStatus(Order.Status.CANCELLED);
-                        rowToBeModified.setBackgroundColor(getResources().getColor(R.color.dark_gray));
+                RejectOrderDialog dialog = new RejectOrderDialog(order);
+                dialog.setOnCancelListener(null);
+                dialog.setOnRejectListener(new RejectOrderDialog.OnRejectListener() {
+                    @Override
+                    public void onReject(Order order) {
+                        rowToBeModified.findViewById(R.id.image).setBackgroundResource(R.drawable.semaphore_item_pendant_rejected);
                         TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                         price.setText("$ " + order.getPrice());
                         total.setText("$ " + Float.toString(table.getPrice()));
                         List<NameValuePair> param = new Vector<NameValuePair>();
                         param.add(new BasicNameValuePair("uuidOrden", order.getId()));
+                        param.add(new BasicNameValuePair("reordenar", "false"));
                         RestService.callPostService(null, WellKnownMethods.OrderRejected, param);
-                        OpenTable table = (OpenTable) TablesGestor.getInstance().getTable(Integer.parseInt(order.getTableNumber()));
-                        Order o = order.clone2();
-                        table.addOrder(o);
+                        Order o = (Order) order.clone();
+                        o.setStatus(Order.Status.PENDANT);
                         addRow(o);
                     }
                 });
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.setOnRejectAndReorderListener(new RejectOrderDialog.OnRejectAndReorderListener() {
+                    @Override
+                    public void onRejectAndReorder(Order order, String comment) {
+                        order.setStatus(Order.Status.CANCELLED);
+                        if (order.isRejected()) {
+                            rowToBeModified.findViewById(R.id.image).setBackgroundResource(R.drawable.semaphore_item_cancelled_rejected);
+                        } else {
+                            rowToBeModified.findViewById(R.id.image).setBackgroundResource(R.drawable.semaphore_item_cancelled);
+                        }
+                        TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
+                        price.setText("$ " + order.getPrice());
+                        total.setText("$ " + Float.toString(table.getPrice()));
+                        List<NameValuePair> param = new Vector<NameValuePair>();
+                        param.add(new BasicNameValuePair("uuidOrden", order.getId()));
+                        param.add(new BasicNameValuePair("comment", comment));
+                        param.add(new BasicNameValuePair("reordenar", "true"));
+                        RestService.callPostService(null, WellKnownMethods.OrderRejected, param);
+                        Order o = (Order) order.clone();
+                        o.setStatus(Order.Status.PENDANT);
+                        addRow(o);
                     }
                 });
-                alert.show();
+                dialog.show(getSherlockActivity().getSupportFragmentManager(), "");
             }
             return true;
         }
@@ -293,18 +312,44 @@ public class OpenTableFragment extends SherlockFragment {
         TextView txtPrice = (TextView) newRow.findViewById(R.id.price);
         txtPrice .setText("$ " + order.getPrice());
 
-        if (order.getStatus().equals(Order.Status.PENDANT)) {
-            newRow.setBackgroundColor(getResources().getColor(R.color.dark_red));
-        } else if (order.getStatus().equals(Order.Status.DOING)) {
-            newRow.setBackgroundColor(getResources().getColor(R.color.dark_yellow));
-        } else if (order.getStatus().equals(Order.Status.DONE)) {
-            newRow.setBackgroundColor(getResources().getColor(R.color.dark_green));
-        } else if (order.getStatus().equals(Order.Status.CANCELLED)) {
-            newRow.setBackgroundColor(getResources().getColor(R.color.dark_gray));
-        } else if (order.getStatus().equals(Order.Status.DELIVERED)) {
-            newRow.setBackgroundColor(getResources().getColor(R.color.dark_green));
-            newRow.findViewById(R.id.image).setVisibility(View.VISIBLE);
+        ImageView semaphore = (ImageView) newRow.findViewById(R.id.image);
+        if (order.isRejected()) {
+            semaphore.setBackgroundResource(R.drawable.semaphore_item_rejected);
         };
+
+        if (order.getStatus().equals(Order.Status.LOCAL)) {
+            if (order.isRejected()) {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_rejected);
+            } else {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item);
+            }
+        } else if (order.getStatus().equals(Order.Status.PENDANT)) {
+            if (order.isRejected()) {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_pendant_rejected);
+            } else {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_pendant);
+            }
+        } else if (order.getStatus().equals(Order.Status.DOING)) {
+            if (order.isRejected()) {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_doing_rejected);
+            } else {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_doing);
+            }
+        } else if (order.getStatus().equals(Order.Status.DONE)) {
+            if (order.isRejected()) {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_done_rejected);
+            } else {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_done);
+            }
+        } else if (order.getStatus().equals(Order.Status.CANCELLED)) {
+            if (order.isRejected()) {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_cancelled_rejected);
+            } else {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_cancelled);
+            }
+        } else if (order.getStatus().equals(Order.Status.DELIVERED)) {
+                semaphore.setBackgroundResource(R.drawable.semaphore_item_delivered);
+        }
 
         total.setText(Float.toString(table.getPrice()));
         orders.addView(newRow);

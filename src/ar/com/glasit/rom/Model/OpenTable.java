@@ -10,16 +10,16 @@ public class OpenTable extends Table {
 	private String waiter;
 	private List<Order> orderRequest;
 
-    public OpenTable(int number, int maxCapacity, String waiter) {
-        super(number, maxCapacity);
+    public OpenTable(int id, int number, int maxCapacity, String waiter) {
+        super(id, number, maxCapacity);
         orderRequest = new Vector<Order>();
         enabled=true;
         open=true;
         this.waiter = waiter;
     }
     
-	public OpenTable(int number, int maxCapacity) {
-        super(number, maxCapacity);
+	public OpenTable(int id, int number, int maxCapacity) {
+        super(id, number, maxCapacity);
         orderRequest = new Vector<Order>();
 		enabled=true;
 		open=true;
@@ -80,7 +80,7 @@ public class OpenTable extends Table {
 	}
 
 	public FreeTable close() {
-		FreeTable closed = new FreeTable(number,maximunCapacity);
+		FreeTable closed = new FreeTable(id, number,maximunCapacity);
 		closed.setEnabled(true);
 		return closed;
 	}
@@ -95,7 +95,7 @@ public class OpenTable extends Table {
 
     @Override
     public Object clone() {
-        OpenTable clone = new OpenTable(number, maximunCapacity);
+        OpenTable clone = new OpenTable(id, number, maximunCapacity);
         clone.fellowDiner = this.fellowDiner;
         clone.waiter = waiter;
         for (Order o: orderRequest) {

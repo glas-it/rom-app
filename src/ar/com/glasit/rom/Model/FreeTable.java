@@ -2,14 +2,14 @@ package ar.com.glasit.rom.Model;
 
 public class FreeTable extends Table{
 	
-	public FreeTable(int number, int maxCapacity) {
-        super(number, maxCapacity);
+	public FreeTable(int id, int number, int maxCapacity) {
+        super(id, number, maxCapacity);
 		open=false;
 		enabled=true;
 	}
 	
 	public OpenTable open(String waiter, int fellowDiner) {
-		OpenTable o = new OpenTable(number, maximunCapacity);
+		OpenTable o = new OpenTable(id, number, maximunCapacity);
 		o.setFellowDiner(fellowDiner);
 		o.setWaiter(waiter);
 		return o;
@@ -17,6 +17,6 @@ public class FreeTable extends Table{
 
     @Override
     public Object clone() {
-        return new FreeTable(number, maximunCapacity);
+        return new FreeTable(id, number, maximunCapacity);
     }
 }

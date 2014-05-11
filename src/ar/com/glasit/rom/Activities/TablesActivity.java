@@ -8,7 +8,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.*;
-import ar.com.glasit.rom.Fragments.KitchenFragment;
 import ar.com.glasit.rom.Fragments.TablesFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
@@ -21,8 +20,6 @@ import android.content.Context;
 import android.os.Bundle;
 import ar.com.glasit.rom.R;
 import com.actionbarsherlock.view.MenuItem;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 
 public class TablesActivity extends SherlockFragmentActivity implements ServiceListener{

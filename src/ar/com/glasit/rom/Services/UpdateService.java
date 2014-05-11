@@ -40,7 +40,7 @@ public class UpdateService extends Service implements ServiceListener{
                 int j = tableOrders.indexOf(order);
                 if (j != -1) {
                     if (!tableOrders.get(j).getStatus().equals(Order.Status.CANCELLED) ||
-                            !tableOrders.get(j).getStatus().equals(Order.Status.REJECTED)) {
+                            !tableOrders.get(j).isRejected()) {
                         tableOrders.get(j).setStatus(Integer.parseInt(order.getId().substring(order.getId().lastIndexOf("-"))),order.getStatus());
                     }
                 } else {

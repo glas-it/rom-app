@@ -2,11 +2,7 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     	android:id="@+id/TableRow01"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:layout_height="wrap_content">
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -31,29 +27,26 @@
         </LinearLayout>
         <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-            <TextView
-                    android:id="@+id/orderId"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:minHeight="42px">
+            <ImageView
+                    android:background="@drawable/semaphore_item_pendant"
+                    android:id="@+id/image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone">
-            </TextView>
+                    />
             <TextView
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Empanadas"
+                    android:text=""
                     android:ems="5"
-                    android:layout_weight="0.75">
+                    android:gravity="center_vertical"
+                    android:layout_weight="0.75" android:paddingLeft="5dp">
             </TextView>
-            <ImageView
-                    android:src="@drawable/ic_action_accept"
-                    android:id="@+id/image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    />
             <TextView
                     android:id="@+id/amount"
                     android:layout_width="wrap_content"

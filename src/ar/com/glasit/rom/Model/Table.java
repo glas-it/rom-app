@@ -5,32 +5,36 @@ import org.json.JSONObject;
 
 public abstract class Table implements Comparable<Table> {
 
+    private static final String ID = "id";
     private static final String NUMBER = "numero";
     private static final String MAX_CAPACITY = "capacidad";
     private static final String OPEN = "abierta";
     private static final String ENABLED = "activo";
 
+	protected int id;
 	protected int number;
 	protected int maximunCapacity;
 	protected boolean enabled;
 	protected boolean open;
 
-    public Table(int number, int maximunCapacity) {
+    public Table(int id, int number, int maximunCapacity) {
+        this.id = id;
         this.number = number;
         this.maximunCapacity = maximunCapacity;
     }
 
     public static Table buildTable(JSONObject json) {
         try {
+            int id = json.getInt(ID);
             int number = json.getInt(NUMBER);
             int maximunCapacity= json.getInt(MAX_CAPACITY);
             boolean enabled= json.getBoolean(ENABLED);
             boolean open= json.getBoolean(OPEN);
             if (enabled) {
                 if (open) {
-                    return new OpenTable(number, maximunCapacity, json.getString("mozo"));
+                    return new OpenTable(id, number, maximunCapacity, json.getString("mozo"));
                 } else {
-                    return new FreeTable(number, maximunCapacity);
+                    return new FreeTable(id, number, maximunCapacity);
                 }
             }
         } catch (JSONException e) {

@@ -25,7 +25,7 @@ public class Order {
     private static final String STATUS = "estado";
 
     public enum Status {
-        LOCAL, PENDANT, DOING, DONE, CANCELLED, DELIVERED, REJECTED;
+        LOCAL, PENDANT, DOING, DONE, CANCELLED, DELIVERED;
 
         public Status nextStatus(Order order) {
             List<NameValuePair> params = new Vector<NameValuePair>();
@@ -62,8 +62,6 @@ public class Order {
                     return "Cancelado";
                 case DELIVERED:
                     return "Entregado";
-                case REJECTED:
-                    return "Rechazado";
             }
             return super.toString();
         }
@@ -79,6 +77,7 @@ public class Order {
     private List<Status> statusList;
     private Date created;
     private int tableNumber;
+    private boolean isRejected;
 
     private Order() {
         this.statusList = new Vector<Status>();
@@ -120,6 +119,11 @@ public class Order {
             orden.created = new Date(json.getJSONObject("creado").getLong("tiempo"));
             orden.tableNumber = json.getInt("mesa");
             orden.user = json.getString("username");
+            try {
+                orden.isRejected = json.getBoolean("fueRechazado");
+            } catch (Exception e) {
+                orden.isRejected = false;
+            }
             return orden;
         } catch (Exception e) {
 
@@ -165,10 +169,6 @@ public class Order {
         }
     }
 
-    public int getFullCount() {
-        return count;
-    }
-
     public int getCount() {
         int count = 0;
         for(int i = 0 ; i < this.count; i++) {
@@ -188,12 +188,6 @@ public class Order {
     public Object clone() {
         Order clone = new Order(item, addition, price);
         clone.id = this.id;
-        clone.count = this.count;
-        return clone;
-    }
-
-    public Order clone2() {
-        Order clone = new Order(item, addition, price);
         clone.count = this.count;
         return clone;
     }
@@ -235,6 +229,10 @@ public class Order {
     
     public boolean isCancelled() {
         return this.status == Status.CANCELLED;
+    }
+
+    public boolean isRejected() {
+        return this.isRejected;
     }
 
     public Status getStatus(){

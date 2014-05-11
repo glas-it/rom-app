@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/cancel"
+          android:showAsAction="always"
+          android:title="@string/cancel" />
+
+    <item android:id="@+id/reject"
+          android:showAsAction="always"
+          android:title="@string/reject"></item>
+
+    <item
+            android:id="@+id/rejectAndOrder"
+            android:showAsAction="always"
+            android:title="@string/rejectAndOrder"/>
+</menu>

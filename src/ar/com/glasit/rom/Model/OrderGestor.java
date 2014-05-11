@@ -27,7 +27,7 @@ public class OrderGestor {
             if (index != -1) {
                 if (o.getStatus().equals(Order.Status.CANCELLED) ||
                         o.getStatus().equals(Order.Status.DELIVERED) ||
-                        o.getStatus().equals(Order.Status.REJECTED)) {
+                        o.isRejected()) {
                     allOrders.get(index).setStatus(o.getStatus());
                 }
             } else {

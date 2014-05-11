@@ -1,131 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/scrollView">
-    <LinearLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView"
+            android:background="@android:color/white"
+            android:layout_above="@+id/buttonBar"
+            android:padding="15dp"
+            android:layout_alignParentTop="true">
         <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/description_layout"
-                android:visibility="gone">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text=""
-                    android:id="@+id/description"/>
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1px"
-                    android:background="@drawable/borders"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/notes"
-                    android:id="@+id/textView2"/>
-            <EditText
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:ems="10"
-                    android:id="@+id/notes"
-                    android:lines="5"
-                    android:gravity="top"/>
+                    android:id="@+id/description_layout"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                        android:text=""
+                        android:id="@+id/description"/>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/borders"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"/>
+            </LinearLayout>
             <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1px"
-                    android:background="@drawable/borders"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:id="@+id/addition_layout"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-            <TextView
-                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/additions"
-                    android:id="@+id/textView2"/>
-            <RadioGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/addition_radios">
-            </RadioGroup>
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLargeInverse"
+                        android:text="@string/notes"
+                        android:id="@+id/textView2"/>
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/notes"
+                        android:lines="5"
+                        android:gravity="top"/>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/borders"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"/>
+            </LinearLayout>
             <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1px"
-                    android:background="@drawable/borders"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:id="@+id/price_layout"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-            <TextView
-                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:id="@+id/addition_layout"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/prices"
-                    android:id="@+id/textView2"/>
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLargeInverse"
+                        android:text="@string/additions"
+                        android:id="@+id/textView2"/>
+                <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/addition_radios">
+                </RadioGroup>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/borders"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:id="@+id/price_layout"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLargeInverse"
+                        android:text="@string/prices"
+                        android:id="@+id/textView2"/>
 
-            <RadioGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/price_radios">
-            </RadioGroup>
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1px"
-                    android:background="@drawable/borders"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"/>
+                <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/price_radios">
+                </RadioGroup>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/borders"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"/>
+            </LinearLayout>
         </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonBar"
+            android:background="@color/abs__bright_foreground_disabled_holo_dark"
+            android:layout_alignParentBottom="true">
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginLeft="4dip"
+                android:layout_marginRight="4dip"
+                android:background="?dividerVertical"/>
         <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                >
             <Button
                     android:id="@+id/cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.5"
+                    android:background="?selectableItemBackground"
                     android:text="@string/cancel"
-                    android:minEms="5"/>
+                    android:textColor="@android:color/white"/>
+            <View
+                    android:id="@+id/ViewColorPickerHelper2"
+                    android:layout_width="1dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="4dip"
+                    android:layout_marginTop="4dip"
+                    android:background="?dividerVertical"/>
+
             <Button
                     android:id="@+id/submit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
                     android:layout_weight="0.5"
+                    android:background="?selectableItemBackground"
                     android:text="@string/ok"
-                    android:minEms="5"/>
+                    android:textColor="@android:color/white"
+                    android:layout_alignParentBottom="true"/>
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</RelativeLayout>
