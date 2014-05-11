@@ -212,7 +212,7 @@ public class OpenTableFragment extends SherlockFragment {
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         order.setStatus(Order.Status.CANCELLED);
-                        rowToBeModified.setBackgroundColor(getResources().getColor(R.color.dark_gray));
+                        ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_cancelled);
                         TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                         price.setText("$ " + order.getPrice());
                         total.setText("$ " + Float.toString(table.getPrice()));
@@ -231,8 +231,8 @@ public class OpenTableFragment extends SherlockFragment {
                 alert.setMessage(R.string.deliveredOrderConfirmation);
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        order.setStatus(Order.Status.CANCELLED);
-                        rowToBeModified.findViewById(R.id.image).setBackgroundResource(R.drawable.semaphore_item_delivered);
+                        order.setStatus(Order.Status.DELIVERED);
+                        ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_delivered);
                         List<NameValuePair> param = new Vector<NameValuePair>();
                         param.add(new BasicNameValuePair("uuidOrden", order.getId()));
                         RestService.callPostService(null, WellKnownMethods.OrderDelivered, param);
@@ -249,7 +249,7 @@ public class OpenTableFragment extends SherlockFragment {
                 dialog.setOnRejectListener(new RejectOrderDialog.OnRejectListener() {
                     @Override
                     public void onReject(Order order) {
-                        rowToBeModified.findViewById(R.id.image).setBackgroundResource(R.drawable.semaphore_item_pendant_rejected);
+                        ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_pendant_rejected);
                         TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                         price.setText("$ " + order.getPrice());
                         total.setText("$ " + Float.toString(table.getPrice()));
@@ -267,9 +267,9 @@ public class OpenTableFragment extends SherlockFragment {
                     public void onRejectAndReorder(Order order, String comment) {
                         order.setStatus(Order.Status.CANCELLED);
                         if (order.isRejected()) {
-                            rowToBeModified.findViewById(R.id.image).setBackgroundResource(R.drawable.semaphore_item_cancelled_rejected);
+                            ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_cancelled_rejected);
                         } else {
-                            rowToBeModified.findViewById(R.id.image).setBackgroundResource(R.drawable.semaphore_item_cancelled);
+                            ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_cancelled);
                         }
                         TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                         price.setText("$ " + order.getPrice());
@@ -314,41 +314,41 @@ public class OpenTableFragment extends SherlockFragment {
 
         ImageView semaphore = (ImageView) newRow.findViewById(R.id.image);
         if (order.isRejected()) {
-            semaphore.setBackgroundResource(R.drawable.semaphore_item_rejected);
+            semaphore.setImageResource(R.drawable.semaphore_item_rejected);
         };
 
         if (order.getStatus().equals(Order.Status.LOCAL)) {
             if (order.isRejected()) {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_rejected);
+                semaphore.setImageResource(R.drawable.semaphore_item_rejected);
             } else {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item);
+                semaphore.setImageResource(R.drawable.semaphore_item);
             }
         } else if (order.getStatus().equals(Order.Status.PENDANT)) {
             if (order.isRejected()) {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_pendant_rejected);
+                semaphore.setImageResource(R.drawable.semaphore_item_pendant_rejected);
             } else {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_pendant);
+                semaphore.setImageResource(R.drawable.semaphore_item_pendant);
             }
         } else if (order.getStatus().equals(Order.Status.DOING)) {
             if (order.isRejected()) {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_doing_rejected);
+                semaphore.setImageResource(R.drawable.semaphore_item_doing_rejected);
             } else {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_doing);
+                semaphore.setImageResource(R.drawable.semaphore_item_doing);
             }
         } else if (order.getStatus().equals(Order.Status.DONE)) {
             if (order.isRejected()) {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_done_rejected);
+                semaphore.setImageResource(R.drawable.semaphore_item_done_rejected);
             } else {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_done);
+                semaphore.setImageResource(R.drawable.semaphore_item_done);
             }
         } else if (order.getStatus().equals(Order.Status.CANCELLED)) {
             if (order.isRejected()) {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_cancelled_rejected);
+                semaphore.setImageResource(R.drawable.semaphore_item_cancelled_rejected);
             } else {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_cancelled);
+                semaphore.setImageResource(R.drawable.semaphore_item_cancelled);
             }
         } else if (order.getStatus().equals(Order.Status.DELIVERED)) {
-                semaphore.setBackgroundResource(R.drawable.semaphore_item_delivered);
+                semaphore.setImageResource(R.drawable.semaphore_item_delivered);
         }
 
         total.setText(Float.toString(table.getPrice()));
