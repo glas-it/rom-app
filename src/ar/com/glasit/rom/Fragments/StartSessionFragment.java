@@ -31,6 +31,13 @@ public class StartSessionFragment extends SherlockProgressFragment{
         this.loginListener = loginListener;
     }
 
+    public StartSessionFragment() {
+    }
+
+    public void setLoginListener(LoginListener loginListener) {
+        this.loginListener = loginListener;
+    }
+
     @Override
     public void onResume() {
         super.onResume();

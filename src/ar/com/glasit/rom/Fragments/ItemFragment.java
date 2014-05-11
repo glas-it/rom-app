@@ -20,6 +20,10 @@ public class ItemFragment extends ListSearcherFragment{
     protected ItemAdapter itemAdapter;
     private List<OnSelectItemListener> onSelectItemListeners;
 
+    public ItemFragment(){
+        super();
+    }
+
     public ItemFragment(IItem item, OnSelectItemListener onSelectItemListener){
         super();
         this.item = item;
@@ -33,6 +37,13 @@ public class ItemFragment extends ListSearcherFragment{
         this.item = item;
         itemAdapter = new ItemAdapter(this.item);
         this.onSelectItemListeners = onSelectItemListeners;
+    }
+
+    public void setParameters(IItem item, OnSelectItemListener onSelectItemListener) {
+        this.item = item;
+        itemAdapter = new ItemAdapter(this.item);
+        this.onSelectItemListeners = new Vector<OnSelectItemListener>();
+        this.onSelectItemListeners.add(onSelectItemListener);
     }
 
     @Override

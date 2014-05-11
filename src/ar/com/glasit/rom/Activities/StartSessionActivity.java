@@ -8,11 +8,13 @@ import android.os.Bundle;
 
 public class StartSessionActivity extends StackFragmentActivity implements LoginListener{
 
+    StartSessionFragment fragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        addFragment(new StartSessionFragment(this));
+        fragment = new StartSessionFragment(this);
+        addFragment(fragment);
     }
 
     @Override
@@ -20,5 +22,13 @@ public class StartSessionActivity extends StackFragmentActivity implements Login
         getSupportActionBar().show();
         startActivity(new Intent(this, TablesActivity.class));
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (fragment != null) {
+            fragment.setLoginListener(this);
+        }
     }
 }

@@ -13,20 +13,29 @@ import com.actionbarsherlock.view.MenuItem;
 public class MenuActivity extends StackFragmentActivity implements OnSelectItemListener {
 
     private Table table;
+    private MenuFragment menuFragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        addFragment(new MenuFragment(this));
+        addFragment((menuFragment = new MenuFragment(this)));
 
         Intent i = getIntent();
         table = TablesGestor.getInstance().getTable(i.getIntExtra("tableNumber", 0));
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        menuFragment.setParameters(Menu.getInstance(), this);
+    }
+
+    @Override
     public void selectItem(IItem item) {
         if (item.hasChildren() && item.isAvailable()){
-            pushFragment(new ItemFragment(item, this));
+            ItemFragment frag = new ItemFragment();
+            frag.setParameters(item, this);
+            pushFragment(frag);
         } else if (item.getClass() == ItemProduct.class && item.isAvailable()){
             showItemDialog(item);
         }

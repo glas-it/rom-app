@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:layout_margin="10dp"
-                android:minHeight="42px">
+                android:minHeight="56dp">
             <ImageView
                     android:src="@drawable/semaphore_item_pendant"
                     android:id="@+id/image"

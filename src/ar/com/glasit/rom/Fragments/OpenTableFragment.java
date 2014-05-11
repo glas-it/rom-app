@@ -27,7 +27,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.List;
 import java.util.Vector;
 
-public class OpenTableFragment extends SherlockFragment {
+public class OpenTableFragment extends SherlockFragment implements TableDetailFragment<OpenTable> {
 
 	private TextView txtmozo;
     private TextView txtcapacity;
@@ -43,6 +43,15 @@ public class OpenTableFragment extends SherlockFragment {
     public OpenTableFragment(TableManager manager, Table table) {
         this.manager = manager;
         this.table = (OpenTable) table;
+    }
+
+    public OpenTableFragment() {
+    }
+
+    @Override
+    public void setParameters(TableManager manager, OpenTable table) {
+        this.manager = manager;
+        this.table = table;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ar.com.glasit.rom.Activities;
 
 import ar.com.glasit.rom.Fragments.OpenTableFragment;
+import ar.com.glasit.rom.Fragments.TableDetailFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.Service.RestService;
@@ -31,6 +32,8 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
 
     private Table oldTable;
     private boolean cancelled;
+    private TableDetailFragment detailFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,14 +53,24 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         TablesGestor gt = TablesGestor.getInstance();
         oldTable = (Table) gt.getTable(tableNumber).clone();
         if (gt.getTable(tableNumber).isOpen() ) {
-            addFragment(new OpenTableFragment(this, gt.getTable(tableNumber)));
+            OpenTableFragment fragment = new OpenTableFragment(this, gt.getTable(tableNumber));
+            detailFragment = fragment;
+            addFragment(fragment);
         } else {
-            addFragment(new FreeTableFragment(this, gt.getTable(tableNumber)));
+            FreeTableFragment fragment = new FreeTableFragment(this, gt.getTable(tableNumber));
+            detailFragment = fragment;
+            addFragment(fragment);
         }
    
     }
 
-	public int getTableNumber() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        detailFragment.setParameters(this, TablesGestor.getInstance().getTable(tableNumber));
+    }
+
+    public int getTableNumber() {
 		return this.tableNumber;
 	}
 

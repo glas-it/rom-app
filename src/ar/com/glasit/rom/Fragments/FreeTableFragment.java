@@ -1,7 +1,6 @@
 package ar.com.glasit.rom.Fragments;
 
-import ar.com.glasit.rom.Model.OpenTable;
-import ar.com.glasit.rom.Model.TableManager;
+import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.R;
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -13,23 +12,30 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import ar.com.glasit.rom.Model.Table;
-import ar.com.glasit.rom.Model.TablesGestor;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class FreeTableFragment extends SherlockFragment{
+public class FreeTableFragment extends SherlockFragment implements TableDetailFragment<FreeTable>{
 
     private int cubiertos;
     private TextView people;
-    private Table table;
+    private FreeTable table;
     private TableManager manager;
 
     public FreeTableFragment(TableManager manager, Table table) {
-        this.table = table;
         this.manager = manager;
+        this.table = (FreeTable) table;
         this.cubiertos = 0;
+    }
+
+    public FreeTableFragment() {
+        this.cubiertos = 0;
+    }
+
+    public void setParameters(TableManager manager, FreeTable table) {
+        this.manager = manager;
+        this.table = table;
     }
 
     @Override
