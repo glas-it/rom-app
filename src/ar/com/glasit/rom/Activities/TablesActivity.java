@@ -1,6 +1,7 @@
 package ar.com.glasit.rom.Activities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -12,6 +13,7 @@ import ar.com.glasit.rom.Fragments.TablesFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.Service.*;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
@@ -19,7 +21,9 @@ import android.support.v4.view.ViewPager;
 import android.content.Context;
 import android.os.Bundle;
 import ar.com.glasit.rom.R;
+
 import com.actionbarsherlock.view.MenuItem;
+
 import org.json.JSONArray;
 
 public class TablesActivity extends SherlockFragmentActivity implements ServiceListener{
@@ -178,9 +182,23 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
             super(fm);
             this.context = context;
             this.fragments = new ArrayList<Fragment>();
-            fragments.add(new TablesFragment(TablesFragment.Type.MINE));
-            fragments.add(new TablesFragment(TablesFragment.Type.FREE));
-            fragments.add(new TablesFragment(TablesFragment.Type.ALL));
+            TablesFragment mine  = new TablesFragment();
+            Bundle b = new Bundle();
+            b.putInt("type", 0);
+            mine.setArguments(b);
+            fragments.add(mine);
+            
+            TablesFragment free  = new TablesFragment();
+            Bundle b1 = new Bundle();
+            b1.putInt("type", 1);
+            free.setArguments(b1);
+            fragments.add(free);
+
+            TablesFragment all  = new TablesFragment();
+            Bundle b2 = new Bundle();
+            b2.putInt("type", 2);
+            all.setArguments(b2);
+            fragments.add(all);
         }
 
         @Override

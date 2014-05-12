@@ -81,6 +81,7 @@ public class RejectOrderDialog extends SherlockDialogFragment{
                 if (onCancelListener == null)
                     return;
                 onCancelListener.onSubmitListener(order);
+                dismiss();
             }
         });
         Button reject = (Button) dialog.findViewById(R.id.reject);
@@ -90,6 +91,7 @@ public class RejectOrderDialog extends SherlockDialogFragment{
                 if (onRejectListener == null)
                     return;
                 onRejectListener.onReject(order);
+                dismiss();
             }
         });
         Button rejectAndOrder = (Button) dialog.findViewById(R.id.rejectAndOrder);
@@ -99,6 +101,7 @@ public class RejectOrderDialog extends SherlockDialogFragment{
                 if (onRejectAndReorderListener == null)
                     return;
                 onRejectAndReorderListener.onRejectAndReorder(order, input.getText().toString());
+                dismiss();
             }
         });
         return dialog;

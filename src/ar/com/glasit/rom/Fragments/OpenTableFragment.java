@@ -13,14 +13,15 @@ import ar.com.glasit.rom.Activities.MenuActivity;
 import ar.com.glasit.rom.Dialogs.ItemDialog;
 import ar.com.glasit.rom.Dialogs.RejectOrderDialog;
 import ar.com.glasit.rom.Model.*;
-
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.RestService;
 import ar.com.glasit.rom.Service.WellKnownMethods;
+
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -106,6 +107,15 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
                 }
             }
         });
+        
+        Button join = (Button) rootView.findViewById(R.id.join);
+        join.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			}
+		});
 
         initOrder();
         return rootView;

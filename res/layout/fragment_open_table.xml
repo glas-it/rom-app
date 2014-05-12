@@ -98,6 +98,44 @@
                         style="?android:attr/buttonStyleSmall"/>
             </LinearLayout>
         </LinearLayout>
+            <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+                                android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+            android:text="@string/joinlabel"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal" 
+            android:paddingRight="10dp">
+
+            <Button
+                android:id="@+id/join"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:ems="3"
+                android:text="@string/join" />
+        </LinearLayout>
+
+    </LinearLayout>
+        
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -143,7 +181,7 @@
                              android:stretchColumns="0">
                 </TableLayout>
             </LinearLayout>
-            <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+            <TableRow
                       android:id="@+id/TableRow01"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"

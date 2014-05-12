@@ -1,5 +1,7 @@
 package ar.com.glasit.rom.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,9 +17,11 @@ import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+
 import org.json.JSONArray;
 
 import java.util.List;
@@ -32,15 +36,19 @@ public class TablesFragment extends GridSearcherFragment{
     protected boolean isVisible = true, searching = false;
     protected Type type;
 
-    public TablesFragment(Type type){
-        this(new Vector<Table>(),type);
+    public TablesFragment(){
+    	super();
     }
 
-    public TablesFragment(List<Table> tables, Type type){
-        super();
+    public void setType(Type type) {
         this.type = type;
-        this.tables = tables;
+        this.tables = new Vector<Table>();
     }
+    
+    public void setTables(List<Table> tables) {
+    	this.tables = tables;
+    }
+
 
     @Override
     public void onResume() {
@@ -58,13 +66,33 @@ public class TablesFragment extends GridSearcherFragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    	Bundle b = getArguments();
+    	switch  ( b.getInt("type") ) {
+    		case 0: this.type= Type.MINE;
+    			break;
+    		case 1: this.type= Type.FREE;
+				break;
+    		case 2: this.type= Type.ALL;
+    			break;
+    	}
         getGridView().setBackgroundColor(Color.TRANSPARENT);
         getGridView().setCacheColorHint(Color.TRANSPARENT);
         getGridView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Table table = (Table) getGridAdapter().getItem(position);
-                RestService.callGetService(new TableListener(table), WellKnownMethods.GetOrders, null);
+            	if (type == Type.ALL) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                    alert.setMessage(R.string.tookTableConfirmation);
+                    alert.setPositiveButton("Ok", new SelectTableListener(position));
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                        }
+                    });
+                    alert.show();
+            	} else {
+            		Table table = (Table) getGridAdapter().getItem(position);
+            		RestService.callGetService(new TableListener(table), WellKnownMethods.GetOrders, null);
+            	}
             }
         });
         getGridView().setNumColumns(4);
@@ -143,4 +171,20 @@ public class TablesFragment extends GridSearcherFragment{
 
         }
     };
+    
+    private class SelectTableListener implements DialogInterface.OnClickListener{
+    	
+    	int position;
+    	
+    	public SelectTableListener(int position) {
+    		position = position;
+		}
+
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+    		Table table = (Table) getGridAdapter().getItem(position);
+    		RestService.callGetService(new TableListener(table), WellKnownMethods.GetOrders, null);
+		}
+    	
+    }
 }

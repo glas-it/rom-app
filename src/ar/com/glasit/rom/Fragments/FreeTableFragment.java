@@ -72,7 +72,16 @@ public class FreeTableFragment extends SherlockFragment implements TableDetailFr
                 }
             }
         });
-
+        
+        Button join = (Button) rootView.findViewById(R.id.join);
+        join.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			}
+		});
+        
         TextView maxCapacity = (TextView) rootView.findViewById(R.id.capacity);
         maxCapacity.setText(Integer.toString(table.getMaximunCapacity()));
         this.validateEnableTable(rootView);
