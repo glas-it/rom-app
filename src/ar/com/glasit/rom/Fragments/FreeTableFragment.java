@@ -15,27 +15,19 @@ import android.widget.TextView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class FreeTableFragment extends SherlockFragment implements TableDetailFragment<FreeTable>{
+public class FreeTableFragment extends SherlockFragment{
 
     private int cubiertos;
     private TextView people;
-    private FreeTable table;
+    private Table table;
     private TableManager manager;
 
-    public FreeTableFragment(TableManager manager, Table table) {
-        this.manager = manager;
-        this.table = (FreeTable) table;
-        this.cubiertos = 0;
-    }
-
     public FreeTableFragment() {
+        this.manager = (TableManager) getSherlockActivity();
         this.cubiertos = 0;
-    }
-
-    public void setParameters(TableManager manager, FreeTable table) {
-        this.manager = manager;
-        this.table = table;
     }
 
     @Override
@@ -52,6 +44,7 @@ public class FreeTableFragment extends SherlockFragment implements TableDetailFr
                 false);
         super.onCreate(savedInstanceState);
 
+        this.table = getTable();
         Button plus = (Button) rootView.findViewById(R.id.plus);
         Button less = (Button) rootView.findViewById(R.id.less);
 
@@ -90,7 +83,7 @@ public class FreeTableFragment extends SherlockFragment implements TableDetailFr
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (table.isEnabled()) {
+        if (getTable().isEnabled()) {
             inflater.inflate(R.menu.free_table, menu);
         } else {
             inflater.inflate(R.menu.cancel, menu);
@@ -102,9 +95,7 @@ public class FreeTableFragment extends SherlockFragment implements TableDetailFr
         Intent intent = null;
         switch (item.getItemId()) {
             case R.id.item_open:
-                TablesGestor tb = TablesGestor.getInstance();
-                tb.openTable(table.getNumber(), Integer.parseInt(people.getText().toString()));
-                manager.onTableOpened((OpenTable)tb.getTable(table.getNumber()));
+                ((TableManager) getSherlockActivity()).onTableOpened(getTable().getId(), Integer.parseInt(people.getText().toString()));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -113,9 +104,20 @@ public class FreeTableFragment extends SherlockFragment implements TableDetailFr
     }
 
     private void validateEnableTable(View root) {
-        if(!table.isEnabled() ) {
+        if(!getTable().isEnabled() ) {
             root.findViewById(R.id.plus).setClickable(false);
             root.findViewById(R.id.less).setClickable(false);
         }
+    }
+
+    private Table getTable() {
+        if (this.table != null)
+            return this.table;
+        try {
+            JSONObject json = new JSONObject(getArguments().getString("table"));
+            return (this.table = Table.buildTable(json));
+        } catch (JSONException e) {
+        }
+        return null;
     }
 }

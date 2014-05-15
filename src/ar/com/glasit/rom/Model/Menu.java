@@ -105,7 +105,7 @@ public class Menu implements IItem{
     }
     
     public Addition getAdditionById(long rubroId, long subrubroId, long additionId) {
-        return getSubRubroById(rubroId, rubroId).getAdditionById(additionId);
+        return getSubRubroById(rubroId, subrubroId).getAdditionById(additionId);
     }
 
     public ItemProduct getProductById(long rubroId, long subrubroId, long productId) {

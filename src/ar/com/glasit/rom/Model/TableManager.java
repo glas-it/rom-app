@@ -1,11 +1,13 @@
 package ar.com.glasit.rom.Model;
 
+import java.util.List;
+
 /**
  * Created by pablo on 20/04/14.
  */
 public interface TableManager {
 
-    void onTableOpened(OpenTable table);
-    void onTableClosed(FreeTable table);
-    void onTableOrder(OpenTable table);
+    void onTableOpened(int tableId, int fellowDiner);
+    void onTableClosed(int tableId);
+    void onTableOrder(int tableId, List<Order> orders);
 }

@@ -1,19 +1,16 @@
 package ar.com.glasit.rom.Activities;
 
+import ar.com.glasit.rom.Fragments.LoadTableFragment;
 import ar.com.glasit.rom.Fragments.OpenTableFragment;
-import ar.com.glasit.rom.Fragments.TableDetailFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
-import ar.com.glasit.rom.Service.RestService;
-import ar.com.glasit.rom.Service.WellKnownMethods;
-import com.actionbarsherlock.app.SherlockFragment;
+import ar.com.glasit.rom.Service.*;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Fragments.FreeTableFragment;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -27,13 +24,6 @@ import java.util.Vector;
 public class TableDetailActivity extends StackFragmentActivity implements TableManager {
 	private final static String tittle = "Mesa "; 
 
-	private int tableNumber;
-	private int tab;
-
-    private Table oldTable;
-    private boolean cancelled;
-    private TableDetailFragment detailFragment;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,49 +31,24 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         setContentView(R.layout.activity_main);
         
         Intent i = getIntent();
-        tableNumber = i.getIntExtra("tableNumber", 0);
-        tab= i.getExtras().getInt("currentTab"); 
+        setTitle(tittle + i.getIntExtra("tableNumber", 0));
 
-        cancelled = true;
-
-        String titulo = tittle;
-        titulo += tableNumber;
-        setTitle(titulo);
-
-        TablesGestor gt = TablesGestor.getInstance();
-        oldTable = (Table) gt.getTable(tableNumber).clone();
-        if (gt.getTable(tableNumber).isOpen() ) {
-            OpenTableFragment fragment = new OpenTableFragment(this, gt.getTable(tableNumber));
-            detailFragment = fragment;
-            addFragment(fragment);
-        } else {
-            FreeTableFragment fragment = new FreeTableFragment(this, gt.getTable(tableNumber));
-            detailFragment = fragment;
-            addFragment(fragment);
-        }
-   
+        SherlockFragment fragment = new LoadTableFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("tableId", i.getIntExtra("tableId", 0));
+        fragment.setArguments(bundle);
+        addFragment(fragment);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        detailFragment.setParameters(this, TablesGestor.getInstance().getTable(tableNumber));
     }
-
-    public int getTableNumber() {
-		return this.tableNumber;
-	}
-
-	public int getTab() {
-		return this.tab;
-	}
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_cancel:
-                cancelled = true;
                 onBackPressed();
                 return true;
             default:
@@ -92,34 +57,30 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     }
 
     @Override
-    public void onTableOpened(OpenTable table) {
-        oldTable = table;
-        replaceFragment(new OpenTableFragment(this, table));
+    public void onTableOpened(int tableId, int fellowDiner) {
         List<NameValuePair> params = new Vector<NameValuePair>();
         params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
-        params.add(new BasicNameValuePair("nroMesa", Integer.toString(table.getNumber())));
+        JSONArray mesas = new JSONArray();
+        mesas.put(tableId);
+        params.add(new BasicNameValuePair("idMesas", mesas.toString()));
         params.add(new BasicNameValuePair("usernameMozo", BackendHelper.getLoggedUser()));
-        params.add(new BasicNameValuePair("comensales", Integer.toString(table.getFellowDiner())));
-        RestService.callPostService(null, WellKnownMethods.OpenTable, params);
+        params.add(new BasicNameValuePair("comensales", Integer.toString(fellowDiner)));
+        RestService.callPostService(openTableListener, WellKnownMethods.OpenTable, params);
     }
 
     @Override
-    public void onTableClosed(FreeTable table) {
-        oldTable = table;
-        replaceFragment(new FreeTableFragment(this, table));
+    public void onTableClosed(int tableId) {
         List<NameValuePair> params = new Vector<NameValuePair>();
         params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
-        params.add(new BasicNameValuePair("nroMesa", Integer.toString(table.getNumber())));
+        params.add(new BasicNameValuePair("idMesa", Integer.toString(tableId)));
         RestService.callPostService(null, WellKnownMethods.CloseTable, params);
-        cancelled = false;
+        onBackPressed();
     }
 
     @Override
-    public void onTableOrder(OpenTable table) {
-        TablesGestor.getInstance().updateTable(table);
-        cancelled = false;
+    public void onTableOrder(int tableId, List<Order> orders) {
         JSONArray json = new JSONArray();
-        for (Order o : table.getOrderRequest()) {
+        for (Order o : orders) {
             if (o.isLocal()){
                 o.stageCompleted();
                 for (int i = 0; i < o.getCount(); i++) {
@@ -127,7 +88,6 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
                     try {
                         jsonTable.put("id", o.getId()+"-"+i);
                     } catch (JSONException e) {
-
                     }
                     json.put(jsonTable);
                 }
@@ -135,16 +95,46 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         }
         List<NameValuePair> params = new Vector<NameValuePair>();
         params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
-        params.add(new BasicNameValuePair("nroMesa", Integer.toString(table.getNumber())));
+        params.add(new BasicNameValuePair("idMesa", Integer.toString(tableId)));
         params.add(new BasicNameValuePair("platos", json.toString()));
         RestService.callPostService(null, WellKnownMethods.NewOrder, params);
+        onBackPressed();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (cancelled) {
-            TablesGestor.getInstance().updateTable(oldTable);
-        }
-        super.onBackPressed();
+    public void displayOpenTable(JSONObject table) {
+        OpenTableFragment fragment = new OpenTableFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("table", table.toString());
+        fragment.setArguments(bundle);
+        replaceFragment(fragment);
     }
+
+    public void displayFreeTable(JSONObject table) {
+        FreeTableFragment fragment = new FreeTableFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("table", table.toString());
+        fragment.setArguments(bundle);
+        replaceFragment(fragment);
+    }
+
+    private ServiceListener openTableListener =  new ServiceListener() {
+        @Override
+        public void onServiceCompleted(IServiceRequest request, ServiceResponse response) {
+            try {
+                if (response.getSuccess()){
+                    displayOpenTable(response.getJsonObject().getJSONObject("mesa"));
+                }else {
+                    onBackPressed();
+                }
+            } catch (JSONException e) {
+            }
+
+        }
+
+        @Override
+        public void onError(String error) {
+
+        }
+    };
+
 }

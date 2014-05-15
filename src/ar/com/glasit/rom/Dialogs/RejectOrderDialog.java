@@ -55,7 +55,7 @@ public class RejectOrderDialog extends SherlockDialogFragment{
     }
 
     public interface OnRejectListener {
-        void onReject(Order order);
+        void onReject(Order order, String comment);
     }
 
     public interface OnRejectAndReorderListener {
@@ -78,9 +78,8 @@ public class RejectOrderDialog extends SherlockDialogFragment{
         cancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onCancelListener == null)
-                    return;
-                onCancelListener.onSubmitListener(order);
+                if (onCancelListener != null)
+                    onCancelListener.onSubmitListener(order);
                 dismiss();
             }
         });
@@ -88,9 +87,8 @@ public class RejectOrderDialog extends SherlockDialogFragment{
         reject.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onRejectListener == null)
-                    return;
-                onRejectListener.onReject(order);
+                if (onRejectListener != null)
+                    onRejectListener.onReject(order, input.getText().toString());
                 dismiss();
             }
         });
@@ -98,9 +96,8 @@ public class RejectOrderDialog extends SherlockDialogFragment{
         rejectAndOrder.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onRejectAndReorderListener == null)
-                    return;
-                onRejectAndReorderListener.onRejectAndReorder(order, input.getText().toString());
+                if (onRejectAndReorderListener != null)
+                    onRejectAndReorderListener.onRejectAndReorder(order, input.getText().toString());
                 dismiss();
             }
         });

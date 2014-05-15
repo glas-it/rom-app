@@ -21,7 +21,7 @@ public class ItemProduct extends Item{
     public ItemProduct(JSONObject json) throws JSONException {
         super(json);
         this.prices = new Vector<NameValuePair>();
-        this.description = json.getString(WellKnownKeys.DESCRIPTION);
+        this.description = json.getString(WellKnownKeys.DETAIL);
         if (json.has(WellKnownKeys.PRICES)) {
             JSONArray jsonPrices= json.getJSONArray(WellKnownKeys.PRICES);
             for (int i = 0; i < jsonPrices.length(); i++) {

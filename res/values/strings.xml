@@ -11,7 +11,7 @@
     <string name="errorInvalidadPass">Contraseña incorrecta</string>
     <string name="errorFieldIncomplete">Por favor completa con tu usuario/PIN</string>
     <string name="loginProcess">Iniciando sesión ..</string>
-    <string name="backend_url">http://192.168.1.101:8080/rom/</string>
+    <string name="backend_url">http://192.168.1.102:8080/rom/</string>
     <string name="refresh">Refrescar</string>
     <string name="open">Abrir</string>
     <string name="close">Cerrar</string>

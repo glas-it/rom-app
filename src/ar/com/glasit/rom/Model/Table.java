@@ -24,22 +24,31 @@ public abstract class Table implements Comparable<Table> {
     }
 
     public static Table buildTable(JSONObject json) {
+        Table table = null;
         try {
-            int id = json.getInt(ID);
-            int number = json.getInt(NUMBER);
-            int maximunCapacity= json.getInt(MAX_CAPACITY);
-            boolean enabled= json.getBoolean(ENABLED);
-            boolean open= json.getBoolean(OPEN);
+            JSONObject jsonTable = null;
+            try {
+                jsonTable = json.getJSONObject("mesa");
+            } catch (JSONException e) {
+                jsonTable = json;
+            }
+            int id = jsonTable.getInt(ID);
+            int number = jsonTable.getInt(NUMBER);
+            int maximunCapacity= jsonTable.getInt(MAX_CAPACITY);
+            boolean enabled= jsonTable.getBoolean(ENABLED);
+            boolean open= jsonTable.getBoolean(OPEN);
             if (enabled) {
                 if (open) {
-                    return new OpenTable(id, number, maximunCapacity, json.getString("mozo"));
+                    table = new OpenTable(id, number, maximunCapacity, jsonTable.getString("mozo"));
+                    table.load(json);
                 } else {
-                    return new FreeTable(id, number, maximunCapacity);
+                    table = new FreeTable(id, number, maximunCapacity);
+                    table.load(json);
                 }
             }
         } catch (JSONException e) {
         }
-        return null;
+        return table;
     }
 	public boolean isEnabled() {
 		return enabled;
@@ -65,6 +74,12 @@ public abstract class Table implements Comparable<Table> {
 	public void setNumber(int number) {
 		this.number = number;
 	}
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 	public int compareTo(Table j){
         if (this.number < j.number)
             return -1;
@@ -78,4 +93,5 @@ public abstract class Table implements Comparable<Table> {
     }
 
     public abstract Object clone();
+    public abstract void load(JSONObject json);
 }

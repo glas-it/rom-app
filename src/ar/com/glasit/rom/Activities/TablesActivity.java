@@ -1,7 +1,6 @@
 package ar.com.glasit.rom.Activities;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -11,6 +10,7 @@ import android.content.Intent;
 import android.support.v4.app.*;
 import ar.com.glasit.rom.Fragments.TablesFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
+import ar.com.glasit.rom.Helpers.ContextHelper;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.Service.*;
 
@@ -24,42 +24,45 @@ import ar.com.glasit.rom.R;
 
 import com.actionbarsherlock.view.MenuItem;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class TablesActivity extends SherlockFragmentActivity implements ServiceListener{
 
     public static final String KEY_TAB = "KEY_TAB";
-    public static List<String> notif = new Vector<String>();
+    public static int index = 0;
     private ActionBar actionBar;
     private ViewPager viewPager;
     private TabsAdapter viewPagerAdapter;
     private int currentTab = 0;
     private boolean updating = false;
 
-    private ServiceListener serviceListenerOrders = new ServiceListener() {
+    private ServiceListener notificationsListener = new ServiceListener() {
         @Override
         public void onServiceCompleted(IServiceRequest request, ServiceResponse serviceResponse) {
             try {
-                JSONArray orders = serviceResponse.getJsonArray();
-                for(int i=0;i<orders.length();i++){
-                    Order order = Order.buildOrder(orders.getJSONObject(i));
-                    if (order.getStatus().equals(Order.Status.DONE) &&
-                            order.getUser().equals(BackendHelper.getLoggedUser())
-                            && !notif.contains(order.getId())){
-                        notif.add(order.getId());
+                JSONArray notifications = serviceResponse.getJsonArray();
+                for(int i=0;i<notifications.length();i++){
+                    JSONObject noti = notifications.getJSONObject(i);
+                    Order order = Order.buildOrder(noti.getJSONObject("orden"));
+//                    if (noti.getString("estado").equals("Terminado")){
                         Intent intent = new Intent();
                         PendingIntent pIntent = PendingIntent.getActivity(TablesActivity.this, 0, intent, 0);
-                        NotificationCompat.Builder noti = new NotificationCompat.Builder(TablesActivity.this)
+                        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(TablesActivity.this)
                                 .setTicker(order.toString())
-                                .setContentTitle(order.getTableNumber())
-                                .setContentText(order.toString())
+                                .setContentTitle("Mesa " + order.getTableNumber())
+                                .setContentText("Retirar: " + order.toString())
                                 .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentIntent(pIntent);
+                                .setContentIntent(pIntent)
+                                .setAutoCancel(true);
                         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                        notificationManager.notify(0, noti.getNotification());
-                    }
+                        notificationManager.notify(index++, notificationBuilder.getNotification());
+//                    }
                 }
                 updating = false;
+                index %= 50;
             } catch (Exception e) {
             }
         }
@@ -74,7 +77,9 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
         @Override
         public void onServiceCompleted(IServiceRequest request, ServiceResponse obj) {
             Menu.getInstance().update(obj.getJsonArray());
-            RestService.callGetService(serviceListenerOrders, WellKnownMethods.GetOrders, null);
+            List<NameValuePair> params = new Vector<NameValuePair>();
+            params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
+            RestService.callGetService(notificationsListener, WellKnownMethods.GetWaiterNotifications, params);
         }
 
         @Override
@@ -106,7 +111,9 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
                                 if (!updating){
                                     updating = true;
                                     if (Menu.getInstance().getChildrenCount() > 0) {
-                                        RestService.callGetService(serviceListenerOrders, WellKnownMethods.GetOrders, null);
+                                        List<NameValuePair> params = new Vector<NameValuePair>();
+                                        params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
+                                        RestService.callGetService(notificationsListener, WellKnownMethods.GetWaiterNotifications, params);
                                     } else {
                                         RestService.callGetService(serviceListenerMenu, WellKnownMethods.GetMenu, null);
                                     }
@@ -220,7 +227,9 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
-                RestService.callGetService(this, WellKnownMethods.GetTables, null);
+                List<NameValuePair> params = new Vector<NameValuePair>();
+                params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+                RestService.callGetService(this, WellKnownMethods.GetTables, params);
                 break;
             case R.id.close_Session:
                 BackendHelper.setLoggedUser("");
@@ -263,7 +272,10 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
     protected synchronized void obtainData() {
         if (!updating && TablesGestor.getInstance().getAllTables().isEmpty()) {
             updating = true;
-            RestService.callGetService(this, WellKnownMethods.GetTables, null);
+            List<NameValuePair> params = new Vector<NameValuePair>();
+            ContextHelper.setContextInstance(getApplicationContext());
+            params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+            RestService.callGetService(this, WellKnownMethods.GetTables, params);
         }
     }
 }

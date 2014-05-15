@@ -23,6 +23,7 @@ public class Order {
     private static final String ADDITION = "idAgregado";
     private static final String PRICE = "precio";
     private static final String STATUS = "estado";
+    private static final String NOTES = "observaciones";
 
     public enum Status {
         LOCAL, PENDANT, DOING, DONE, CANCELLED, DELIVERED;
@@ -74,6 +75,7 @@ public class Order {
     private String id;
     private String user;
     private Status status;
+    private String notes;
     private List<Status> statusList;
     private Date created;
     private int tableNumber;
@@ -104,7 +106,9 @@ public class Order {
             JSONObject price = json.getJSONObject(PRICE);
             orden.price = new BasicNameValuePair(price.getString(WellKnownKeys.DESCRIPTION), price.getString(WellKnownKeys.VALUE));
             String status = json.getString(STATUS);
-            if (status.equals("Pendiente")) {
+            if (status.equals("Local")) {
+                orden.status = Status.LOCAL;
+            } else if (status.equals("Pendiente")) {
                 orden.status = Status.PENDANT;
             } else if (status.equals("En Preparacion")) {
                 orden.status = Status.DOING;
@@ -116,11 +120,12 @@ public class Order {
                 orden.status = Status.DELIVERED;
             }
             orden.statusList.add(0, orden.status);
-            orden.created = new Date(json.getJSONObject("creado").getLong("tiempo"));
-            orden.tableNumber = json.getInt("mesa");
-            orden.user = json.getString("username");
+            orden.notes = json.getString(NOTES);
             try {
-                orden.isRejected = json.getBoolean("fueRechazado");
+                orden.created = new Date(json.getJSONObject("creado").getLong("tiempo"));
+                orden.tableNumber = json.getInt("mesa");
+                orden.user = json.getString("username");
+                orden.isRejected = json.getBoolean("fueRechazada");
             } catch (Exception e) {
                 orden.isRejected = false;
             }
@@ -140,6 +145,10 @@ public class Order {
         this.statusList = new Vector<Status>();
         this.tableNumber = 0;
         this.created = new Date();
+    }
+
+    public void setNotes(String notes){
+        this.notes = notes;
     }
 
     public String getUser() {
@@ -268,10 +277,14 @@ public class Order {
             json.put(RUBRO, item.getParent().getParent().getId());
             json.put(SUBRUBRO, item.getParent().getId());
             json.put(PRODUCT, item.getId());
+            json.put(NOTES, this.notes);
             if (addition != null)  {
                 json.put(ADDITION, addition.getId());
             }
             switch (this.status) {
+                case LOCAL:
+                    json.put(STATUS, "Local");
+                    break;
                 case PENDANT:
                     json.put(STATUS, "Pendiente");
                     break;

@@ -1,5 +1,7 @@
 package ar.com.glasit.rom.Model;
 
+import org.json.JSONObject;
+
 public class FreeTable extends Table{
 	
 	public FreeTable(int id, int number, int maxCapacity) {
@@ -18,5 +20,10 @@ public class FreeTable extends Table{
     @Override
     public Object clone() {
         return new FreeTable(id, number, maximunCapacity);
+    }
+
+    @Override
+    public void load(JSONObject json) {
+
     }
 }

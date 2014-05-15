@@ -12,16 +12,12 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class MenuActivity extends StackFragmentActivity implements OnSelectItemListener {
 
-    private Table table;
     private MenuFragment menuFragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         addFragment((menuFragment = new MenuFragment(this)));
-
-        Intent i = getIntent();
-        table = TablesGestor.getInstance().getTable(i.getIntExtra("tableNumber", 0));
     }
 
     @Override
@@ -65,7 +61,8 @@ public class MenuActivity extends StackFragmentActivity implements OnSelectItemL
         dialog.setOnSubmitListener(new ItemDialog.OnSubmitListener() {
             @Override
             public void onSubmitListener(Order o) {
-                ((OpenTable)table).addOrder(o);
+                Intent intent = getIntent();
+                intent.putExtra("order", o.toJSON().toString());
                 if (getParent() == null) {
                     MenuActivity.this.setResult(RESULT_OK, getIntent());
                 } else {

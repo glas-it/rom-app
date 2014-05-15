@@ -77,24 +77,7 @@ public class TablesFragment extends GridSearcherFragment{
     	}
         getGridView().setBackgroundColor(Color.TRANSPARENT);
         getGridView().setCacheColorHint(Color.TRANSPARENT);
-        getGridView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            	if (type == Type.ALL) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
-                    alert.setMessage(R.string.tookTableConfirmation);
-                    alert.setPositiveButton("Ok", new SelectTableListener(position));
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                        }
-                    });
-                    alert.show();
-            	} else {
-            		Table table = (Table) getGridAdapter().getItem(position);
-            		RestService.callGetService(new TableListener(table), WellKnownMethods.GetOrders, null);
-            	}
-            }
-        });
+        getGridView().setOnItemClickListener(new SelectTableListener());
         getGridView().setNumColumns(4);
     }
 
@@ -138,53 +121,15 @@ public class TablesFragment extends GridSearcherFragment{
         }
     }
 
-    private class TableListener implements ServiceListener {
-        Table table;
-        TableListener(Table table) {
-            this.table = table;
-        }
+    private class SelectTableListener implements AdapterView.OnItemClickListener{
         @Override
-        public void onServiceCompleted(IServiceRequest request, ServiceResponse serviceResponse) {
-            try {
-                JSONArray orders = serviceResponse.getJsonArray();
-                boolean clear = true;
-                for(int i=0;i<orders.length();i++){
-                    Order order = Order.buildOrder(orders.getJSONObject(i));
-                    if (table.getNumber() == Integer.parseInt(order.getTableNumber())){
-                        OpenTable openTable = (OpenTable) table;
-                        if (clear) {
-                            openTable.clearOrders();
-                            clear = false;
-                        }
-                        openTable.addOrder(order);
-                    }
-                }
-                Intent i = new Intent(getActivity(), TableDetailActivity.class);
-                i.putExtra("tableNumber", table.getNumber());
-                startActivity(i);
-            } catch (Exception e) {
-            }
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Table table = (Table) getGridAdapter().getItem(position);
+            Intent i = new Intent(getActivity(), TableDetailActivity.class);
+            i.putExtra("tableId", table.getId());
+            i.putExtra("tableNumber", table.getNumber());
+            startActivity(i);
         }
-
-        @Override
-        public void onError(String error) {
-
-        }
-    };
-    
-    private class SelectTableListener implements DialogInterface.OnClickListener{
-    	
-    	int position;
-    	
-    	public SelectTableListener(int position) {
-    		position = position;
-		}
-
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-    		Table table = (Table) getGridAdapter().getItem(position);
-    		RestService.callGetService(new TableListener(table), WellKnownMethods.GetOrders, null);
-		}
-    	
     }
+
 }

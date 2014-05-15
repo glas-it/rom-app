@@ -2,7 +2,6 @@ package ar.com.glasit.rom.Fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import ar.com.glasit.rom.Activities.MenuActivity;
-import ar.com.glasit.rom.Dialogs.ItemDialog;
 import ar.com.glasit.rom.Dialogs.RejectOrderDialog;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.R;
@@ -24,15 +22,14 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Vector;
 
-public class OpenTableFragment extends SherlockFragment implements TableDetailFragment<OpenTable> {
+public class OpenTableFragment extends SherlockFragment{
 
-	private TextView txtmozo;
-    private TextView txtcapacity;
-    private TextView txtcomensales;
     private TextView people;
     private TextView total;
 
@@ -40,20 +37,6 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
     private OpenTable table;
     private TableManager manager;
     private static final int REQUEST_CODE = 0x1;
-
-    public OpenTableFragment(TableManager manager, Table table) {
-        this.manager = manager;
-        this.table = (OpenTable) table;
-    }
-
-    public OpenTableFragment() {
-    }
-
-    @Override
-    public void setParameters(TableManager manager, OpenTable table) {
-        this.manager = manager;
-        this.table = table;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,12 +52,13 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
                 false);
         super.onCreate(savedInstanceState);
 
-        txtcapacity = (TextView) rootView.findViewById(ar.com.glasit.rom.R.id.capacity);
-        txtcapacity.setText(Integer.toString(table.getMaximunCapacity()));
-        txtmozo = (TextView) rootView.findViewById(ar.com.glasit.rom.R.id.mozo);
-        txtmozo.setText(table.getWaiter());
-        txtcomensales = (TextView) rootView.findViewById(ar.com.glasit.rom.R.id.cubiertos);
-        txtcomensales.setText(Integer.toString(table.getFellowDiner()));
+        this.table = getTable();
+        TextView txtCapacity = (TextView) rootView.findViewById(ar.com.glasit.rom.R.id.capacity);
+        txtCapacity.setText(Integer.toString(getTable().getMaximunCapacity()));
+        TextView txtWaiter = (TextView) rootView.findViewById(ar.com.glasit.rom.R.id.mozo);
+        txtWaiter.setText(getTable().getWaiter());
+        TextView txtPeople = (TextView) rootView.findViewById(ar.com.glasit.rom.R.id.cubiertos);
+        txtPeople.setText(Integer.toString(getTable().getFellowDiner()));
         total = (TextView) rootView.findViewById(R.id.total);
 
         orders = (TableLayout) rootView.findViewById(R.id.orders);
@@ -123,7 +107,6 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
 
     private void openMenu() {
         Intent intent = new Intent(getSherlockActivity(), MenuActivity.class);
-        intent.putExtra("tableNumber", table.getNumber());
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -131,8 +114,13 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == MenuActivity.RESULT_OK) {
-            List<Order> list = table.getOrderRequest();
-            addRow(list.get(list.size() - 1));
+            try {
+                Order order = Order.buildOrder(new JSONObject(data.getStringExtra("order")));
+                getTable().addOrder(order);
+                addRow(order);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -154,8 +142,8 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     list.removeView(rowToBeRemoved);
-                    table.removeOrder(order);
-                    total.setText("$ " + Float.toString(table.getPrice()));
+                    getTable().removeOrder(order);
+                    total.setText("$ " + Float.toString(getTable().getPrice()));
                 }
             });
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -185,7 +173,7 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
             TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
             price.setText("$ " + order.getPrice());
 
-            total.setText("$ " + Float.toString(table.getPrice()));
+            total.setText("$ " + Float.toString(getTable().getPrice()));
         }
     }
 
@@ -207,7 +195,7 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
                 amount.setText(Integer.toString(order.getCount()));
                 TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                 price.setText("$ " + order.getPrice());
-                total.setText("$ " + Float.toString(table.getPrice()));
+                total.setText("$ " + Float.toString(getTable().getPrice()));
             }
         }
     }
@@ -234,7 +222,7 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
                         ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_cancelled);
                         TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                         price.setText("$ " + order.getPrice());
-                        total.setText("$ " + Float.toString(table.getPrice()));
+                        total.setText("$ " + Float.toString(getTable().getPrice()));
                         List<NameValuePair> param = new Vector<NameValuePair>();
                         param.add(new BasicNameValuePair("uuidOrden", order.getId()));
                         RestService.callPostService(null, WellKnownMethods.OrderCancel, param);
@@ -262,45 +250,37 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
                     }
                 });
                 alert.show();
-            } else if (order.isDelivered()) {
+            } else if (order.isDelivered() && !order.isRejected()) {
                 RejectOrderDialog dialog = new RejectOrderDialog(order);
                 dialog.setOnCancelListener(null);
                 dialog.setOnRejectListener(new RejectOrderDialog.OnRejectListener() {
                     @Override
-                    public void onReject(Order order) {
-                        ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_pendant_rejected);
+                    public void onReject(Order order, String comment) {
+                        order.setStatus(Order.Status.CANCELLED);
+                        ((ImageView) rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_cancelled_rejected);
                         TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                         price.setText("$ " + order.getPrice());
-                        total.setText("$ " + Float.toString(table.getPrice()));
+                        total.setText("$ " + Float.toString(getTable().getPrice()));
                         List<NameValuePair> param = new Vector<NameValuePair>();
                         param.add(new BasicNameValuePair("uuidOrden", order.getId()));
+                        param.add(new BasicNameValuePair("observaciones", comment));
                         param.add(new BasicNameValuePair("reordenar", "false"));
                         RestService.callPostService(null, WellKnownMethods.OrderRejected, param);
-                        Order o = (Order) order.clone();
-                        o.setStatus(Order.Status.PENDANT);
-                        addRow(o);
                     }
                 });
                 dialog.setOnRejectAndReorderListener(new RejectOrderDialog.OnRejectAndReorderListener() {
                     @Override
                     public void onRejectAndReorder(Order order, String comment) {
-                        order.setStatus(Order.Status.CANCELLED);
-                        if (order.isRejected()) {
-                            ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_cancelled_rejected);
-                        } else {
-                            ((ImageView)rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_cancelled);
-                        }
+                        order.setStatus(Order.Status.PENDANT);
+                        ((ImageView) rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_pendant_rejected);
                         TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                         price.setText("$ " + order.getPrice());
-                        total.setText("$ " + Float.toString(table.getPrice()));
+                        total.setText("$ " + Float.toString(getTable().getPrice()));
                         List<NameValuePair> param = new Vector<NameValuePair>();
                         param.add(new BasicNameValuePair("uuidOrden", order.getId()));
-                        param.add(new BasicNameValuePair("comment", comment));
+                        param.add(new BasicNameValuePair("observaciones", comment));
                         param.add(new BasicNameValuePair("reordenar", "true"));
                         RestService.callPostService(null, WellKnownMethods.OrderRejected, param);
-                        Order o = (Order) order.clone();
-                        o.setStatus(Order.Status.PENDANT);
-                        addRow(o);
                     }
                 });
                 dialog.show(getSherlockActivity().getSupportFragmentManager(), "");
@@ -367,10 +347,14 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
                 semaphore.setImageResource(R.drawable.semaphore_item_cancelled);
             }
         } else if (order.getStatus().equals(Order.Status.DELIVERED)) {
+            if (order.isRejected()) {
+                semaphore.setImageResource(R.drawable.semaphore_item_cancelled_rejected);
+            } else {
                 semaphore.setImageResource(R.drawable.semaphore_item_delivered);
+            }
         }
 
-        total.setText(Float.toString(table.getPrice()));
+        total.setText(Float.toString(getTable().getPrice()));
         orders.addView(newRow);
     }
 
@@ -383,13 +367,11 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_order:
-                manager.onTableOrder(table);
-                getSherlockActivity().onBackPressed();
+                ((TableManager) getSherlockActivity()).onTableOrder(table.getId(), getTable().getOrderRequest());
                 break;
             case R.id.close_table:
-                TablesGestor.getInstance().closeTable(table.getNumber());
-                manager.onTableClosed((FreeTable) TablesGestor.getInstance().getTable(table.getNumber()));
-                getSherlockActivity().onBackPressed();
+                TablesGestor.getInstance().closeTable(getTable().getNumber());
+                ((TableManager) getSherlockActivity()).onTableClosed(getTable().getId());
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -398,8 +380,19 @@ public class OpenTableFragment extends SherlockFragment implements TableDetailFr
     }
 
     private void initOrder() {
-        for (Order o : table.getOrderRequest()) {
+        for (Order o : getTable().getOrderRequest()) {
             addRow(o);
         }
+    }
+
+    private OpenTable getTable() {
+        if (this.table != null)
+            return this.table;
+        try {
+            JSONObject json = new JSONObject(getArguments().getString("table"));
+            return (this.table = (OpenTable) Table.buildTable(json));
+        } catch (JSONException e) {
+        }
+        return null;
     }
 }

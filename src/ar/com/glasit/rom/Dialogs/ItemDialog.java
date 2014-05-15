@@ -28,6 +28,7 @@ public class ItemDialog extends SherlockDialogFragment{
     private Addition selectedAddition;
     private NameValuePair selectedPrice;
 
+    private EditText input;
     public ItemDialog(ItemProduct item) {
         this.item = item;
     }
@@ -109,12 +110,14 @@ public class ItemDialog extends SherlockDialogFragment{
             }
         }
 
+        input = (EditText) dialog.findViewById(R.id.input);
         Button submit = (Button) dialog.findViewById(R.id.submit);
         submit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Order o = new Order(item, selectedAddition, selectedPrice);
                 o.setCount(1);
+                o.setNotes(input.getText().toString());
                 submitListener.onSubmitListener(o);
                 dismiss();
             }

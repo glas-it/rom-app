@@ -1,10 +1,16 @@
 package ar.com.glasit.rom.Model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-public class OpenTable extends Table {
+public class OpenTable extends
+
+        Table {
 
 	private int fellowDiner;
 	private String waiter;
@@ -29,32 +35,6 @@ public class OpenTable extends Table {
 		return orderRequest;
 	}
 
-    public Order getById(String id) {
-        for (Order o : orderRequest) {
-            if (o.getId().equals(id))
-                return o;
-        }
-        return null;
-    }
-
-    public void clearOrders(){
-        this.orderRequest = new Vector<Order>();
-    }
-    public void removeOthers(List<String> uuids) {
-        Iterator<Order> it = orderRequest.iterator();
-        while(it.hasNext()) {
-            boolean remove = true;
-            for (String uuid : uuids) {
-                if (uuid.equals(it.next().getId())){
-                    remove = false;
-                    break;
-                }
-            }
-            if (remove) {
-                it.remove();
-            }
-        }
-    }
 	public void addOrder(Order order) {
 		this.orderRequest.add(order);
 	}
@@ -102,5 +82,18 @@ public class OpenTable extends Table {
             clone.addOrder((Order) o.clone());
         }
         return clone;
+    }
+
+    @Override
+    public void load(JSONObject json) {
+        JSONArray ordenes = null;
+        try {
+            ordenes = json.getJSONArray("ordenes");
+            for (int i = 0; i < ordenes.length(); i++) {
+                this.addOrder(Order.buildOrder(ordenes.getJSONObject(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
