@@ -1,5 +1,6 @@
 package ar.com.glasit.rom.Activities;
 
+import android.widget.Toast;
 import ar.com.glasit.rom.Fragments.LoadTableFragment;
 import ar.com.glasit.rom.Fragments.OpenTableFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
@@ -104,6 +105,10 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     public void displayOpenTable(JSONObject table) {
         OpenTableFragment fragment = new OpenTableFragment();
         Bundle bundle = new Bundle();
+        try {
+            table.put("abierta", true);
+        } catch (JSONException e) {
+        }
         bundle.putString("table", table.toString());
         fragment.setArguments(bundle);
         replaceFragment(fragment);
@@ -133,7 +138,7 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
 
         @Override
         public void onError(String error) {
-
+            Toast.makeText(TableDetailActivity.this, error, Toast.LENGTH_SHORT).show();
         }
     };
 

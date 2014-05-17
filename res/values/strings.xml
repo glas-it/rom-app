@@ -31,8 +31,6 @@
     <string name="errorDialog">Aceptar</string>
     <string name="continuar">Continuar</string>
     <string name="empty_restaurant_key">Por favor completa la clave de identificación del restaurante</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Mesas</string>
     <string name="tablelabel">Mesa </string>
     <string name="mozolabel">Tomada por mozo  :</string>
