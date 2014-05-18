@@ -1,7 +1,9 @@
 package ar.com.glasit.rom.Fragments;
 
+import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.R;
+
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.content.Intent;
@@ -12,9 +14,11 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,12 +70,27 @@ public class FreeTableFragment extends SherlockFragment{
             }
         });
         
+        FreeTable table = (FreeTable) this.table;
+        
+        if ( table.getTablesToJoin() != null) {
+        	  TextView tablesToJoin = (TextView) rootView.findViewById(R.id.tablesJoined);
+        	  tablesToJoin.setText(table.getJoinedTablesToString());
+        }
+        
+      
+        
         Button join = (Button) rootView.findViewById(R.id.join);
         join.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				public void onClick(View v) {
+					TableDetailActivity t = (TableDetailActivity)getSherlockActivity();
+					JSONObject json=null;
+					try {
+						json = new JSONObject(getArguments().getString("table"));
+					} catch (JSONException e) {
+					}
+					t.displayTableSelector(json);
 			}
 		});
         
@@ -94,8 +113,10 @@ public class FreeTableFragment extends SherlockFragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
         switch (item.getItemId()) {
-            case R.id.item_open:
-                ((TableManager) getSherlockActivity()).onTableOpened(getTable().getId(), Integer.parseInt(people.getText().toString()));
+            case R.id.item_open: 
+            	FreeTable table = (FreeTable) getTable();
+                ((TableManager) getSherlockActivity()).onTableOpened(table.getId(), Integer.parseInt(people.getText().toString()),
+                		table.getJoinedTablesId());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -119,5 +140,9 @@ public class FreeTableFragment extends SherlockFragment{
         } catch (JSONException e) {
         }
         return null;
+    }
+    
+    public void setTable(Table table) {
+    	this.table = table;
     }
 }

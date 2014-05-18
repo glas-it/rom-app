@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import ar.com.glasit.rom.Activities.MenuActivity;
+import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Dialogs.RejectOrderDialog;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.R;
@@ -92,12 +93,19 @@ public class OpenTableFragment extends SherlockFragment{
             }
         });
         
+
         Button join = (Button) rootView.findViewById(R.id.join);
         join.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				TableDetailActivity t = (TableDetailActivity)getSherlockActivity();
+				JSONObject json=null;
+				try {
+					json = new JSONObject(getArguments().getString("table"));
+				} catch (JSONException e) {
+				}
+				t.displayTableSelector(json);
 			}
 		});
 

@@ -15,12 +15,23 @@ public class OpenTable extends
 	private int fellowDiner;
 	private String waiter;
 	private List<Order> orderRequest;
+	protected boolean isOpen;
+	protected boolean isJoined;
 
-    public OpenTable(int id, int number, int maxCapacity, String waiter) {
+    public boolean isJoined() {
+		return isJoined;
+	}
+
+	public void setJoined(boolean isJoined) {
+		this.isJoined = isJoined;
+	}
+
+	public OpenTable(int id, int number, int maxCapacity, String waiter) {
         super(id, number, maxCapacity);
         orderRequest = new Vector<Order>();
         enabled=true;
         open=true;
+        isJoined=false;
         this.waiter = waiter;
     }
     

@@ -1,17 +1,21 @@
 package ar.com.glasit.rom.Activities;
 
+import android.widget.Toast;
 import ar.com.glasit.rom.Fragments.LoadTableFragment;
 import ar.com.glasit.rom.Fragments.OpenTableFragment;
+import ar.com.glasit.rom.Fragments.TablesSelectorFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
+import ar.com.glasit.rom.Model.Table.JoinedTable;
 import ar.com.glasit.rom.Service.*;
-
 import android.content.Intent;
 import android.os.Bundle;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Fragments.FreeTableFragment;
+
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -57,11 +61,16 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     }
 
     @Override
-    public void onTableOpened(int tableId, int fellowDiner) {
+    public void onTableOpened(int tableId, int fellowDiner, int[] joinedTablesId) {
         List<NameValuePair> params = new Vector<NameValuePair>();
         params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
         JSONArray mesas = new JSONArray();
         mesas.put(tableId);
+        if (joinedTablesId != null) {
+        	for (int i =0 ; i< joinedTablesId.length ; i++ ) {
+        		mesas.put (joinedTablesId[i]);
+        	}
+        }
         params.add(new BasicNameValuePair("idMesas", mesas.toString()));
         params.add(new BasicNameValuePair("usernameMozo", BackendHelper.getLoggedUser()));
         params.add(new BasicNameValuePair("comensales", Integer.toString(fellowDiner)));
@@ -104,6 +113,10 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     public void displayOpenTable(JSONObject table) {
         OpenTableFragment fragment = new OpenTableFragment();
         Bundle bundle = new Bundle();
+         try {
+        	table.put("abierta", true);
+        } catch (JSONException e) {
+        }
         bundle.putString("table", table.toString());
         fragment.setArguments(bundle);
         replaceFragment(fragment);
@@ -137,4 +150,49 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         }
     };
 
+	@Override
+	public void onTableJoined(Table table, List<JoinedTable> selectedTables) {
+		if (!table.isOpen()) {
+			((FreeTable) table).addTablesToJoin(selectedTables);
+	        FreeTableFragment fragment = new FreeTableFragment();
+	        fragment.setTable(table);
+	        Bundle bundle = new Bundle();
+	        bundle.putString("table", table.toString());
+	        fragment.setArguments(bundle);
+	        replaceFragment(fragment);
+		}
+		else {
+			//TODO:service de editar mesas de una abierta
+		}
+		
+	}
+
+	
+    private ServiceListener joinTableListener =  new ServiceListener() {
+        @Override
+        public void onServiceCompleted(IServiceRequest request, ServiceResponse response) {
+            try {
+                if (response.getSuccess()){
+                    displayOpenTable(response.getJsonObject().getJSONObject("mesa"));
+                }else {
+                    onBackPressed();
+                }
+            } catch (JSONException e) {
+            }
+
+        }
+
+        @Override
+        public void onError(String error) {
+        	Toast.makeText(TableDetailActivity.this, error, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+	public void displayTableSelector(JSONObject table) {
+        TablesSelectorFragment fragment = new TablesSelectorFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("table", table.toString());
+        fragment.setArguments(bundle);
+        replaceFragment(fragment);
+	}
 }

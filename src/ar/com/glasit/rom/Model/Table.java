@@ -1,5 +1,6 @@
 package ar.com.glasit.rom.Model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,8 +40,27 @@ public abstract class Table implements Comparable<Table> {
             boolean open= jsonTable.getBoolean(OPEN);
             if (enabled) {
                 if (open) {
-                    table = new OpenTable(id, number, maximunCapacity, jsonTable.getString("mozo"));
-                    table.load(json);
+                	String tableType = jsonTable.getString("class");
+                	if (tableType.contains("MesaComposite")) {
+                		CompositeTable c = new CompositeTable(id, number, maximunCapacity);
+                    	JSONArray mesas = new JSONArray();
+                    	mesas = jsonTable.getJSONArray("mesas");	
+                    	for (int i = 0; i < mesas.length(); i++) {
+                             JSONObject j = mesas.getJSONObject(i);
+                             int numberJ = j.getInt(NUMBER);
+                             if (numberJ != number ) {
+                                 int maxCapacityJ = j.getInt(MAX_CAPACITY);
+                                 int idJ = j.getInt(ID);
+                            	 c.addJoinedTable(idJ,numberJ,maxCapacityJ);
+                             }
+                        }
+                    	table = c;
+                    	
+                	}
+                	else {
+                		table = new OpenTable(id, number, maximunCapacity, jsonTable.getString("mozo"));
+                	}
+                	table.load(json);
                 } else {
                     table = new FreeTable(id, number, maximunCapacity);
                     table.load(json);
@@ -50,6 +70,7 @@ public abstract class Table implements Comparable<Table> {
         }
         return table;
     }
+
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -94,4 +115,44 @@ public abstract class Table implements Comparable<Table> {
 
     public abstract Object clone();
     public abstract void load(JSONObject json);
+    
+	public JoinedTable toJoinedTable() {
+		JoinedTable j = new JoinedTable(this.id, this.number, this.maximunCapacity);
+		return j;
+	}
+    
+	public class JoinedTable implements Comparable<JoinedTable> {
+		public JoinedTable(int id, int number, int maximunCapacity) {
+			setTableId(id);
+			setTableNumber(number);
+			setCapacity(maximunCapacity);
+		}
+		private int tableId;
+		private int tableNumber;
+		private int capacity;
+		
+		public int getTableId() {
+			return tableId;
+		}
+		public void setTableId(int tableId) {
+			this.tableId = tableId;
+		}
+		public int getTableNumber() {
+			return tableNumber;
+		}
+		public void setTableNumber(int tableNumber) {
+			this.tableNumber = tableNumber;
+		}
+		public int getCapacity() {
+			return capacity;
+		}
+		public void setCapacity(int capacity) {
+			this.capacity = capacity;
+		}
+		@Override
+		public int compareTo(JoinedTable another) {
+			int anotherTableNumber = another.getTableNumber();
+			return this.tableNumber - anotherTableNumber;
+		}
+	}
 }
