@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -151,20 +153,16 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     };
 
 	@Override
-	public void onTableJoined(Table table, List<JoinedTable> selectedTables) {
-		if (!table.isOpen()) {
-			((FreeTable) table).addTablesToJoin(selectedTables);
-	        FreeTableFragment fragment = new FreeTableFragment();
-	        fragment.setTable(table);
-	        Bundle bundle = new Bundle();
-	        bundle.putString("table", table.toString());
-	        fragment.setArguments(bundle);
-	        replaceFragment(fragment);
-		}
-		else {
-			//TODO:service de editar mesas de una abierta
-		}
-		
+	public void onTableFreeJoined(Table table, List<JoinedTable> selectedTables) {
+		setTitle(tittle + Integer.toString(table.getNumber()));
+		((FreeTable) table).addTablesToJoin(selectedTables);
+	    FreeTableFragment fragment = new FreeTableFragment();
+	    Collections.sort(selectedTables);
+	    fragment.setTable(table);
+	    Bundle bundle = new Bundle();
+	    bundle.putString("table", table.toString());
+	    fragment.setArguments(bundle);
+	    replaceFragment(fragment);	
 	}
 
 	
@@ -194,5 +192,55 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         bundle.putString("table", table.toString());
         fragment.setArguments(bundle);
         replaceFragment(fragment);
+	}
+
+	@Override
+	public void onTableOpenJoined(Table table, List<JoinedTable> toAdd,
+			List<JoinedTable> toQuit) {
+//		((OpenTable) table).remove(toQuit);
+//		((OpenTable) table).add(toAdd);
+
+		setTitle(tittle + Integer.toString(table.getNumber()));
+		
+		if (toAdd != null) {
+			Iterator<JoinedTable> it = toAdd.iterator();
+			while (it.hasNext()) {
+				 JoinedTable t = it.next();
+				 List<NameValuePair> params = new Vector<NameValuePair>();
+			     params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+			     params.add(new BasicNameValuePair("idMesaCompuesta", Integer.toString(table.getId())));
+			     params.add(new BasicNameValuePair("idMesa", Integer.toString(t.getTableId())));
+			     RestService.callPostService(null, WellKnownMethods.AddTable, params);
+			     
+			}
+		}
+		
+		if (toQuit != null) {
+			Iterator<JoinedTable> it = toQuit.iterator();
+			while (it.hasNext()) {
+				 JoinedTable t = it.next();
+				 List<NameValuePair> params = new Vector<NameValuePair>();
+			     params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+			     params.add(new BasicNameValuePair("idMesaCompuesta", Integer.toString(table.getId())));
+			     params.add(new BasicNameValuePair("idMesa", Integer.toString(t.getTableId())));
+			     RestService.callPostService(null, WellKnownMethods.RemoveTable, params);
+			     
+			}
+		}
+		
+		
+        SherlockFragment fragment = new LoadTableFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("tableId", table.getId());
+        fragment.setArguments(bundle);
+        addFragment(fragment);
+		
+//		OpenTableFragment fragment = new OpenTableFragment();
+//      fragment.setTable(table);
+//      Bundle bundle = new Bundle();
+//      bundle.putString("table", table.toString());
+//      fragment.setArguments(bundle);
+//      replaceFragment(fragment);	
+		
 	}
 }

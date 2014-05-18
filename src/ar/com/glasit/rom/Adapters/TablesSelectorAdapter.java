@@ -97,9 +97,11 @@ public class TablesSelectorAdapter extends BaseAdapter implements Filterable {
           	  }
           	});
             
-            if (this.previousSelection.contains(Integer.toString(filteredData.get(position).getTableNumber()))) {
-            	check.setChecked(true);
-    		 }          
+            if (this.previousSelection != null) {
+            	if (this.previousSelection.contains(Integer.toString(filteredData.get(position).getTableNumber()))) {
+            		check.setChecked(true);
+            	}
+        }
             
         }
         return rowView;

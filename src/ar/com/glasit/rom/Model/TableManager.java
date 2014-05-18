@@ -12,5 +12,6 @@ public interface TableManager {
     void onTableOpened(int tableId, int fellowDiner, int[] joinedTablesId);
     void onTableClosed(int tableId);
     void onTableOrder(int tableId, List<Order> orders);
-    void onTableJoined(Table table, List<JoinedTable> selectedTables);
+	void onTableFreeJoined(Table table, List<JoinedTable> selectedTables);
+	void onTableOpenJoined(Table table, List<JoinedTable> toAdd,  List<JoinedTable> toQuit );
 }

@@ -111,8 +111,13 @@ public class TablesSelectorFragment extends ListSearcherFragment implements Serv
          }
 
          if(previousSelection != null) {
-        	 freeTablesToJoin.addAll(previousSelection);
-        	 Collections.sort(freeTablesToJoin);
+        	this.previouTablesSelected = previousSelection;
+ 			if (selectedTables == null) {
+				selectedTables = new ArrayList<JoinedTable>();
+ 			}
+ 			this.selectedTables.addAll(previouTablesSelected);
+        	freeTablesToJoin.addAll(previousSelection);
+        	Collections.sort(freeTablesToJoin);
          }
          this.tableSelectorAdapter = new TablesSelectorAdapter(freeTablesToJoin, table,previousSelection);
          this.tableSelectorAdapter.setCheckListener(this.checkListener);
@@ -169,7 +174,12 @@ public class TablesSelectorFragment extends ListSearcherFragment implements Serv
          switch (item.getItemId()) {
              case R.id.joinConfirmation:
             	 if (selectedTables != null) {
-            		 ((TableManager) getSherlockActivity()).onTableJoined(table, selectedTables);
+            		 if (!this.table.isOpen()) {
+            			 ((TableManager) getSherlockActivity()).onTableFreeJoined(table, selectedTables);
+            		 }
+            		 else {
+            			 ((TableManager) getSherlockActivity()).onTableOpenJoined(table, this.toAdd(), this.toQuit());
+            		 }
             	 }
             	 return true;
              default:
@@ -249,5 +259,64 @@ public class TablesSelectorFragment extends ListSearcherFragment implements Serv
 	@Override
 	public void onError(String error) {
 	} 
+	
+	public List<JoinedTable> toQuit() {
+		if (this.previouTablesSelected == null) 
+			return null;
+		else {
+			List<JoinedTable> tablesToRemove = null;
+			Iterator<JoinedTable> it = this.previouTablesSelected.iterator();
+			while (it.hasNext()) {
+				JoinedTable previousTable = it.next();
+				Iterator<JoinedTable> it2 = this.selectedTables.iterator();
+				boolean found = false;
+				while (it2.hasNext() && !found) {
+					if (it2.next().getTableId() == previousTable.getTableId()) {
+						found=true;
+					}
+				}
+				if (found != true ) {
+					if (tablesToRemove == null) {
+						tablesToRemove = new ArrayList<Table.JoinedTable>();		
+					}
+					tablesToRemove.add(previousTable);
+				}
+			}
+			return tablesToRemove;
+		}
+	}
+	
+	public List<JoinedTable> toAdd() {
+		if (this.selectedTables == null) 
+			return this.selectedTables;
+		else {
+			
+			if (this.previouTablesSelected == null) {
+				return this.selectedTables;
+			}
+			else {
+				List<JoinedTable> tablesToaAdd = null;
+				Iterator<JoinedTable> it = this.selectedTables.iterator();
+			
+				while (it.hasNext()) {
+					JoinedTable selectedTable = it.next();
+					Iterator<JoinedTable> it2 = this.previouTablesSelected.iterator();
+					boolean found = false;
+					while (it2.hasNext() && !found) {
+						if (it2.next().getTableId() == selectedTable.getTableId()) {
+							found=true;
+						}
+					}
+					if (found != true ) {
+						if (tablesToaAdd == null) {
+							tablesToaAdd = new ArrayList<Table.JoinedTable>();		
+						}
+						tablesToaAdd.add(selectedTable);
+					}
+				}
+				return tablesToaAdd;
+			}
+		}
+	}
 
 }

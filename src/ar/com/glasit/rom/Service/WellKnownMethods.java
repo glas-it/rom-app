@@ -16,6 +16,8 @@ public class WellKnownMethods {
     public final static String OrderRejected= "orden/rechazado";
 
     public final static String GetTable= "pedido/byMesa";
+    public final static String AddTable = "pedido/agregarMesa";
+    public final static String RemoveTable= "pedido/quitarMesa";
     public final static String TakeTable= "pedido/quitarMesa";
     public final static String GetWaiterNotifications = "restaurant/notificacionMozo";
 }

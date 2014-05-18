@@ -411,4 +411,9 @@ public class OpenTableFragment extends SherlockFragment{
         }
         return null;
     }
+
+	public void setTable(Table table2) {
+		this.table = (OpenTable) table2;
+		
+	}
 }

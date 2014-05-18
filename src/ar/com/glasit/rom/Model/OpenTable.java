@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ar.com.glasit.rom.Model.Table.JoinedTable;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -108,4 +110,5 @@ public class OpenTable extends
             e.printStackTrace();
         }
     }
+
 }
