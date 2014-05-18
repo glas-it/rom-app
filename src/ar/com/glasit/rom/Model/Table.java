@@ -4,8 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class git gui
-        Table implements Comparable<Table> {
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+public abstract class Table implements Comparable<Table> {
 
     private static final String ID = "id";
     private static final String NUMBER = "numero";
@@ -18,11 +22,13 @@ public abstract class git gui
 	protected int maximunCapacity;
 	protected boolean enabled;
 	protected boolean open;
+    protected List<JoinedTable> joinedTables;
 
     public Table(int id, int number, int maximunCapacity) {
         this.id = id;
         this.number = number;
         this.maximunCapacity = maximunCapacity;
+        this.joinedTables = new Vector<JoinedTable>();
     }
 
     public static Table buildTable(JSONObject json) {
@@ -42,24 +48,25 @@ public abstract class git gui
             if (enabled) {
                 if (open) {
                 	String tableType = jsonTable.getString("class");
+                    String waiter = jsonTable.getString("mozo");
                 	if (tableType.contains("MesaComposite")) {
-                		CompositeTable c = new CompositeTable(id, number, maximunCapacity);
-                    	JSONArray mesas = new JSONArray();
-                    	mesas = jsonTable.getJSONArray("mesas");	
+                		CompositeTable c = new CompositeTable(id, number, maximunCapacity, waiter);
+                        JSONArray mesas = jsonTable.getJSONArray("mesas");
                     	for (int i = 0; i < mesas.length(); i++) {
-                             JSONObject j = mesas.getJSONObject(i);
-                             int numberJ = j.getInt(NUMBER);
-                             if (numberJ != number ) {
-                                 int maxCapacityJ = j.getInt(MAX_CAPACITY);
-                                 int idJ = j.getInt(ID);
-                            	 c.addJoinedTable(idJ,numberJ,maxCapacityJ);
-                             }
+                            JSONObject j = mesas.getJSONObject(i);
+                            int numberJ = j.getInt(NUMBER);
+                            int maxCapacityJ = j.getInt(MAX_CAPACITY);
+                            int idJ = j.getInt(ID);
+                            if (numberJ != number) {
+                                c.addJoinedTable(idJ,numberJ,maxCapacityJ);
+                            } else {
+                                c.setMaximunCapacity(maxCapacityJ);
+                            }
                         }
                     	table = c;
                     	
-                	}
-                	else {
-                		table = new OpenTable(id, number, maximunCapacity, jsonTable.getString("mozo"));
+                	} else {
+                		table = new OpenTable(id, number, maximunCapacity, waiter);
                 	}
                 	table.load(json);
                 } else {
@@ -84,9 +91,28 @@ public abstract class git gui
 	public void setOpen(boolean open) {
 		this.open = open;
 	}
-	public int getMaximunCapacity() {
-		return maximunCapacity;
-	}
+    public int getOriginalCapacity() {
+        return maximunCapacity;
+    }
+    public int getMaximunCapacity() {
+        int totalCapacityInJoin = maximunCapacity;
+        for (JoinedTable table : this.joinedTables) {
+            totalCapacityInJoin += table.getCapacity();
+        }
+        return totalCapacityInJoin;
+    }
+    public String getJoinedTablesToString() {
+        if(this.joinedTables == null) return null;
+        else {
+            Collections.sort(this.joinedTables);
+            String tablesNumber="";
+            for (JoinedTable t : this.joinedTables) {
+                tablesNumber += Integer.toString(t.getTableNumber());
+                tablesNumber += " ";
+            }
+            return tablesNumber;
+        }
+    }
 	public void setMaximunCapacity(int maximunCapacity) {
 		this.maximunCapacity = maximunCapacity;
 	}
@@ -108,7 +134,18 @@ public abstract class git gui
         else
             return 1;
     }
-
+    public void addTable(JoinedTable tableNumber) {
+        this.joinedTables.add(tableNumber);
+    }
+    public void removeTable(Integer tableNumber) {
+        this.joinedTables.remove(tableNumber);
+    }
+    public void setJoinedTables(List<JoinedTable> joinedTables) {
+        this.joinedTables = joinedTables;
+    }
+    public List<JoinedTable> getJoinedTables() {
+        return this.joinedTables;
+    }
     @Override
     public boolean equals(Object o) {
         return (o instanceof Table && ((Table)o).number == this.number);
@@ -120,40 +157,5 @@ public abstract class git gui
 	public JoinedTable toJoinedTable() {
 		JoinedTable j = new JoinedTable(this.id, this.number, this.maximunCapacity);
 		return j;
-	}
-    
-	public class JoinedTable implements Comparable<JoinedTable> {
-		public JoinedTable(int id, int number, int maximunCapacity) {
-			setTableId(id);
-			setTableNumber(number);
-			setCapacity(maximunCapacity);
-		}
-		private int tableId;
-		private int tableNumber;
-		private int capacity;
-		
-		public int getTableId() {
-			return tableId;
-		}
-		public void setTableId(int tableId) {
-			this.tableId = tableId;
-		}
-		public int getTableNumber() {
-			return tableNumber;
-		}
-		public void setTableNumber(int tableNumber) {
-			this.tableNumber = tableNumber;
-		}
-		public int getCapacity() {
-			return capacity;
-		}
-		public void setCapacity(int capacity) {
-			this.capacity = capacity;
-		}
-		@Override
-		public int compareTo(JoinedTable another) {
-			int anotherTableNumber = another.getTableNumber();
-			return this.tableNumber - anotherTableNumber;
-		}
 	}
 }

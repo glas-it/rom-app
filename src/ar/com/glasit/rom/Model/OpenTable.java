@@ -8,9 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-public class OpenTable extends
-
-        Table {
+public class OpenTable extends Table {
 
 	private int fellowDiner;
 	private String waiter;
@@ -34,14 +32,7 @@ public class OpenTable extends
         isJoined=false;
         this.waiter = waiter;
     }
-    
-	public OpenTable(int id, int number, int maxCapacity) {
-        super(id, number, maxCapacity);
-        orderRequest = new Vector<Order>();
-		enabled=true;
-		open=true;
-	}
-	
+
 	public List<Order> getOrderRequest() {
 		return orderRequest;
 	}
@@ -86,9 +77,8 @@ public class OpenTable extends
 
     @Override
     public Object clone() {
-        OpenTable clone = new OpenTable(id, number, maximunCapacity);
+        OpenTable clone = new OpenTable(id, number, maximunCapacity, waiter);
         clone.fellowDiner = this.fellowDiner;
-        clone.waiter = waiter;
         for (Order o: orderRequest) {
             clone.addOrder((Order) o.clone());
         }

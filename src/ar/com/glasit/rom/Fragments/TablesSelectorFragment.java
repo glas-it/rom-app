@@ -1,17 +1,15 @@
 package ar.com.glasit.rom.Fragments;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import ar.com.glasit.rom.Model.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -21,21 +19,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Filterable;
-import android.widget.GridView;
-import android.widget.Toast;
 import ar.com.glasit.rom.R;
-import ar.com.glasit.rom.Activities.TableDetailActivity;
-import ar.com.glasit.rom.Adapters.TableAdapter;
 import ar.com.glasit.rom.Adapters.TableSelectorAdapter;
-import ar.com.glasit.rom.Fragments.TablesFragment.Type;
 import ar.com.glasit.rom.Helpers.BackendHelper;
-import ar.com.glasit.rom.Model.CompositeTable;
-import ar.com.glasit.rom.Model.FreeTable;
-import ar.com.glasit.rom.Model.OpenTable;
-import ar.com.glasit.rom.Model.Table;
-import ar.com.glasit.rom.Model.TableManager;
-import ar.com.glasit.rom.Model.TablesGestor;
-import ar.com.glasit.rom.Model.Table.JoinedTable;
 import ar.com.glasit.rom.Service.IServiceRequest;
 import ar.com.glasit.rom.Service.RestService;
 import ar.com.glasit.rom.Service.ServiceListener;
@@ -44,20 +30,20 @@ import ar.com.glasit.rom.Service.WellKnownMethods;
 
 public class TablesSelectorFragment extends GridSearcherFragment implements ServiceListener {
    
-	private static final String ACTUAL_CAPACITY = " Capacidad : ";
+	private static final String ACTUAL_CAPACITY = " - Capacidad: ";
 	protected List<JoinedTable> selectedTables = null;
-	protected List<JoinedTable> previouTablesSelected = null;
-    protected boolean isVisible = true, searching = false;
-    private Table table;
+    protected boolean isVisible = true;
     private int currentCapacity;
     private TableSelectorAdapter tableSelectorAdapter;
     private String title;
-    
-     public TablesSelectorFragment() {
-		super();
-	}
-     
-     @Override
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        selectedTables = new Vector<JoinedTable>();
+    }
+
+    @Override
      public void onResume() {
          super.onResume();
          isVisible = true;
@@ -67,7 +53,7 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
      private void obtainData() {
          List<NameValuePair> params = new Vector<NameValuePair>();
          params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
-         RestService.callGetService(this, WellKnownMethods.GetTables, params);
+         RestService.callGetService(this, WellKnownMethods.GetFreeTables, params);
 	}
 
 	@Override
@@ -85,55 +71,45 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
     	 }
     	 return joinedTables;
 	 }
-	
-     public void setTables(){
-         setGridShown(true);
-         
-         List<Table> freeTables = TablesGestor.getInstance().getTables(Type.FREE);
-         List<JoinedTable> freeTablesToJoin = toJoinedTables(freeTables);
-         List<JoinedTable> previousSelection = null;
-          
-         if(!this.table.isOpen()) {
-        	 
-        	 FreeTable free = (FreeTable) table;
-        	 previousSelection = free.getTablesToJoin();
-        	 
-        	 Iterator<JoinedTable> it = freeTablesToJoin.iterator();
-        	 boolean found =false;
-        	 while ( it.hasNext() && !found ) {
-        		 JoinedTable t = it.next();
-        		 if ( t.getTableNumber() == this.table.getNumber()) {
-        			 it.remove();
-        			 found = true;
-        		 }
-        	 }
-         }
-         else {
-        	 OpenTable open = (OpenTable)this.table;
-        	 if (open.isJoined()) {
-        		 previousSelection = ((CompositeTable) open).getJoinedTables(); 		 
-        	 }
-         }
 
-         if(previousSelection != null) {
-        	 freeTablesToJoin.addAll(previousSelection);
-        	 Collections.sort(freeTablesToJoin);
-         }
-         
-         this.tableSelectorAdapter = new TableSelectorAdapter(freeTablesToJoin,table);
-         this.tableSelectorAdapter.setCheckListener(this.checkListener);
-         setGridAdapter(this.tableSelectorAdapter);
-         this.tableSelectorAdapter.setView(getGridView());
-        // this.tableSelectorAdapter.init(previousSelection);
-     }
+    public void setTables(List<Table> freeTables){
+        List<JoinedTable> freeTablesToJoin = toJoinedTables(freeTables);
+        List<JoinedTable> joinedTables = new Vector<JoinedTable>();
+        JSONArray joinedTablesJSON = getJoinedTables();
+        for (int i = 0; i < joinedTablesJSON.length(); i++) {
+            try {
+                int id = joinedTablesJSON.getJSONObject(i).getInt("id");
+                int numero = joinedTablesJSON.getJSONObject(i).getInt("numero");
+                int capacidad = joinedTablesJSON.getJSONObject(i).getInt("capacidad");
+                JoinedTable joinedTable = new JoinedTable(id, numero, capacidad);
+                joinedTables.add(joinedTable);
+                selectedTables.add(joinedTable);
+            } catch (JSONException e) {
+            }
+        }
+        int tableNumber = getArguments().getInt("tableNumber");
+        Iterator<JoinedTable> it = freeTablesToJoin.iterator();
+        boolean found =false;
+        while ( it.hasNext() && !found ) {
+            JoinedTable t = it.next();
+            if ( t.getTableNumber() == tableNumber) {
+                it.remove();
+            } else if (joinedTables.contains(t.getTableNumber())) {
+                selectedTables.add(t);
+            }
+        }
+        this.tableSelectorAdapter = new TableSelectorAdapter(freeTablesToJoin, joinedTables);
+        this.tableSelectorAdapter.setCheckListener(this.checkListener);
+        setGridShown(true);
+        setGridAdapter(this.tableSelectorAdapter);
+    }
 
-
-	@Override
-     public void onActivityCreated(Bundle savedInstanceState) {
-         super.onActivityCreated(savedInstanceState);
-         setEmptyText(R.string.empty_tables);
-         setGridShown(false);
-     }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setEmptyText(R.string.empty_tables);
+        setGridShown(false);
+    }
 
      @Override
      public boolean onQueryTextSubmit(String query) {
@@ -160,13 +136,11 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
      public void onViewCreated(View view, Bundle savedInstanceState) {
          super.onViewCreated(view, savedInstanceState);
     	 this.title = (String) getSherlockActivity().getTitle();
-    	 this.table= getTable();
-    	 this.currentCapacity = table.getMaximunCapacity();
+    	 this.currentCapacity = getArguments().getInt("capacity");
       	 drawTittle();
          getGridView().setBackgroundColor(Color.TRANSPARENT);
          getGridView().setCacheColorHint(Color.TRANSPARENT);
          getGridView().setNumColumns(3);
-//         getGridView().setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
      }
      
      @Override
@@ -179,9 +153,12 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
          switch (item.getItemId()) {
              case R.id.joinConfirmation:
             	 if (selectedTables != null) {
-            		 ((TableManager) getSherlockActivity()).onTableJoined(table, selectedTables);
+            		 ((TableManager) getSherlockActivity()).onTableJoined(selectedTables);
             	 }
-            	 return true;
+             case R.id.cancelSelection:
+                 this.getSherlockActivity().setTitle(title);
+                 getSherlockActivity().onBackPressed();
+                 return true;
              default:
                  return super.onOptionsItemSelected(item);
          }
@@ -191,53 +168,44 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
     	 String message = title;
     	 message+= ACTUAL_CAPACITY;
     	 message+= Integer.toString(currentCapacity);
-    	 this.getActivity().setTitle(message);
+    	 this.getSherlockActivity().setTitle(message);
      }
-     
-     public interface CheckListener {
+
+
+    public JSONArray getJoinedTables() {
+        try {
+            return new JSONArray(getArguments().getString("joinedTables"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JSONArray();
+    }
+    public interface CheckListener {
      	public void checked(JoinedTable table);
      	public void unChecked(JoinedTable table);
  	}
      
-     private CheckListener checkListener = new CheckListener() {
-		
-    	@Override
-		public void checked(JoinedTable table) {
-			currentCapacity += table.getCapacity();
-			if (selectedTables == null) {
-				selectedTables = new ArrayList<JoinedTable>();
-			}
-			selectedTables.add(table);
-			drawTittle();
-		}
+    private CheckListener checkListener = new CheckListener() {
 
-		@Override
-		public void unChecked(JoinedTable table) {
-			currentCapacity -= table.getCapacity();
-			
-			if (selectedTables != null) {
-				Iterator<JoinedTable> it  = selectedTables.iterator();
-				boolean found = false;
-				while (it.hasNext() && !found) {
-					JoinedTable t = it.next();
-					if ( t.getTableNumber() == table.getTableNumber() ) 
-						it.remove();
-				}
-			}
-			drawTittle();
-		};
-     };
+        @Override
+        public void checked(JoinedTable table) {
+            currentCapacity += table.getCapacity();
+            if (selectedTables == null) {
+                selectedTables = new ArrayList<JoinedTable>();
+            }
+            selectedTables.add(table);
+            drawTittle();
+        }
 
-     private Table getTable() {
-         if (this.table != null)
-             return this.table;
-         try {
-             JSONObject json = new JSONObject(getArguments().getString("table"));
-             return (this.table = Table.buildTable(json));
-         } catch (JSONException e) {
-         }
-         return null;
-     }
+        @Override
+        public void unChecked(JoinedTable table) {
+            currentCapacity -= table.getCapacity();
+            if (selectedTables != null) {
+                selectedTables.remove(table);
+            }
+            drawTittle();
+        };
+    };
 
 	@Override
 	public void onServiceCompleted(IServiceRequest request, ServiceResponse serviceResponse) {
@@ -250,10 +218,9 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
 	                    newTables.add(t);
 	                }
 	            }
-	            TablesGestor.getInstance().updateData(newTables);
-		 }
+                setTables(newTables);
+         }
 		 catch (Exception e) {}
-		 setTables();
 	}
 
 	@Override

@@ -6,35 +6,15 @@ import java.util.List;
 
 public class CompositeTable extends OpenTable {
 
-	List<JoinedTable> joinedTables;
-	
-	public List<JoinedTable> getJoinedTables() {
-		return joinedTables;
-	}
-
-	public void setJoinedTables(List<JoinedTable> joinedTables) {
-		this.joinedTables = joinedTables;
-	}
-
-	private int totalCapacity;
-	
-	public CompositeTable(int id, int number, int maxCapacity, List<JoinedTable> joinedTables, int joinedCapacity) {
-		super(id, number, maxCapacity);
+	public CompositeTable(int id, int number, int maxCapacity, List<JoinedTable> joinedTables, int joinedCapacity, String waiter) {
+		super(id, number, maxCapacity, waiter);
 		this.isJoined=true;
 		this.joinedTables = joinedTables;
-		this.totalCapacity = joinedCapacity;
-		
 	}
 	
-	public CompositeTable(int id, int number, int maximunCapacity) {
-		super(id, number, maximunCapacity);
+	public CompositeTable(int id, int number, int maximunCapacity, String waiter) {
+		super(id, number, maximunCapacity, waiter);
 		this.isJoined = true;
-		this.totalCapacity = maximunCapacity;
-	}
-
-	@Override 
-	public int getMaximunCapacity() {
-		return totalCapacity;
 	}
 
 	public void addJoinedTable(int idJ, int numberJ, int maxCapacityJ) {

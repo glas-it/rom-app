@@ -19,6 +19,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,35 +71,41 @@ public class FreeTableFragment extends SherlockFragment{
             }
         });
         
-        FreeTable table = (FreeTable) this.table;
-        
-        if ( table.getTablesToJoin() != null) {
-        	  TextView tablesToJoin = (TextView) rootView.findViewById(R.id.tablesJoined);
-        	  tablesToJoin.setText(table.getJoinedTablesToString());
-        }
-        
-      
-        
+
+
         Button join = (Button) rootView.findViewById(R.id.join);
         join.setOnClickListener(new OnClickListener() {
-			
-			@Override
-				public void onClick(View v) {
-					TableDetailActivity t = (TableDetailActivity)getSherlockActivity();
-					JSONObject json=null;
-					try {
-						json = new JSONObject(getArguments().getString("table"));
-					} catch (JSONException e) {
-					}
-					t.displayTableSelector(json);
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                TableDetailActivity t = (TableDetailActivity)getSherlockActivity();
+                JSONArray json = new JSONArray();
+                for (JoinedTable table : getTable().getJoinedTables()) {
+                    JSONObject jsonTable = new JSONObject();
+                    try {
+                        jsonTable.put("id", table.getTableId());
+                        jsonTable.put("numero", table.getTableNumber());
+                        jsonTable.put("capacidad", table.getCapacity());
+                    } catch (JSONException e) {
+                    }
+                    json.put(jsonTable);
+                }
+                t.displayTableSelector(json, getTable());
+            }
+        });
         
-        TextView maxCapacity = (TextView) rootView.findViewById(R.id.capacity);
-        maxCapacity.setText(Integer.toString(table.getMaximunCapacity()));
+
         this.validateEnableTable(rootView);
 	    return rootView;
-	  }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        TextView tablesToJoin = (TextView) getView().findViewById(R.id.tablesJoined);
+        tablesToJoin.setText(getTable().getJoinedTablesToString());
+        TextView maxCapacity = (TextView) getView().findViewById(R.id.capacity);
+        maxCapacity.setText(Integer.toString(getTable().getMaximunCapacity()));
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -117,7 +124,7 @@ public class FreeTableFragment extends SherlockFragment{
                 FreeTable table = (FreeTable) getTable();
                 TablesGestor.getInstance().openTable(getTable().getNumber(), Integer.parseInt(people.getText().toString()));
                 ((TableManager) getSherlockActivity()).onTableOpened(table.getId(), Integer.parseInt(people.getText().toString()),
-                		table.getJoinedTablesId());
+                		table.getJoinedTables());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

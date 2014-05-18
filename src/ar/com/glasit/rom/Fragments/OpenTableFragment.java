@@ -23,6 +23,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,7 +37,6 @@ public class OpenTableFragment extends SherlockFragment{
 
     private TableLayout orders;
     private OpenTable table;
-    private TableManager manager;
     private static final int REQUEST_CODE = 0x1;
 
     @Override
@@ -95,12 +95,18 @@ public class OpenTableFragment extends SherlockFragment{
                 @Override
                 public void onClick(View v) {
                     TableDetailActivity t = (TableDetailActivity)getSherlockActivity();
-                    JSONObject json=null;
-                    try {
-                        json = new JSONObject(getArguments().getString("table"));
-                    } catch (JSONException e) {
+                    JSONArray json = new JSONArray();
+                    for (JoinedTable table : getTable().getJoinedTables()) {
+                        JSONObject jsonTable = new JSONObject();
+                        try {
+                            jsonTable.put("id", table.getTableId());
+                            jsonTable.put("numero", table.getTableNumber());
+                            jsonTable.put("capacidad", table.getCapacity());
+                        } catch (JSONException e) {
+                        }
+                        json.put(jsonTable);
                     }
-                    t.displayTableSelector(json);
+                    t.displayTableSelector(json, getTable());
                 }
             });
         } else {
@@ -112,6 +118,15 @@ public class OpenTableFragment extends SherlockFragment{
 
         initOrder();
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        TextView tablesToJoin = (TextView) getView().findViewById(R.id.tablesJoined);
+        tablesToJoin.setText(getTable().getJoinedTablesToString());
+        TextView maxCapacity = (TextView) getView().findViewById(R.id.capacity);
+        maxCapacity.setText(Integer.toString(getTable().getMaximunCapacity()));
     }
 
     private void openMenu() {

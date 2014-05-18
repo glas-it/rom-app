@@ -6,7 +6,6 @@ import ar.com.glasit.rom.Fragments.OpenTableFragment;
 import ar.com.glasit.rom.Fragments.TablesSelectorFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
-import ar.com.glasit.rom.Model.Table.JoinedTable;
 import ar.com.glasit.rom.Service.*;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +27,7 @@ import java.util.Vector;
 public class TableDetailActivity extends StackFragmentActivity implements TableManager {
 	private final static String tittle = "Mesa "; 
 
+    private Table tableToModify;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,15 +61,13 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     }
 
     @Override
-    public void onTableOpened(int tableId, int fellowDiner, int[] joinedTablesId) {
+    public void onTableOpened(int tableId, int fellowDiner, List<JoinedTable> joinedTables) {
         List<NameValuePair> params = new Vector<NameValuePair>();
         params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
         JSONArray mesas = new JSONArray();
         mesas.put(tableId);
-        if (joinedTablesId != null) {
-        	for (int i =0 ; i< joinedTablesId.length ; i++ ) {
-        		mesas.put (joinedTablesId[i]);
-        	}
+        for (JoinedTable joinedTable : joinedTables) {
+            mesas.put(joinedTable.getTableId());
         }
         params.add(new BasicNameValuePair("idMesas", mesas.toString()));
         params.add(new BasicNameValuePair("usernameMozo", BackendHelper.getLoggedUser()));
@@ -142,7 +140,6 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
                 }
             } catch (JSONException e) {
             }
-
         }
 
         @Override
@@ -152,22 +149,29 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     };
 
 	@Override
-	public void onTableJoined(Table table, List<JoinedTable> selectedTables) {
-		if (!table.isOpen()) {
-			((FreeTable) table).addTablesToJoin(selectedTables);
-	        FreeTableFragment fragment = new FreeTableFragment();
-	        fragment.setTable(table);
-	        Bundle bundle = new Bundle();
-	        bundle.putString("table", ((FreeTable) table).toString());
-	        fragment.setArguments(bundle);
-	        replaceFragment(fragment);
-		}
-		else {
-			//TODO:service de editar mesas de una abierta
-		}
-		
-	}
-
+	public void onTableJoined(List<JoinedTable> selectedTables) {
+        if (tableToModify.isOpen()) {
+            for (JoinedTable table: selectedTables) {
+                if (!tableToModify.getJoinedTables().contains(table)) {
+                    List<NameValuePair> params = new Vector<NameValuePair>();
+                    params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+                    params.add(new BasicNameValuePair("idMesaCompuesta", Integer.toString(tableToModify.getId())));
+                    params.add(new BasicNameValuePair("idMesa", Integer.toString(table.getTableId())));
+                    RestService.callPostService(null, WellKnownMethods.JoinTable, params);
+                }
+            }
+            for (JoinedTable table: tableToModify.getJoinedTables()) {
+                if (!selectedTables.contains(table)) {
+                    List<NameValuePair> params = new Vector<NameValuePair>();
+                    params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+                    params.add(new BasicNameValuePair("idMesaCompuesta", Integer.toString(tableToModify.getId())));
+                    params.add(new BasicNameValuePair("idMesa", Integer.toString(table.getTableId())));
+                    RestService.callPostService(null, WellKnownMethods.UnjoinTable, params);
+                }
+            }
+        }
+        tableToModify.setJoinedTables(selectedTables);
+    }
 	
     private ServiceListener joinTableListener =  new ServiceListener() {
         @Override
@@ -189,11 +193,14 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         }
     };
 
-	public void displayTableSelector(JSONObject table) {
+	public void displayTableSelector(JSONArray joinedTables, Table table) {
+        tableToModify = table;
         TablesSelectorFragment fragment = new TablesSelectorFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("table", table.toString());
+        bundle.putString("joinedTables", joinedTables.toString());
+        bundle.putInt("tableNumber", table.getNumber());
+        bundle.putInt("capacity", table.getOriginalCapacity());
         fragment.setArguments(bundle);
-        replaceFragment(fragment);
+        pushFragment(fragment);
 	}
 }
