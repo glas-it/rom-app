@@ -13,7 +13,7 @@ public class OpenTable extends
         Table {
 
 	private int fellowDiner;
-	private String waiter;
+	protected String waiter;
 	private List<Order> orderRequest;
 	protected boolean isOpen;
 	protected boolean isJoined;
@@ -26,13 +26,14 @@ public class OpenTable extends
 		this.isJoined = isJoined;
 	}
 
-	public OpenTable(int id, int number, int maxCapacity, String waiter) {
+	public OpenTable(int id, int number, int maxCapacity, int fellowDiner, String waiter) {
         super(id, number, maxCapacity);
         orderRequest = new Vector<Order>();
         enabled=true;
         open=true;
         isJoined=false;
         this.waiter = waiter;
+        this.fellowDiner = fellowDiner;
     }
     
 	public OpenTable(int id, int number, int maxCapacity) {

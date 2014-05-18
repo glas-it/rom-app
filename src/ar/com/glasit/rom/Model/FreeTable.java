@@ -1,6 +1,7 @@
 package ar.com.glasit.rom.Model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class FreeTable extends Table{
 		}
 		else {
 			o = new CompositeTable(id, number, maximunCapacity, this.tablesToJoin, this.totalCapacityInJoin);
-			o.setFellowDiner(fellowDiner);
 			o.setWaiter(waiter);
+			o.setFellowDiner(fellowDiner);
 		}
 		return o;
 	}
@@ -67,6 +68,7 @@ public class FreeTable extends Table{
     public int[] getJoinedTablesId() {
     	if(this.tablesToJoin == null) return null;
     	else {
+    		Collections.sort(this.tablesToJoin);
     		int[] idTables = new int[tablesToJoin.size()];
     		int i = 0;
     		Iterator<JoinedTable> it = tablesToJoin.iterator();

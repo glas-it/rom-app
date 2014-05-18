@@ -17,16 +17,11 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Filterable;
-import android.widget.GridView;
-import android.widget.Toast;
 import ar.com.glasit.rom.R;
-import ar.com.glasit.rom.Activities.TableDetailActivity;
-import ar.com.glasit.rom.Adapters.TableAdapter;
-import ar.com.glasit.rom.Adapters.TableSelectorAdapter;
+import ar.com.glasit.rom.Adapters.TablesSelectorAdapter;
 import ar.com.glasit.rom.Fragments.TablesFragment.Type;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.CompositeTable;
@@ -42,7 +37,7 @@ import ar.com.glasit.rom.Service.ServiceListener;
 import ar.com.glasit.rom.Service.ServiceResponse;
 import ar.com.glasit.rom.Service.WellKnownMethods;
 
-public class TablesSelectorFragment extends GridSearcherFragment implements ServiceListener {
+public class TablesSelectorFragment extends ListSearcherFragment implements ServiceListener {
    
 	private static final String ACTUAL_CAPACITY = " Capacidad : ";
 	protected List<JoinedTable> selectedTables = null;
@@ -50,7 +45,7 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
     protected boolean isVisible = true, searching = false;
     private Table table;
     private int currentCapacity;
-    private TableSelectorAdapter tableSelectorAdapter;
+    private TablesSelectorAdapter tableSelectorAdapter;
     private String title;
     
      public TablesSelectorFragment() {
@@ -87,8 +82,8 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
 	 }
 	
      public void setTables(){
-         setGridShown(true);
          
+    	 setListShown(true);
          List<Table> freeTables = TablesGestor.getInstance().getTables(Type.FREE);
          List<JoinedTable> freeTablesToJoin = toJoinedTables(freeTables);
          List<JoinedTable> previousSelection = null;
@@ -119,12 +114,11 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
         	 freeTablesToJoin.addAll(previousSelection);
         	 Collections.sort(freeTablesToJoin);
          }
-         
-         this.tableSelectorAdapter = new TableSelectorAdapter(freeTablesToJoin,table);
+         this.tableSelectorAdapter = new TablesSelectorAdapter(freeTablesToJoin, table,previousSelection);
          this.tableSelectorAdapter.setCheckListener(this.checkListener);
-         setGridAdapter(this.tableSelectorAdapter);
-         this.tableSelectorAdapter.setView(getGridView());
-        // this.tableSelectorAdapter.init(previousSelection);
+         this.tableSelectorAdapter.setView(this.getListView());
+
+         this.setListAdapter(this.tableSelectorAdapter);
      }
 
 
@@ -132,13 +126,13 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
      public void onActivityCreated(Bundle savedInstanceState) {
          super.onActivityCreated(savedInstanceState);
          setEmptyText(R.string.empty_tables);
-         setGridShown(false);
+         setListShown(false);
      }
 
      @Override
      public boolean onQueryTextSubmit(String query) {
          try {
-             ((Filterable) getGridAdapter()).getFilter().filter(query);
+             ((Filterable) getListAdapter()).getFilter().filter(query);
          } catch (NullPointerException ex) {}
          return true;
      }
@@ -146,7 +140,7 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
      @Override
      public boolean onQueryTextChange(String newText) {
          try {
-             ((Filterable) getGridAdapter()).getFilter().filter(newText);
+             ((Filterable) getListAdapter()).getFilter().filter(newText);
          } catch (NullPointerException ex) {}
          return false;
      }
@@ -163,10 +157,6 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
     	 this.table= getTable();
     	 this.currentCapacity = table.getMaximunCapacity();
       	 drawTittle();
-         getGridView().setBackgroundColor(Color.TRANSPARENT);
-         getGridView().setCacheColorHint(Color.TRANSPARENT);
-         getGridView().setNumColumns(3);
-         getGridView().setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
      }
      
      @Override

@@ -93,6 +93,14 @@ public class OpenTableFragment extends SherlockFragment{
             }
         });
         
+        OpenTable table = (OpenTable) this.table;
+        
+        if ( table.isJoined()) {
+        	  TextView tablesJoined = (TextView) rootView.findViewById(R.id.tablesJoined);
+        	  CompositeTable c = (CompositeTable) table;
+              tablesJoined.setText(c.getJoinedTablesToString());
+        }
+        
 
         Button join = (Button) rootView.findViewById(R.id.join);
         join.setOnClickListener(new OnClickListener() {

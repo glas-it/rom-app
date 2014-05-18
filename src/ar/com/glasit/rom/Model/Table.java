@@ -11,6 +11,7 @@ public abstract class Table implements Comparable<Table> {
     private static final String MAX_CAPACITY = "capacidad";
     private static final String OPEN = "abierta";
     private static final String ENABLED = "activo";
+	private static final String FELLOWDINNER = null;
 
 	protected int id;
 	protected int number;
@@ -38,11 +39,12 @@ public abstract class Table implements Comparable<Table> {
             int maximunCapacity= jsonTable.getInt(MAX_CAPACITY);
             boolean enabled= jsonTable.getBoolean(ENABLED);
             boolean open= jsonTable.getBoolean(OPEN);
+ //           int fellowDiner = jsonTable.getInt(FELLOWDINNER);
             if (enabled) {
                 if (open) {
                 	String tableType = jsonTable.getString("class");
                 	if (tableType.contains("MesaComposite")) {
-                		CompositeTable c = new CompositeTable(id, number, maximunCapacity);
+                		CompositeTable c = new CompositeTable(id, number, maximunCapacity, maximunCapacity, jsonTable.getString("mozo"));
                     	JSONArray mesas = new JSONArray();
                     	mesas = jsonTable.getJSONArray("mesas");	
                     	for (int i = 0; i < mesas.length(); i++) {
@@ -54,11 +56,13 @@ public abstract class Table implements Comparable<Table> {
                             	 c.addJoinedTable(idJ,numberJ,maxCapacityJ);
                              }
                         }
+                    	//table.setFellowDiner(fellowDiner);
                     	table = c;
                     	
                 	}
                 	else {
-                		table = new OpenTable(id, number, maximunCapacity, jsonTable.getString("mozo"));
+                		table = new OpenTable(id, number, maximunCapacity, maximunCapacity, jsonTable.getString("mozo"));
+                		//table.setFellowDiner(fellowDiner);
                 	}
                 	table.load(json);
                 } else {

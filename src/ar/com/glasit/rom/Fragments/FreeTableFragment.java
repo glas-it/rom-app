@@ -77,8 +77,6 @@ public class FreeTableFragment extends SherlockFragment{
         	  tablesToJoin.setText(table.getJoinedTablesToString());
         }
         
-      
-        
         Button join = (Button) rootView.findViewById(R.id.join);
         join.setOnClickListener(new OnClickListener() {
 			
