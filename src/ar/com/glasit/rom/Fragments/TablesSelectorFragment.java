@@ -166,7 +166,7 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
          getGridView().setBackgroundColor(Color.TRANSPARENT);
          getGridView().setCacheColorHint(Color.TRANSPARENT);
          getGridView().setNumColumns(3);
-         getGridView().setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+//         getGridView().setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
      }
      
      @Override

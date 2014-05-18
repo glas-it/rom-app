@@ -113,8 +113,9 @@ public class FreeTableFragment extends SherlockFragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
         switch (item.getItemId()) {
-            case R.id.item_open: 
-            	FreeTable table = (FreeTable) getTable();
+            case R.id.item_open:
+                FreeTable table = (FreeTable) getTable();
+                TablesGestor.getInstance().openTable(getTable().getNumber(), Integer.parseInt(people.getText().toString()));
                 ((TableManager) getSherlockActivity()).onTableOpened(table.getId(), Integer.parseInt(people.getText().toString()),
                 		table.getJoinedTablesId());
                 return true;

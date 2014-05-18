@@ -61,53 +61,54 @@ public class OpenTableFragment extends SherlockFragment{
         TextView txtPeople = (TextView) rootView.findViewById(ar.com.glasit.rom.R.id.cubiertos);
         txtPeople.setText(Integer.toString(getTable().getFellowDiner()));
         total = (TextView) rootView.findViewById(R.id.total);
-
         orders = (TableLayout) rootView.findViewById(R.id.orders);
+        people = (TextView) rootView.findViewById(R.id.cubiertos);
         Button newItem = (Button) rootView.findViewById(R.id.newItem);
-        newItem.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                openMenu();
-            }
-        });
-
         Button plus = (Button) rootView.findViewById(R.id.plus);
         Button less = (Button) rootView.findViewById(R.id.less);
-
-        people = (TextView) rootView.findViewById(R.id.cubiertos);
-        plus.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (table.getFellowDiner() < table.getMaximunCapacity()) {
-                    table.setFellowDiner(table.getFellowDiner() + 1);
-                    people.setText(Integer.toString(table.getFellowDiner()));
-                }
-            }
-        });
-        less.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (table.getFellowDiner() > 1) {
-                    table.setFellowDiner(table.getFellowDiner() - 1);
-                    people.setText(Integer.toString(table.getFellowDiner()));
-                }
-            }
-        });
-        
-
         Button join = (Button) rootView.findViewById(R.id.join);
-        join.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				TableDetailActivity t = (TableDetailActivity)getSherlockActivity();
-				JSONObject json=null;
-				try {
-					json = new JSONObject(getArguments().getString("table"));
-				} catch (JSONException e) {
-				}
-				t.displayTableSelector(json);
-			}
-		});
+        if (!getStatus().equals("Cerrado")) {
+            newItem.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    openMenu();
+                }
+            });
+            plus.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (table.getFellowDiner() < table.getMaximunCapacity()) {
+                        table.setFellowDiner(table.getFellowDiner() + 1);
+                        people.setText(Integer.toString(table.getFellowDiner()));
+                    }
+                }
+            });
+            less.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (table.getFellowDiner() > 1) {
+                        table.setFellowDiner(table.getFellowDiner() - 1);
+                        people.setText(Integer.toString(table.getFellowDiner()));
+                    }
+                }
+            });
+            join.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TableDetailActivity t = (TableDetailActivity)getSherlockActivity();
+                    JSONObject json=null;
+                    try {
+                        json = new JSONObject(getArguments().getString("table"));
+                    } catch (JSONException e) {
+                    }
+                    t.displayTableSelector(json);
+                }
+            });
+        } else {
+            newItem.setVisibility(View.INVISIBLE);
+            plus.setVisibility(View.INVISIBLE);
+            less.setVisibility(View.INVISIBLE);
+            join.setVisibility(View.INVISIBLE);
+        }
 
         initOrder();
         return rootView;
@@ -368,7 +369,12 @@ public class OpenTableFragment extends SherlockFragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.open_table, menu);
+        String state = getStatus();
+        if (state.equals("Cerrado")) {
+            inflater.inflate(R.menu.pay_table, menu);
+        } else {
+            inflater.inflate(R.menu.open_table, menu);
+        }
     }
 
     @Override
@@ -378,8 +384,13 @@ public class OpenTableFragment extends SherlockFragment{
                 ((TableManager) getSherlockActivity()).onTableOrder(table.getId(), getTable().getOrderRequest());
                 break;
             case R.id.close_table:
-                TablesGestor.getInstance().closeTable(getTable().getNumber());
+                if (!getTable().getOrderRequest().isEmpty()) {
+                    TablesGestor.getInstance().closeTable(getTable().getNumber());
+                }
                 ((TableManager) getSherlockActivity()).onTableClosed(getTable().getId());
+                break;
+            case R.id.item_wait_payment:
+                getSherlockActivity().onBackPressed();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -402,5 +413,14 @@ public class OpenTableFragment extends SherlockFragment{
         } catch (JSONException e) {
         }
         return null;
+    }
+
+    private String getStatus() {
+        try {
+            JSONObject json = new JSONObject(getArguments().getString("table"));
+            return json.getJSONObject("estado").getString("nombre");
+        } catch (JSONException e) {
+        }
+        return "";
     }
 }

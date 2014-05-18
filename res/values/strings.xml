@@ -70,4 +70,5 @@
     <string name="cancelSelection">Deshacer</string>
     <string name="cleanAll">Limpiar seleccion</string>
     <string name="confirmChanges">Confirmar</string>
+    <string name="wait_payment">Esperar pago</string>
 </resources>

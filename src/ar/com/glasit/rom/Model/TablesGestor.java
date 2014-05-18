@@ -1,6 +1,7 @@
 package ar.com.glasit.rom.Model;
 
 import ar.com.glasit.rom.Fragments.TablesFragment;
+import ar.com.glasit.rom.Helpers.BackendHelper;
 
 import java.util.*;
 
@@ -8,8 +9,7 @@ public class TablesGestor {
 
 	private List<Table> allTables;
 	private static TablesGestor instance = null;
-	public static String myName = "Juan";
-	
+
 	private TablesGestor() {
 		this.allTables = new Vector<Table>();
 	}
@@ -40,7 +40,7 @@ public class TablesGestor {
 			Table t = it.next();
 			if (t.open)  {
 				OpenTable op = (OpenTable) t;
-				if (op.getWaiter() != null && op.getWaiter().contentEquals(myName)) {
+				if (op.getWaiter() != null && op.getWaiter().contentEquals(BackendHelper.getLoggedUserName())) {
 					my.add(op);
 				}
 			}
@@ -89,7 +89,7 @@ public class TablesGestor {
 			if (t.getNumber() == number) {
 				it.remove();
 				FreeTable ft = (FreeTable) t;
-				this.allTables.add(ft.open(myName,fellowDiner));
+				this.allTables.add(ft.open(BackendHelper.getLoggedUserName(),fellowDiner));
 				found = true;
                 break;
 			}
@@ -119,6 +119,7 @@ public class TablesGestor {
 			t = it.next();
 			if (t.getNumber() == tableNumber) {
 				found=true;
+                break;
 			}
 		}
 		if (!found) {
@@ -128,6 +129,4 @@ public class TablesGestor {
 			return t;
 		}
 	}
-
-
 }

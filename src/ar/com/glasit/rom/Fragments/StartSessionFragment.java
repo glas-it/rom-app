@@ -171,7 +171,7 @@ public class StartSessionFragment extends SherlockProgressFragment{
                     BackendHelper.setLoggedUser(mUserView.getText().toString());
                     loginListener.loginSuccess();
                     try {
-                        TablesGestor.myName = obj.getJsonObject().getString("nombre");
+                        BackendHelper.setLoggedUserName(obj.getJsonObject().getString("nombre"));
                     } catch (Exception e) {}
                 } else {
                     showError(getString(R.string.errorMail));

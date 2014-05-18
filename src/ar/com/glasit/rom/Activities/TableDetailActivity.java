@@ -113,8 +113,9 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
     public void displayOpenTable(JSONObject table) {
         OpenTableFragment fragment = new OpenTableFragment();
         Bundle bundle = new Bundle();
-         try {
-        	table.put("abierta", true);
+        try {
+            table.put("abierta", true);
+            table.put("mozo", BackendHelper.getLoggedUserName());
         } catch (JSONException e) {
         }
         bundle.putString("table", table.toString());
@@ -146,7 +147,7 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
 
         @Override
         public void onError(String error) {
-
+            Toast.makeText(TableDetailActivity.this, error, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -157,7 +158,7 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
 	        FreeTableFragment fragment = new FreeTableFragment();
 	        fragment.setTable(table);
 	        Bundle bundle = new Bundle();
-	        bundle.putString("table", table.toString());
+	        bundle.putString("table", ((FreeTable) table).toString());
 	        fragment.setArguments(bundle);
 	        replaceFragment(fragment);
 		}

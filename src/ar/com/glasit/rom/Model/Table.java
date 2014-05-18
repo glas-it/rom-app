@@ -4,7 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class Table implements Comparable<Table> {
+public abstract class git gui
+        Table implements Comparable<Table> {
 
     private static final String ID = "id";
     private static final String NUMBER = "numero";
