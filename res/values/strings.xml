@@ -66,4 +66,5 @@
     <string name="reject">Rechazar</string>
     <string name="rejectAndOrder">Nuevo Pedido</string>
     <string name="join">Unir</string>
+    <string name="wait_payment">Esperar pago</string>
 </resources>

@@ -95,6 +95,7 @@ public class FreeTableFragment extends SherlockFragment{
         Intent intent = null;
         switch (item.getItemId()) {
             case R.id.item_open:
+                TablesGestor.getInstance().openTable(getTable().getNumber(), Integer.parseInt(people.getText().toString()));
                 ((TableManager) getSherlockActivity()).onTableOpened(getTable().getId(), Integer.parseInt(people.getText().toString()));
                 return true;
             default:

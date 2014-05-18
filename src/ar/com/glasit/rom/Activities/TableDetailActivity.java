@@ -107,6 +107,7 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         Bundle bundle = new Bundle();
         try {
             table.put("abierta", true);
+            table.put("mozo", BackendHelper.getLoggedUserName());
         } catch (JSONException e) {
         }
         bundle.putString("table", table.toString());

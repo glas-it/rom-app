@@ -12,6 +12,7 @@ import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.OpenTable;
 import ar.com.glasit.rom.Model.Order;
 import ar.com.glasit.rom.Model.Table;
+import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -66,12 +67,19 @@ public class LoadTableFragment extends SherlockProgressFragment{
                 JSONObject table = serviceResponse.getJsonObject();
                 if (table.has("id")) {
                     if (table.getJSONObject("mozo").getString("username").equals(BackendHelper.getLoggedUser())) {
-                        ((TableDetailActivity)getSherlockActivity()).displayOpenTable(table);
+                        int tableNumber = table.getJSONObject("mesa").getInt("numero");
+                        ((OpenTable)TablesGestor.getInstance().getTable(tableNumber)).setWaiter(BackendHelper.getLoggedUserName());
+                        ((TableDetailActivity) getSherlockActivity()).displayOpenTable(table);
                     } else {
                         AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
                         alert.setMessage(R.string.tookTableConfirmation);
                         alert.setPositiveButton("Ok", new TookTableListener(table));
-                        alert.setNegativeButton("Cancel", null);
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getSherlockActivity().onBackPressed();
+                            }
+                        });
                         alert.show();
                     }
                 } else {
@@ -100,8 +108,6 @@ public class LoadTableFragment extends SherlockProgressFragment{
                 params.add(new BasicNameValuePair("idMesa", Integer.toString(idTable)));
                 params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
                 RestService.callPostService(new TableListener(), WellKnownMethods.TakeTable, params);
-
-                ((TableDetailActivity)getSherlockActivity()).displayOpenTable(table);
             }
         }
     };
