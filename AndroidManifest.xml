@@ -47,7 +47,8 @@
         </activity>
         <activity
                 android:name=".Activities.KitchenActivity"
-                android:label="@string/app_name" >
+                android:label="@string/app_name"
+                android:screenOrientation="landscape">
         </activity>
         <activity android:name=".Activities.TableDetailActivity"
                   android:screenOrientation="portrait"

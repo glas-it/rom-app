@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import ar.com.glasit.rom.Activities.MenuActivity;
 import ar.com.glasit.rom.Dialogs.RejectOrderDialog;
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.RestService;
@@ -71,17 +72,42 @@ public class OpenTableFragment extends SherlockFragment{
 
         Button plus = (Button) rootView.findViewById(R.id.plus);
         Button less = (Button) rootView.findViewById(R.id.less);
-
-        people = (TextView) rootView.findViewById(R.id.cubiertos);
-        plus.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (table.getFellowDiner() < table.getMaximunCapacity()) {
-                    table.setFellowDiner(table.getFellowDiner() + 1);
-                    people.setText(Integer.toString(table.getFellowDiner()));
+        Button join = (Button) rootView.findViewById(R.id.join);
+        if (!getStatus().equals("Cerrado")) {
+            newItem.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    openMenu();
                 }
-            }
-        });
+            });
+            plus.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (table.getFellowDiner() < table.getMaximunCapacity()) {
+                        table.setFellowDiner(table.getFellowDiner() + 1);
+                        people.setText(Integer.toString(table.getFellowDiner()));
+                        List<NameValuePair> params = new Vector<NameValuePair>();
+                        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+                        params.add(new BasicNameValuePair("idMesa", Integer.toString(getTable().getId())));
+                        params.add(new BasicNameValuePair("comensales", "1"));
+                        RestService.callPostService(null, WellKnownMethods.NewFellow, params);
+                    }
+                }
+            });
+            less.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (table.getFellowDiner() > 1) {
+                        table.setFellowDiner(table.getFellowDiner() - 1);
+                        people.setText(Integer.toString(table.getFellowDiner()));
+                        List<NameValuePair> params = new Vector<NameValuePair>();
+                        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+                        params.add(new BasicNameValuePair("idMesa", Integer.toString(getTable().getId())));
+                        params.add(new BasicNameValuePair("comensales", "-1"));
+                        RestService.callPostService(null, WellKnownMethods.NewFellow, params);
+                    }
+                }
+            });
+        };
         less.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,10 +117,9 @@ public class OpenTableFragment extends SherlockFragment{
                 }
             }
         });
-        
-        Button join = (Button) rootView.findViewById(R.id.join);
+
         join.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub

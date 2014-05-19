@@ -1,5 +1,6 @@
 package ar.com.glasit.rom.Model;
 
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Service.RestService;
 import ar.com.glasit.rom.Service.WellKnownKeys;
 import ar.com.glasit.rom.Service.WellKnownMethods;
@@ -8,6 +9,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +40,7 @@ public class Order {
                     RestService.callPostService(null, WellKnownMethods.OrderDoing, params);
                     return DOING;
                 case DOING:
+                    params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
                     RestService.callPostService(null, WellKnownMethods.OrderDone, params);
                     return DONE;
                 case DONE:
@@ -118,6 +121,8 @@ public class Order {
                 orden.status = Status.CANCELLED;
             } else if (status.equals("Entregado")) {
                 orden.status = Status.DELIVERED;
+            } else {
+                return null;
             }
             orden.statusList.add(0, orden.status);
             orden.notes = json.getString(NOTES);
@@ -314,7 +319,7 @@ public class Order {
         long millis = (new Date()).getTime() - created.getTime();
         long Hours = millis/(1000 * 60 * 60);
         long Mins = (millis % (1000*60*60)) / (1000*60);
-        return Hours + ":" + Mins;
+        return Hours + ":" + new DecimalFormat("00").format(Mins);
     }
 
     public String getTableNumber() {

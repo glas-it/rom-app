@@ -1,14 +1,12 @@
 package ar.com.glasit.rom.Activities;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.*;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -17,6 +15,7 @@ import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 import ar.com.glasit.rom.Fragments.KitchenFragment;
+import ar.com.glasit.rom.Fragments.TablesFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.Menu;
 import ar.com.glasit.rom.Model.Order;
@@ -27,7 +26,10 @@ import ar.com.glasit.rom.Service.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,11 +40,43 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
 
     public static final String KEY_TAB = "KEY_TAB";
 
+    public static int index = 0;
     private ActionBar actionBar;
     private ViewPager viewPager;
     private TabsAdapter viewPagerAdapter;
     private int currentTab = 0;
     private boolean updating = false;
+
+    private ServiceListener notificationsListener = new ServiceListener() {
+        @Override
+        public void onServiceCompleted(IServiceRequest request, ServiceResponse serviceResponse) {
+            try {
+                JSONArray notifications = serviceResponse.getJsonArray();
+                for(int i=0;i<notifications.length();i++){
+                    JSONObject noti = notifications.getJSONObject(i);
+                    Intent intent = new Intent();
+                    PendingIntent pIntent = PendingIntent.getActivity(KitchenActivity.this, 0, intent, 0);
+                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(KitchenActivity.this)
+                            .setTicker("Novedades " + noti.getString("titulo"))
+                            .setContentTitle(noti.getString("titulo"))
+                            .setContentText(noti.getString("mensaje"))
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentIntent(pIntent)
+                            .setAutoCancel(true);
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    notificationManager.notify(index++, notificationBuilder.getNotification());
+                }
+                updating = false;
+                index %= 50;
+            } catch (Exception e) {
+            }
+        }
+
+        @Override
+        public void onError(String error) {
+
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,7 +106,11 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
                                         }
                                     }catch (Exception e){
                                     }
-                                    RestService.callGetService(KitchenActivity.this, WellKnownMethods.GetOrders, null);
+                                    List<NameValuePair> params = new Vector<NameValuePair>();
+                                    params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
+                                    RestService.callGetService(KitchenActivity.this, WellKnownMethods.GetOrders, params);
+                                    params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+                                    RestService.callGetService(notificationsListener, WellKnownMethods.GetNotifications, params);
                                     updating = true;
                                 }
                             }
@@ -153,9 +191,23 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
             super(fm);
             this.context = context;
             this.fragments = new ArrayList<Fragment>();
-            fragments.add(new KitchenFragment(KitchenFragment.Type.PENDANT));
-            fragments.add(new KitchenFragment(KitchenFragment.Type.DOING));
-            fragments.add(new KitchenFragment(KitchenFragment.Type.DONE));
+            KitchenFragment mine  = new KitchenFragment();
+            Bundle b = new Bundle();
+            b.putInt("type", 0);
+            mine.setArguments(b);
+            fragments.add(mine);
+
+            KitchenFragment free  = new KitchenFragment();
+            Bundle b1 = new Bundle();
+            b1.putInt("type", 1);
+            free.setArguments(b1);
+            fragments.add(free);
+
+            KitchenFragment all  = new KitchenFragment();
+            Bundle b2 = new Bundle();
+            b2.putInt("type", 2);
+            all.setArguments(b2);
+            fragments.add(all);
         }
 
         @Override
@@ -177,7 +229,9 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
-                RestService.callGetService(this, WellKnownMethods.GetOrders, null);
+                List<NameValuePair> params = new Vector<NameValuePair>();
+                params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
+                RestService.callGetService(this, WellKnownMethods.GetOrders, params);
                 break;
             case R.id.close_Session:
                 finish();
@@ -214,7 +268,9 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
         if (!updating && TablesGestor.getInstance().getAllTables().isEmpty()) {
             updating = true;
             if (Menu.getInstance().getChildrenCount() > 0) {
-                RestService.callGetService(this, WellKnownMethods.GetOrders, null);
+                List<NameValuePair> params = new Vector<NameValuePair>();
+                params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
+                RestService.callGetService(this, WellKnownMethods.GetOrders, params);
             } else {
                 RestService.callGetService(serviceListener, WellKnownMethods.GetMenu, null);
             }
@@ -225,7 +281,9 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
         @Override
         public void onServiceCompleted(IServiceRequest request, ServiceResponse obj) {
             Menu.getInstance().update(obj.getJsonArray());
-            RestService.callGetService(KitchenActivity.this, WellKnownMethods.GetOrders, null);
+            List<NameValuePair> params = new Vector<NameValuePair>();
+            params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
+            RestService.callGetService(KitchenActivity.this, WellKnownMethods.GetOrders, params);
         }
 
         @Override

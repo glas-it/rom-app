@@ -4,7 +4,8 @@ public class WellKnownMethods {
 	/* Menu */
     public final static String GetMenu= "restaurant/menu";
     public final static String GetTables= "restaurant/mesas";
-    public final static String GetOrders= "orden/cocina";
+    public final static String GetFreeTables= "restaurant/mesasDisponibles";
+    public final static String GetOrders= "orden/all";
     public final static String NewOrder= "orden/alta";
     public final static String Login= "autenticacion/";
     public final static String OpenTable= "pedido/apertura";
@@ -16,6 +17,9 @@ public class WellKnownMethods {
     public final static String OrderRejected= "orden/rechazado";
 
     public final static String GetTable= "pedido/byMesa";
-    public final static String TakeTable= "pedido/quitarMesa";
-    public final static String GetWaiterNotifications = "restaurant/notificacionMozo";
+    public final static String TakeTable= "pedido/cambioMozo";
+    public final static String JoinTable= "pedido/agregarMesa";
+    public final static String UnjoinTable= "pedido/quitarMesa";
+    public final static String NewFellow= "pedido/agregarComensales";
+    public final static String GetNotifications = "restaurant/notificacion";
 }

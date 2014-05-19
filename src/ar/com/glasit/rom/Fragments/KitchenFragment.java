@@ -52,6 +52,10 @@ public class KitchenFragment extends ListSearcherFragment{
 
     private GestureDetector gestureDetector;
 
+    public KitchenFragment(){
+        this(new Vector<Order>(),null);
+    }
+
     public KitchenFragment(Type type){
         this(new Vector<Order>(),type);
     }
@@ -78,6 +82,16 @@ public class KitchenFragment extends ListSearcherFragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Bundle b = getArguments();
+        switch  ( b.getInt("type") ) {
+            case 0: this.type= Type.PENDANT;
+                break;
+            case 1: this.type= Type.DOING;
+                break;
+            case 2: this.type= Type.DONE;
+                break;
+        }
+
         getListView().setBackgroundColor(Color.TRANSPARENT);
         getListView().setCacheColorHint(Color.TRANSPARENT);
 

@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import ar.com.glasit.rom.Fragments.KitchenFragment;
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.Service.*;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 
 import java.util.List;
@@ -24,7 +27,9 @@ public class UpdateService extends Service implements ServiceListener{
     @Override
     public void onStart(Intent intent, int startId) {
         if (Menu.getInstance().getChildrenCount() > 0) {
-            RestService.callGetService(this, WellKnownMethods.GetOrders, null);
+            List<NameValuePair> params = new Vector<NameValuePair>();
+            params.add(new BasicNameValuePair("username", BackendHelper.getSecretKey()));
+            RestService.callGetService(this, WellKnownMethods.GetOrders, params);
         }
     }
 

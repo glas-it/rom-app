@@ -46,20 +46,17 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
                 JSONArray notifications = serviceResponse.getJsonArray();
                 for(int i=0;i<notifications.length();i++){
                     JSONObject noti = notifications.getJSONObject(i);
-                    Order order = Order.buildOrder(noti.getJSONObject("orden"));
-//                    if (noti.getString("estado").equals("Terminado")){
-                        Intent intent = new Intent();
-                        PendingIntent pIntent = PendingIntent.getActivity(TablesActivity.this, 0, intent, 0);
-                        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(TablesActivity.this)
-                                .setTicker(order.toString())
-                                .setContentTitle("Mesa " + order.getTableNumber())
-                                .setContentText("Retirar: " + order.toString())
-                                .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentIntent(pIntent)
-                                .setAutoCancel(true);
-                        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                        notificationManager.notify(index++, notificationBuilder.getNotification());
-//                    }
+                    Intent intent = new Intent();
+                    PendingIntent pIntent = PendingIntent.getActivity(TablesActivity.this, 0, intent, 0);
+                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(TablesActivity.this)
+                            .setTicker("Novedades " + noti.getString("titulo"))
+                            .setContentTitle(noti.getString("titulo"))
+                            .setContentText(noti.getString("mensaje"))
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentIntent(pIntent)
+                            .setAutoCancel(true);
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    notificationManager.notify(index++, notificationBuilder.getNotification());
                 }
                 updating = false;
                 index %= 50;
@@ -78,8 +75,9 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
         public void onServiceCompleted(IServiceRequest request, ServiceResponse obj) {
             Menu.getInstance().update(obj.getJsonArray());
             List<NameValuePair> params = new Vector<NameValuePair>();
+            params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
             params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
-            RestService.callGetService(notificationsListener, WellKnownMethods.GetWaiterNotifications, params);
+            RestService.callGetService(notificationsListener, WellKnownMethods.GetNotifications, params);
         }
 
         @Override
@@ -112,8 +110,9 @@ public class TablesActivity extends SherlockFragmentActivity implements ServiceL
                                     updating = true;
                                     if (Menu.getInstance().getChildrenCount() > 0) {
                                         List<NameValuePair> params = new Vector<NameValuePair>();
+                                        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
                                         params.add(new BasicNameValuePair("username", BackendHelper.getLoggedUser()));
-                                        RestService.callGetService(notificationsListener, WellKnownMethods.GetWaiterNotifications, params);
+                                        RestService.callGetService(notificationsListener, WellKnownMethods.GetNotifications, params);
                                     } else {
                                         RestService.callGetService(serviceListenerMenu, WellKnownMethods.GetMenu, null);
                                     }
