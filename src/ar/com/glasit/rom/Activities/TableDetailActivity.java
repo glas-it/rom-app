@@ -29,6 +29,8 @@ import java.util.Vector;
 
 public class TableDetailActivity extends StackFragmentActivity implements TableManager {
 	private final static String tittle = "Mesa "; 
+	private int responseWaiting = 0;
+	
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,7 +173,17 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         public void onServiceCompleted(IServiceRequest request, ServiceResponse response) {
             try {
                 if (response.getSuccess()){
-                    displayOpenTable(response.getJsonObject().getJSONObject("mesa"));
+                	responseWaiting--;
+                	if (responseWaiting == 0) {
+                		JSONObject j = response.getJsonObject().getJSONObject("mesa");
+//                      SherlockFragment fragment = new LoadTableFragment();
+//                      Bundle bundle = new Bundle();
+//                      bundle.putInt("tableId", table.getId());
+//                      fragment.setArguments(bundle);
+//                      addFragment(fragment);
+//                      replaceFragment(fragment);
+//                		 displayOpenTable(response.getJsonObject().getJSONObject("mesa"));
+                	}
                 }else {
                     onBackPressed();
                 }
@@ -197,11 +209,9 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
 	@Override
 	public void onTableOpenJoined(Table table, List<JoinedTable> toAdd,
 			List<JoinedTable> toQuit) {
-//		((OpenTable) table).remove(toQuit);
-//		((OpenTable) table).add(toAdd);
 
 		setTitle(tittle + Integer.toString(table.getNumber()));
-		
+		this.responseWaiting = 0;
 		if (toAdd != null) {
 			Iterator<JoinedTable> it = toAdd.iterator();
 			while (it.hasNext()) {
@@ -211,7 +221,7 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
 			     params.add(new BasicNameValuePair("idMesaCompuesta", Integer.toString(table.getId())));
 			     params.add(new BasicNameValuePair("idMesa", Integer.toString(t.getTableId())));
 			     RestService.callPostService(null, WellKnownMethods.AddTable, params);
-			     
+			     this.responseWaiting++;
 			}
 		}
 		
@@ -224,23 +234,16 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
 			     params.add(new BasicNameValuePair("idMesaCompuesta", Integer.toString(table.getId())));
 			     params.add(new BasicNameValuePair("idMesa", Integer.toString(t.getTableId())));
 			     RestService.callPostService(null, WellKnownMethods.RemoveTable, params);
-			     
+			     this.responseWaiting++;
 			}
 		}
-		
-		
+			
         SherlockFragment fragment = new LoadTableFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("tableId", table.getId());
         fragment.setArguments(bundle);
         addFragment(fragment);
-		
-//		OpenTableFragment fragment = new OpenTableFragment();
-//      fragment.setTable(table);
-//      Bundle bundle = new Bundle();
-//      bundle.putString("table", table.toString());
-//      fragment.setArguments(bundle);
-//      replaceFragment(fragment);	
+        replaceFragment(fragment);
 		
 	}
 }

@@ -56,6 +56,8 @@ public class TablesSelectorFragment extends ListSearcherFragment implements Serv
      public void onResume() {
          super.onResume();
          isVisible = true;
+         this.selectedTables = null;
+         this.previouTablesSelected = null;
          obtainData();
      }
 
