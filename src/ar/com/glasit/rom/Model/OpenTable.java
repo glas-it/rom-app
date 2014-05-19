@@ -91,7 +91,9 @@ public class OpenTable extends Table {
         try {
             ordenes = json.getJSONArray("ordenes");
             for (int i = 0; i < ordenes.length(); i++) {
-                this.addOrder(Order.buildOrder(ordenes.getJSONObject(i)));
+                Order order = Order.buildOrder(ordenes.getJSONObject(i));
+                if (order != null)
+                    this.addOrder(order);
             }
             this.fellowDiner = json.getInt("comensales");
         } catch (JSONException e) {

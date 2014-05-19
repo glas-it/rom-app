@@ -11,6 +11,7 @@ import android.widget.*;
 import ar.com.glasit.rom.Activities.MenuActivity;
 import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Dialogs.RejectOrderDialog;
+import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.*;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.RestService;
@@ -79,6 +80,11 @@ public class OpenTableFragment extends SherlockFragment{
                     if (table.getFellowDiner() < table.getMaximunCapacity()) {
                         table.setFellowDiner(table.getFellowDiner() + 1);
                         people.setText(Integer.toString(table.getFellowDiner()));
+                        List<NameValuePair> params = new Vector<NameValuePair>();
+                        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+                        params.add(new BasicNameValuePair("idMesa", Integer.toString(getTable().getId())));
+                        params.add(new BasicNameValuePair("comensales", "1"));
+                        RestService.callPostService(null, WellKnownMethods.NewFellow, params);
                     }
                 }
             });
@@ -88,6 +94,11 @@ public class OpenTableFragment extends SherlockFragment{
                     if (table.getFellowDiner() > 1) {
                         table.setFellowDiner(table.getFellowDiner() - 1);
                         people.setText(Integer.toString(table.getFellowDiner()));
+                        List<NameValuePair> params = new Vector<NameValuePair>();
+                        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+                        params.add(new BasicNameValuePair("idMesa", Integer.toString(getTable().getId())));
+                        params.add(new BasicNameValuePair("comensales", "-1"));
+                        RestService.callPostService(null, WellKnownMethods.NewFellow, params);
                     }
                 }
             });
@@ -115,7 +126,6 @@ public class OpenTableFragment extends SherlockFragment{
             less.setVisibility(View.INVISIBLE);
             join.setVisibility(View.INVISIBLE);
         }
-
         initOrder();
         return rootView;
     }
