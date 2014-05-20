@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+
 public class FreeTableFragment extends SherlockFragment{
 
     private int cubiertos;
@@ -121,15 +123,30 @@ public class FreeTableFragment extends SherlockFragment{
         Intent intent = null;
         switch (item.getItemId()) {
             case R.id.item_open:
-                FreeTable table = (FreeTable) getTable();
-                TablesGestor.getInstance().openTable(getTable().getNumber(), Integer.parseInt(people.getText().toString()));
-                ((TableManager) getSherlockActivity()).onTableOpened(table.getId(), Integer.parseInt(people.getText().toString()),
-                		table.getJoinedTables());
+                if (canOpen()) {
+                    FreeTable table = (FreeTable) getTable();
+                    TablesGestor.getInstance().openTable(getTable().getNumber(), Integer.parseInt(people.getText().toString()));
+                    ((TableManager) getSherlockActivity()).onTableOpened(table.getId(), Integer.parseInt(people.getText().toString()),
+                    		table.getJoinedTables());
+                } else {
+                    showNeedToAddFellows();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private boolean canOpen() {
+        return Integer.parseInt(people.getText().toString()) > 0;
+    }
+
+    private void showNeedToAddFellows() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+        alert.setMessage("No puede abrir una mesa sin comensales");
+        alert.setPositiveButton("Ok", null);
+        alert.show();
     }
 
     private void validateEnableTable(View root) {

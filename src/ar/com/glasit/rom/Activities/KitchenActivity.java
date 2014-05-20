@@ -20,7 +20,6 @@ import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.Menu;
 import ar.com.glasit.rom.Model.Order;
 import ar.com.glasit.rom.Model.OrderGestor;
-import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
 import com.actionbarsherlock.app.ActionBar;
@@ -265,7 +264,7 @@ public class KitchenActivity extends SherlockFragmentActivity implements Service
     }
 
     protected synchronized void obtainData() {
-        if (!updating && TablesGestor.getInstance().getAllTables().isEmpty()) {
+        if (!updating) {
             updating = true;
             if (Menu.getInstance().getChildrenCount() > 0) {
                 List<NameValuePair> params = new Vector<NameValuePair>();

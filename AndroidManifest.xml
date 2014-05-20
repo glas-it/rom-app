@@ -55,14 +55,5 @@
                   android:uiOptions="splitActionBarWhenNarrow"
                   android:label="@string/tablelabel">
         </activity>
-        <service
-                android:enabled="true"
-                android:exported="true"
-                android:name=".Services.UpdateService"
-                android:label="UpdateService">
-            <intent-filter>
-                <action android:name=".Services.UpdateService" />
-            </intent-filter>
-        </service>
     </application>
 </manifest>

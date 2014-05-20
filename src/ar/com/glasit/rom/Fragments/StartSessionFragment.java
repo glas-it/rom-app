@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.LoginListener;
-import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
 import com.devspark.progressfragment.SherlockProgressFragment;

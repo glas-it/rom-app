@@ -31,7 +31,7 @@ public class ItemProduct extends Item{
             }
         }
         try {
-            this.isAvailable = json.getBoolean(WellKnownKeys.AVAILABLE);
+            this.isAvailable = json.getBoolean("activo");
         } catch (Exception e) {
             this.isAvailable = true;
         }

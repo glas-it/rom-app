@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Helpers.ContextHelper;
-import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
