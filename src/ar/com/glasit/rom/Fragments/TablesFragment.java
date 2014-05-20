@@ -46,9 +46,19 @@ public class TablesFragment extends GridSearcherFragment{
     }
     
     public void setTables(List<Table> tables) {
+        Collections.sort(tables, new Comparator<Table>() {
+            @Override
+            public int compare(Table aTable, Table anotherTable) {
+                if (aTable.getNumber() > anotherTable.getNumber()) {
+                    return 1;
+                } else if (aTable.getNumber() < anotherTable.getNumber()) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
     	this.tables = tables;
     }
-
 
     @Override
     public void onResume() {

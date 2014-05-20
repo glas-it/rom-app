@@ -138,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:ems="3"
-                android:text="@string/join" />
+                android:text="+" />
         </LinearLayout>
 
     </LinearLayout>

@@ -55,6 +55,13 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
             case R.id.item_cancel:
                 onBackPressed();
                 return true;
+            case R.id.close_Session:
+                BackendHelper.setLoggedUser("");
+                Intent intent = new Intent(this, StartSessionActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
