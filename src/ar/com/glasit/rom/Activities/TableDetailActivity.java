@@ -1,5 +1,6 @@
 package ar.com.glasit.rom.Activities;
 
+import android.app.AlertDialog;
 import android.widget.Toast;
 import ar.com.glasit.rom.Fragments.LoadTableFragment;
 import ar.com.glasit.rom.Fragments.OpenTableFragment;
@@ -61,7 +62,7 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
-                break;
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -107,12 +108,23 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
                 }
             }
         }
-        List<NameValuePair> params = new Vector<NameValuePair>();
-        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
-        params.add(new BasicNameValuePair("idMesa", Integer.toString(tableId)));
-        params.add(new BasicNameValuePair("platos", json.toString()));
-        RestService.callPostService(null, WellKnownMethods.NewOrder, params);
-        onBackPressed();
+        if (json.length() == 0) {
+            showEmptyOrderDialog();
+        } else {
+            List<NameValuePair> params = new Vector<NameValuePair>();
+            params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+            params.add(new BasicNameValuePair("idMesa", Integer.toString(tableId)));
+            params.add(new BasicNameValuePair("platos", json.toString()));
+            RestService.callPostService(null, WellKnownMethods.NewOrder, params);
+            onBackPressed();
+        }
+    }
+
+    private void showEmptyOrderDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("No hay órdenes para enviar");
+        alert.setPositiveButton("Ok", null);
+        alert.show();     
     }
 
     public void displayOpenTable(JSONObject table) {
