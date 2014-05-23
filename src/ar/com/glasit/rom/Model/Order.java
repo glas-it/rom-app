@@ -156,6 +156,10 @@ public class Order {
         this.notes = notes;
     }
 
+    public String getNotes(){
+        return notes;
+    }
+
     public String getUser() {
         return this.user;
     }

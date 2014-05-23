@@ -114,6 +114,7 @@ public class SetUpFragment extends SherlockFragment{
             public void onClick(View v) {
                 if (restaurantKey.getText().toString().isEmpty()) {
                     Toast.makeText(getSherlockActivity(), getText(R.string.empty_restaurant_key),Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 BackendHelper.setSecretKey(restaurantKey.getText().toString());
                 BackendHelper.setAppType(appType.getSelectedItem().toString());
