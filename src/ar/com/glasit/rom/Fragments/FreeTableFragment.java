@@ -111,7 +111,7 @@ public class FreeTableFragment extends SherlockFragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (getTable().isEnabled()) {
+        if (getTable() != null && getTable().isEnabled()) {
             inflater.inflate(R.menu.free_table, menu);
         } else {
             inflater.inflate(R.menu.cancel, menu);

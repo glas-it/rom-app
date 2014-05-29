@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         >
-
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
@@ -23,7 +22,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMediumInverse"
                     android:text="@string/rejectOrderConfirmation"
-                    android:id="@+id/textView"/>
+                    android:id="@+id/textView"
+                    android:textColor="@android:color/black"/>
             <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

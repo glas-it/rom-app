@@ -2,11 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/food" >
+            android:background="@drawable/food" android:fillViewport="false">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content" >
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -15,49 +15,54 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
-            <TextView
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/mozolabel"
-                    android:id="@+id/textView"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="10dp"/>
-            <TextView
-                    android:id="@+id/mozo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:gravity="center_vertical">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/mozolabel"
+                        android:id="@+id/textView"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"/>
+                <TextView
+                        android:id="@+id/mozo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Juan"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5">
+                <TextView
+                        android:id="@+id/capacitylabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/capacitylabel"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"/>
+                <TextView
+                        android:id="@+id/capacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-            <TextView
-                    android:id="@+id/capacitylabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/capacitylabel"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="10dp"/>
-            <TextView
-                    android:id="@+id/capacity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </LinearLayout>
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
             <TextView
@@ -72,8 +77,8 @@
                     android:id="@+id/cubiertos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="0"/>
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="3"/>
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
@@ -83,53 +88,52 @@
                 <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+"
-                        android:id="@+id/plus"
+                        android:text="-"
+                        android:id="@+id/less"
                         android:layout_marginLeft="5dp"
                         android:ems="3"
                         style="?android:attr/buttonStyleSmall"/>
                 <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-"
-                        android:id="@+id/less"
+                        android:text="+"
+                        android:id="@+id/plus"
                         android:layout_marginLeft="5dp"
                         android:ems="3"
                         style="?android:attr/buttonStyleSmall"/>
             </LinearLayout>
         </LinearLayout>
-            <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-                                android:paddingRight="10dp"
-                    android:paddingLeft="10dp"
-            android:text="@string/joinlabel"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-         <TextView
-           android:id="@+id/tablesJoined"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:textAppearance="?android:attr/textAppearanceMedium"
-           android:text="-" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|right"
-            android:orientation="horizontal" 
-            android:paddingRight="10dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:text="@string/joinlabel"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+             <TextView
+               android:id="@+id/tablesJoined"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:attr/textAppearanceSmall"
+               android:text="-" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|right"
+                android:orientation="horizontal"
+                android:paddingRight="10dp">
 
             <Button
                 android:id="@+id/join"
@@ -140,9 +144,49 @@
                 android:ems="3"
                 android:text="+" />
         </LinearLayout>
-
     </LinearLayout>
-        
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center_vertical">
+
+            <TextView
+                    android:id="@+id/TextView02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="Descuento:"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                    android:id="@+id/coupon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Sin descuento" />
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|right"
+                    android:orientation="horizontal"
+                    android:paddingRight="10dp">
+                <Button
+                        android:id="@+id/addCoupon"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:ems="3"
+                        android:text="+"/>
+            </LinearLayout>
+        </LinearLayout>
+
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -156,8 +200,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:stretchColumns="0"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:background="@android:color/darker_gray">

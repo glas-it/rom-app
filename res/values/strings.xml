@@ -33,8 +33,8 @@
     <string name="empty_restaurant_key">Por favor completa la clave de identificación del restaurante</string>
     <string name="title_activity_main">Mesas</string>
     <string name="tablelabel">Mesa </string>
-    <string name="mozolabel">Tomada por mozo  :</string>
-    <string name="capacitylabel">Capacidad máxima:</string>
+    <string name="mozolabel">Mozo:</string>
+    <string name="capacitylabel">Capacidad:</string>
     <string name="joinlabel">Mesas unidas:</string>
     <string name="cubiertoslabel">Cubiertos:</string>
     <string name="opentable">Abrir mesa:</string>
@@ -71,4 +71,9 @@
     <string name="cleanAll">Limpiar seleccion</string>
     <string name="confirmChanges">Confirmar</string>
     <string name="wait_payment">Esperar pago</string>
+    <string name="cuponConfirmation">¿Desea agregar el siguiente descuento: \"{Coupon.title}\"?</string>
+    <string name="invalidCoupon">El cupón: \"{Coupon.title}\" no se encuentra vigente por el momento</string>
+    <string name="qrLabel">QR</string>
+    <string name="needToDeliverFirst">Cuidado!, Antes de cerra la mesa debe entregar todos las órdenes</string>
+    <string name="wantToAddCupon">¿Desea agregar una promoción antes de cerrar la mesa?</string>
 </resources>

@@ -64,7 +64,6 @@ public abstract class Table implements Comparable<Table> {
                             }
                         }
                     	table = c;
-                    	
                 	} else {
                 		table = new OpenTable(id, number, maximunCapacity, waiter);
                 	}

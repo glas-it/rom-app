@@ -15,6 +15,7 @@ public class OpenTable extends Table {
 	private List<Order> orderRequest;
 	protected boolean isOpen;
 	protected boolean isJoined;
+	protected Coupon coupon;
 
     public boolean isJoined() {
 		return isJoined;
@@ -41,6 +42,13 @@ public class OpenTable extends Table {
 		this.orderRequest.add(order);
 	}
 
+    public void addCoupon(Coupon coupon) {
+        this.coupon = coupon;
+    }
+
+    public Coupon getCoupon() {
+        return this.coupon;
+    }
     public void removeOrder(Order order) {
         this.orderRequest.remove(order);
     }
@@ -89,13 +97,19 @@ public class OpenTable extends Table {
     public void load(JSONObject json) {
         JSONArray ordenes = null;
         try {
+            this.fellowDiner = json.getInt("comensales");
+            try{
+                this.coupon = new Coupon(json.getJSONObject("promocion"));
+            } catch (Exception e) {
+                this.coupon = null;
+            }
             ordenes = json.getJSONArray("ordenes");
             for (int i = 0; i < ordenes.length(); i++) {
                 Order order = Order.buildOrder(ordenes.getJSONObject(i));
-                if (order != null)
+                if (order != null) {
                     this.addOrder(order);
+                }
             }
-            this.fellowDiner = json.getInt("comensales");
         } catch (JSONException e) {
             e.printStackTrace();
         }

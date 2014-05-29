@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import ar.com.glasit.rom.Activities.CameraActivity;
 import ar.com.glasit.rom.Activities.MenuActivity;
 import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Dialogs.RejectOrderDialog;
@@ -34,11 +35,14 @@ import java.util.Vector;
 public class OpenTableFragment extends SherlockFragment{
 
     private TextView people;
+    private TextView coupon;
+    private Button addCoupon;
     private TextView total;
 
     private TableLayout orders;
     private OpenTable table;
     private static final int REQUEST_CODE = 0x1;
+    private static final int REQUEST_QR_CODE = 0x2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +68,12 @@ public class OpenTableFragment extends SherlockFragment{
         total = (TextView) rootView.findViewById(R.id.total);
         orders = (TableLayout) rootView.findViewById(R.id.orders);
         people = (TextView) rootView.findViewById(R.id.cubiertos);
+        coupon = (TextView) rootView.findViewById(R.id.coupon);
         Button newItem = (Button) rootView.findViewById(R.id.newItem);
         Button plus = (Button) rootView.findViewById(R.id.plus);
         Button less = (Button) rootView.findViewById(R.id.less);
         Button join = (Button) rootView.findViewById(R.id.join);
+        addCoupon = (Button) rootView.findViewById(R.id.addCoupon);
         if (!getStatus().equals("Cerrado")) {
             newItem.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -120,11 +126,19 @@ public class OpenTableFragment extends SherlockFragment{
                     t.displayTableSelector(json, getTable());
                 }
             });
+            addCoupon.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getSherlockActivity(), CameraActivity.class);
+                    startActivityForResult(intent, REQUEST_QR_CODE);
+                }
+            });
         } else {
             newItem.setVisibility(View.INVISIBLE);
             plus.setVisibility(View.INVISIBLE);
             less.setVisibility(View.INVISIBLE);
             join.setVisibility(View.INVISIBLE);
+            coupon.setVisibility(View.INVISIBLE);
         }
         initOrder();
         return rootView;
@@ -137,6 +151,11 @@ public class OpenTableFragment extends SherlockFragment{
         tablesToJoin.setText(getTable().getJoinedTablesToString());
         TextView maxCapacity = (TextView) getView().findViewById(R.id.capacity);
         maxCapacity.setText(Integer.toString(getTable().getMaximunCapacity()));
+        people.setText(Integer.toString(getTable().getFellowDiner()));
+        if (getTable().getCoupon() != null) {
+            coupon.setText(getTable().getCoupon().getTitle());
+            addCoupon.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void openMenu() {
@@ -155,6 +174,16 @@ public class OpenTableFragment extends SherlockFragment{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else if (requestCode == REQUEST_QR_CODE && resultCode == MenuActivity.RESULT_OK) {
+            Coupon newCoupon = new Coupon(data.getStringExtra("COUPON"));
+            getTable().addCoupon(newCoupon);
+            coupon.setText(newCoupon.getTitle());
+            addCoupon.setVisibility(View.INVISIBLE);
+            List<NameValuePair> params = new Vector<NameValuePair>();
+            params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+            params.add(new BasicNameValuePair("idPromocion", Long.toString(newCoupon.getId())));
+            params.add(new BasicNameValuePair("idMesa", Long.toString(getTable().getId())));
+            RestService.callPostService(null, WellKnownMethods.AddCoupon, params);
         }
     }
 
@@ -410,6 +439,34 @@ public class OpenTableFragment extends SherlockFragment{
                 break;
             case R.id.close_table:
                 if (!getTable().getOrderRequest().isEmpty()) {
+                    for (Order o: getTable().getOrderRequest()) {
+                        if (!o.isCancelled() && !o.isDelivered()) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                            alert.setMessage(R.string.needToDeliverFirst);
+                            alert.setPositiveButton("Ok", null);
+                            alert.show();
+                            return true;
+                        }
+                    }
+                    if (getTable().getCoupon() == null) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                        alert.setMessage(R.string.wantToAddCupon);
+                        alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getSherlockActivity(), CameraActivity.class);
+                                startActivityForResult(intent, REQUEST_QR_CODE);
+                            }
+                        });
+                        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                TablesGestor.getInstance().closeTable(getTable().getNumber());
+                            }
+                        });
+                        alert.show();
+                        return true;
+                    }
                     TablesGestor.getInstance().closeTable(getTable().getNumber());
                 }
                 ((TableManager) getSherlockActivity()).onTableClosed(getTable().getId());

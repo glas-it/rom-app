@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMediumInverse"
+            android:text="La promoción de ''25% off para toda la familia'' no se encuentra vigente por el momento"
+            android:id="@+id/textView"
+            android:textColor="@android:color/black" android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:padding="30dp"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonBar"
+            android:background="@color/abs__bright_foreground_disabled_holo_dark"
+            android:layout_below="@+id/textView" android:layout_alignParentLeft="true">
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginLeft="4dip"
+                android:layout_marginRight="4dip"
+                android:background="?dividerVertical"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                >
+
+
+            <Button
+                    android:id="@+id/submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="0.5"
+                    android:background="?selectableItemBackground"
+                    android:text="@string/ok"
+                    android:textColor="@android:color/white"
+                    android:layout_alignParentBottom="true"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
