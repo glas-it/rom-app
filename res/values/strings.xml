@@ -11,7 +11,7 @@
     <string name="errorInvalidadPass">Contraseña incorrecta</string>
     <string name="errorFieldIncomplete">Por favor completa con tu usuario/PIN</string>
     <string name="loginProcess">Iniciando sesión ..</string>
-    <string name="backend_url">http://192.168.1.102:8080/rom/</string>
+    <string name="backend_url">http://192.168.1.37:8080/rom/</string>
     <string name="refresh">Refrescar</string>
     <string name="open">Abrir</string>
     <string name="close">Cerrar</string>
@@ -73,6 +73,7 @@
     <string name="wait_payment">Esperar pago</string>
     <string name="cuponConfirmation">¿Desea agregar el siguiente descuento: \"{Coupon.title}\"?</string>
     <string name="invalidCoupon">El cupón: \"{Coupon.title}\" no se encuentra vigente por el momento</string>
+    <string name="invalidQR">El cupó no se encuentra vigente por el momento o es invalido</string>
     <string name="qrLabel">QR</string>
     <string name="needToDeliverFirst">Cuidado!, Antes de cerra la mesa debe entregar todos las órdenes</string>
     <string name="wantToAddCupon">¿Desea agregar una promoción antes de cerrar la mesa?</string>

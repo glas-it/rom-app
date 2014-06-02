@@ -22,6 +22,6 @@ public class WellKnownMethods {
     public final static String UnjoinTable= "pedido/quitarMesa";
     public final static String NewFellow= "pedido/agregarComensales";
     public final static String GetNotifications = "restaurant/notificacion";
-    public final static String ValidateCoupon = "pedido/validar";
+    public final static String ValidateCoupon = "promocion/validar";
     public final static String AddCoupon = "pedido/agregarPromocion";
 }

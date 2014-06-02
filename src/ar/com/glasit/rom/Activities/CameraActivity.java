@@ -146,24 +146,25 @@ public class CameraActivity extends Activity {
             progressBar.setVisibility(View.INVISIBLE);
             return;
         }
-/*
-        List<NameValuePair> params = new Vector<NameValuePair>();
-        params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
-        params.add(new BasicNameValuePair("idPromocion", Long.toString(coupon.getId())));
-        RestService.callGetService(onCouponValidation, WellKnownMethods.ValidateCoupon, params);
-*/
-        JSONObject json = new JSONObject();
-        try {
-            if (coupon.getExpirationDate().after(new Date()) &&
-                    coupon.getStartDate().before(new Date())){
-                json.put("success", true);
-            } else {
-                json.put("success", false);
-            }
-            onCouponValidation.onServiceCompleted(null, new ServiceResponse(json));
-        } catch (JSONException e) {
-            onCouponValidation.onError("");
-        }
+
+//        JSONObject json = new JSONObject();
+//        try {
+        	
+        	   List<NameValuePair> params = new Vector<NameValuePair>();
+               params.add(new BasicNameValuePair("idRestaurant", BackendHelper.getSecretKey()));
+               params.add(new BasicNameValuePair("idPromocion", Long.toString(coupon.getId())));
+               RestService.callGetService(onCouponValidation, WellKnownMethods.ValidateCoupon, params);
+//        	
+//            if (coupon.getExpirationDate().after(new Date()) &&
+//                    coupon.getStartDate().before(new Date())){
+//                json.put("success", true);
+//            } else {
+//                json.put("success", false);
+//            }
+//            onCouponValidation.onServiceCompleted(null, new ServiceResponse(json));
+//        } catch (JSONException e) {
+//            onCouponValidation.onError("");
+//        }
     }
 
     private String buildMessage(int resId, Coupon coupon){
@@ -210,7 +211,7 @@ public class CameraActivity extends Activity {
                         }
                     });
                 } else {
-                    alert.setMessage(buildMessage(R.string.invalidCoupon, coupon));
+                    alert.setMessage(R.string.invalidQR);
                     alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
