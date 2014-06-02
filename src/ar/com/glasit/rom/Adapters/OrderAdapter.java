@@ -62,7 +62,7 @@ public class OrderAdapter extends BaseAdapter implements Filterable {
             description.setText(filteredData.get(position).toString());
             TextView notes = (TextView) rowView.findViewById(R.id.notes);
             notes.setTextColor(Color.BLACK);
-            notes.setText(filteredData.get(position).getNotes());
+            notes.setText("Notas: " + filteredData.get(position).getNotes());
             TextView time = (TextView) rowView.findViewById(R.id.text3);
             time.setTextColor(Color.BLACK);
             time.setText(filteredData.get(position).getTime());

@@ -25,15 +25,16 @@
     </LinearLayout>
 
     <LinearLayout
-            android:layout_column="2"
-            android:orientation="vertical"
-            android:layout_weight="0.7"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:gravity="center_vertical"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_weight="0.7"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp" >
+
         <TextView
             android:id="@+id/text2"
             android:layout_width="wrap_content"
@@ -48,6 +49,7 @@
             android:text="note"
             android:textAppearance="?android:attr/textAppearanceSmall"
             />
+
     </LinearLayout>
     
     <TextView

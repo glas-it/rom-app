@@ -417,7 +417,7 @@ public class OpenTableFragment extends SherlockFragment{
             }
         }
 
-        total.setText(Float.toString(getTable().getPrice()));
+        total.setText("$ " + Float.toString(getTable().getPrice()));
         orders.addView(newRow);
     }
 
