@@ -462,6 +462,7 @@ public class OpenTableFragment extends SherlockFragment{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 TablesGestor.getInstance().closeTable(getTable().getNumber());
+                                ((TableManager) getSherlockActivity()).onTableClosed(getTable().getId());
                             }
                         });
                         alert.show();
