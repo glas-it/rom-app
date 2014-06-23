@@ -1,12 +1,9 @@
 package ar.com.glasit.rom.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import ar.com.glasit.rom.Fragments.SetUpFragment;
-import ar.com.glasit.rom.Fragments.StartSessionFragment;
 import ar.com.glasit.rom.R;
-import com.actionbarsherlock.app.SherlockActivity;
 
 public class SetUpActivity extends StackFragmentActivity implements SetupListener{
 

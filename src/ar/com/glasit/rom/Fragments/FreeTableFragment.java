@@ -103,6 +103,8 @@ public class FreeTableFragment extends SherlockFragment{
     @Override
     public void onResume() {
         super.onResume();
+        TableDetailActivity tableDetailActivity = (TableDetailActivity)getSherlockActivity();
+        this.table = tableDetailActivity.getTableToModify();
         TextView tablesToJoin = (TextView) getView().findViewById(R.id.tablesJoined);
         tablesToJoin.setText(getTable().getJoinedTablesToString());
         TextView maxCapacity = (TextView) getView().findViewById(R.id.capacity);

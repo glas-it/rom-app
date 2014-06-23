@@ -10,7 +10,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.widget.SearchView;
 import com.devspark.progressfragment.SherlockProgressGridFragment;
-import com.devspark.progressfragment.SherlockProgressListFragment;
 
 public class GridSearcherFragment extends SherlockProgressGridFragment implements SearchView.OnQueryTextListener{
 

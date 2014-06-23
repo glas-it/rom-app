@@ -2,25 +2,18 @@ package ar.com.glasit.rom.Fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Filterable;
 import android.widget.Toast;
-import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Adapters.OrderAdapter;
-import ar.com.glasit.rom.Adapters.TableAdapter;
 import ar.com.glasit.rom.Model.Order;
 import ar.com.glasit.rom.Model.OrderGestor;
-import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.R;
-import ar.com.glasit.rom.Service.RestService;
-import ar.com.glasit.rom.Service.WellKnownMethods;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 

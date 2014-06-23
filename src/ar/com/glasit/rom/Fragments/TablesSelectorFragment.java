@@ -84,6 +84,7 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
                 JoinedTable joinedTable = new JoinedTable(id, numero, capacidad);
                 joinedTables.add(joinedTable);
                 selectedTables.add(joinedTable);
+                freeTablesToJoin.remove(joinedTable);
             } catch (JSONException e) {
             }
         }
@@ -137,6 +138,18 @@ public class TablesSelectorFragment extends GridSearcherFragment implements Serv
          super.onViewCreated(view, savedInstanceState);
     	 this.title = (String) getSherlockActivity().getTitle();
     	 this.currentCapacity = getArguments().getInt("capacity");
+         try {
+             JSONArray joinedTablesJSON = getJoinedTables();
+             for (int i = 0; i < joinedTablesJSON.length(); i++) {
+                 try {
+                     int capacidad = joinedTablesJSON.getJSONObject(i).getInt("capacidad");
+                     currentCapacity += capacidad;
+                 } catch (JSONException e) {
+                 }
+             }
+         } catch (Exception e) {
+
+         }
       	 drawTittle();
          getGridView().setBackgroundColor(Color.TRANSPARENT);
          getGridView().setCacheColorHint(Color.TRANSPARENT);

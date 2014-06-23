@@ -1,6 +1,5 @@
 package ar.com.glasit.rom.Model;
 
-import ar.com.glasit.rom.Activities.MainActivity;
 import ar.com.glasit.rom.Helpers.ContextHelper;
 import ar.com.glasit.rom.R;
 import org.json.JSONArray;

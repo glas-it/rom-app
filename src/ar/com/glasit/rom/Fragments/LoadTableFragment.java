@@ -2,7 +2,6 @@ package ar.com.glasit.rom.Fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +9,12 @@ import android.view.ViewGroup;
 import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.OpenTable;
-import ar.com.glasit.rom.Model.Order;
-import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.internal.view.menu.BaseMenuPresenter;
 import com.devspark.progressfragment.SherlockProgressFragment;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;

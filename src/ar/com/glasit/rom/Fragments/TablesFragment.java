@@ -1,7 +1,5 @@
 package ar.com.glasit.rom.Fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,18 +9,12 @@ import android.widget.Filterable;
 import android.widget.Toast;
 import ar.com.glasit.rom.Activities.TableDetailActivity;
 import ar.com.glasit.rom.Adapters.TableAdapter;
-import ar.com.glasit.rom.Model.OpenTable;
-import ar.com.glasit.rom.Model.Order;
 import ar.com.glasit.rom.Model.Table;
 import ar.com.glasit.rom.Model.TablesGestor;
 import ar.com.glasit.rom.R;
-import ar.com.glasit.rom.Service.*;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
-
-import org.json.JSONArray;
 
 import java.util.Collections;
 import java.util.Comparator;

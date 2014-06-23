@@ -1,6 +1,5 @@
 package ar.com.glasit.rom.Model;
 
-import android.app.AlertDialog;
 import ar.com.glasit.rom.Service.WellKnownKeys;
 import org.json.JSONArray;
 import org.json.JSONException;

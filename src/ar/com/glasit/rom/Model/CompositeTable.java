@@ -1,7 +1,6 @@
 package ar.com.glasit.rom.Model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class CompositeTable extends OpenTable {

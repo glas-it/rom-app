@@ -1,29 +1,14 @@
 package ar.com.glasit.rom.Dialogs;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.*;
-import ar.com.glasit.rom.Model.Addition;
-import ar.com.glasit.rom.Model.ItemProduct;
-import ar.com.glasit.rom.Model.ItemSubRubro;
 import ar.com.glasit.rom.Model.Order;
 import ar.com.glasit.rom.R;
-import ar.com.glasit.rom.Service.RestService;
-import ar.com.glasit.rom.Service.WellKnownMethods;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.actionbarsherlock.view.MenuItem;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.List;
-import java.util.Vector;
 
 public class RejectOrderDialog extends SherlockDialogFragment{
 

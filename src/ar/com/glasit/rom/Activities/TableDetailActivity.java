@@ -222,4 +222,10 @@ public class TableDetailActivity extends StackFragmentActivity implements TableM
         fragment.setArguments(bundle);
         pushFragment(fragment);
 	}
+
+    public Table getTableToModify() {
+        Table table = this.tableToModify;
+        this.tableToModify = null;
+        return table;
+    }
 }

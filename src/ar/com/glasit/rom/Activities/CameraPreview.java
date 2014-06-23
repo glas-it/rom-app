@@ -2,18 +2,13 @@ package ar.com.glasit.rom.Activities;
 
 import java.io.IOException;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.Parameters;
 
 /** A basic Camera preview class */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {

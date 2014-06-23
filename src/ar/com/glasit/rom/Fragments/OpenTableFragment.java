@@ -138,7 +138,7 @@ public class OpenTableFragment extends SherlockFragment{
             plus.setVisibility(View.INVISIBLE);
             less.setVisibility(View.INVISIBLE);
             join.setVisibility(View.INVISIBLE);
-            coupon.setVisibility(View.INVISIBLE);
+            addCoupon.setVisibility(View.INVISIBLE);
         }
         initOrder();
         return rootView;
@@ -334,7 +334,7 @@ public class OpenTableFragment extends SherlockFragment{
                 dialog.setOnRejectAndReorderListener(new RejectOrderDialog.OnRejectAndReorderListener() {
                     @Override
                     public void onRejectAndReorder(Order order, String comment) {
-                        order.setStatus(Order.Status.PENDANT);
+                        order.setStatus(Order.Status.LOCAL);
                         ((ImageView) rowToBeModified.findViewById(R.id.image)).setImageResource(R.drawable.semaphore_item_pendant_rejected);
                         TextView price = (TextView) rowToBeModified.findViewById(R.id.price);
                         price.setText("$ " + order.getPrice());

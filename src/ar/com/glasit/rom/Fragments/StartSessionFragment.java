@@ -14,7 +14,6 @@ import ar.com.glasit.rom.R;
 import ar.com.glasit.rom.Service.*;
 import com.devspark.progressfragment.SherlockProgressFragment;
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 
 import java.util.List;

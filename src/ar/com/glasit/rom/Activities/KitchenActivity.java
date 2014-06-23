@@ -1,6 +1,5 @@
 package ar.com.glasit.rom.Activities;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,14 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.*;
 import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.widget.Adapter;
-import android.widget.BaseAdapter;
-import android.widget.Toast;
 import ar.com.glasit.rom.Fragments.KitchenFragment;
-import ar.com.glasit.rom.Fragments.TablesFragment;
 import ar.com.glasit.rom.Helpers.BackendHelper;
 import ar.com.glasit.rom.Model.Menu;
 import ar.com.glasit.rom.Model.Order;
@@ -31,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 

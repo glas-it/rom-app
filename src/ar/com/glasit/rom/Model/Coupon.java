@@ -1,6 +1,5 @@
 package ar.com.glasit.rom.Model;
 
-import android.database.Cursor;
 import org.json.JSONObject;
 
 import java.util.Date;
